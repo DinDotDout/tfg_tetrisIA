@@ -1,0 +1,3 @@
+standard rotation system Unity (SRS) - LD4 Master 
+AI - Nuno faria tensor flow keras
+Plataforma - tetris - https://www.techwithtim.net/tutorials/game-development-with-python/tetris-pygame/tutorial-1/

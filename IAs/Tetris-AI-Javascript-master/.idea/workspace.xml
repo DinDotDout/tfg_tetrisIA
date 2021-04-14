@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="76910cd7-2d50-4b57-b1ed-a3bd9c59cfb3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI.js" beforeDir="false" afterPath="$PROJECT_DIR$/AI.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BlockMatrix.js" beforeDir="false" afterPath="$PROJECT_DIR$/BlockMatrix.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Brain.js" beforeDir="false" afterPath="$PROJECT_DIR$/Brain.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Game.js" beforeDir="false" afterPath="$PROJECT_DIR$/Game.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Player.js" beforeDir="false" afterPath="$PROJECT_DIR$/Player.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Population.js" beforeDir="false" afterPath="$PROJECT_DIR$/Population.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Shape.js" beforeDir="false" afterPath="$PROJECT_DIR$/Shape.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sketch.js" beforeDir="false" afterPath="$PROJECT_DIR$/sketch.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1ckGjOxuGX0EQn35HvCU9dlw30y" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\evang\Documents\GitHub\Tetris-AI-Javascript" />
+    </key>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="76910cd7-2d50-4b57-b1ed-a3bd9c59cfb3" name="Default Changelist" comment="" />
+      <created>1591065311562</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1591065311562</updated>
+      <workItem from="1591065313564" duration="15095000" />
+      <workItem from="1591754995550" duration="15824000" />
+      <workItem from="1592365210519" duration="4397000" />
+      <workItem from="1592782464126" duration="18979000" />
+      <workItem from="1592885195478" duration="8875000" />
+      <workItem from="1592900158748" duration="1155000" />
+      <workItem from="1592955528950" duration="14856000" />
+      <workItem from="1593665384913" duration="3472000" />
+      <workItem from="1594791612805" duration="2119000" />
+      <workItem from="1595401874452" duration="602000" />
+      <workItem from="1595482152220" duration="973000" />
+      <workItem from="1595830503404" duration="9694000" />
+      <workItem from="1596426153673" duration="10606000" />
+      <workItem from="1596502982080" duration="14716000" />
+      <workItem from="1596589877920" duration="17104000" />
+      <workItem from="1596621451704" duration="1671000" />
+      <workItem from="1596677251919" duration="590000" />
+      <workItem from="1596678718348" duration="5114000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="396" y="92" key="#Inspections" timestamp="1596607471554">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="396" y="92" key="#Inspections/0.0.1536.824@0.0.1536.824" timestamp="1596607471554" />
+    <state x="279" y="58" key="SettingsEditor" timestamp="1591065609548">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="279" y="58" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1591065609548" />
+    <state x="426" y="188" width="672" height="677" key="run.anything.popup" timestamp="1596602829474">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="426" y="188" width="672" height="677" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1596602829474" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1596682216086">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1596682216086" />
+  </component>
+</project>
