@@ -3,7 +3,7 @@ import random
 import sys
 import numpy as np
 
-import board as b
+import tetrisStructure.board as b
 
 pygame.font.init()
 
@@ -22,7 +22,6 @@ UP = np.array([0,1])
 DOWN = np.array([0,-1])
 LEFT = np.array([-1,0])
 RIGHT = np.array([1,0])
-
 
 def draw_text_middle(surface, text, size, color):
     font = pygame.font.SysFont("comicsans", size, bold=True)
@@ -69,6 +68,7 @@ def draw_window(surface, grid, score=0, last_score=0):
 
     surface.blit(label, (sx + 20, sy + 160))
 
+    # draw placed blocks and main piece
     for i in range(len(grid)):
         for j in range(len(grid[i])):
             pygame.draw.rect(surface, grid[i][j], (top_left_x + j*block_size,
@@ -77,10 +77,9 @@ def draw_window(surface, grid, score=0, last_score=0):
     pygame.draw.rect(surface, (255, 0, 0), (top_left_x,
                                             top_left_y, play_width, play_height), 5)
 
-    draw_grid(surface, grid)
-    pygame.display.update()
+    draw_grid(surface, grid) #draws delimiters between cells
 
-def draw_next_shape(surface, bag):
+def draw_next_shapes(surface, bag):
     # shape = get_shape(shapes[0])
     font = pygame.font.SysFont('comicsans', 30)
     label = font.render('Next Shape', 1, (255, 255, 255))
@@ -88,16 +87,26 @@ def draw_next_shape(surface, bag):
     sx = top_left_x + play_width + 50
     sy = top_left_y + play_height/2 - 300
     surface.blit(label, (sx + 10, sy))
-    for k in range(6):
-        shape = get_shape(shapes[k])
-        format = shape.shape[shape.rotation % len(shape.shape)]
-        for i, line in enumerate(format):
-            row = list(line)
-            for j, column in enumerate(row):
-                if column == '0':
-                    draw_shape(shape, surface, sx + j *
-                               block_size, sy + i*block_size)
+    sx += 1.5*block_size
+    sy += 3*block_size
+    for i in range(6):
+        pieceTiles = bag[i].tiles
+        for tile in pieceTiles:
+            x, y = tile.position
+            pygame.draw.rect(surface, tile.color, (sx + x *
+                    block_size, sy + -y*block_size, block_size, block_size), 0)
         sy += 91
+
+def draw_stored_piece(surface, piece):
+    if not piece:
+        return
+    sx = top_left_x - block_size*5
+    sy = top_left_y + block_size*3
+    pieceTiles = piece.tiles
+    for tile in pieceTiles:
+        x, y = tile.position
+        pygame.draw.rect(surface, tile.color, (sx + x *
+                block_size, sy + -y*block_size, block_size, block_size), 0)
 
 def update_score(nscore):
     score = max_score()
@@ -134,9 +143,8 @@ def main(win):  # *
     fall_time = 0
     fall_speed = 1
     level_time = 0
-    score = 0
 
-    while run:
+    while run and not board.gameOver:
         fall_time += clock.get_rawtime()
         level_time += clock.get_rawtime()
         clock.tick()
@@ -153,41 +161,12 @@ def main(win):  # *
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-                # pygame.display.quit()
-                # pygame.quit()
-                # exit()
             input_controller(event, board)
            
-
-        # if save_piece and not already_saved:
-        #     if not saved_piece:  # if it's the first time we save a piece
-        #         current_piece.x = 4
-        #         current_piece.y = 2
-        #         saved_piece = current_piece
-        #         current_piece = get_shape(piece_array.pop(0))
-        #         next_addition -= 1
-        #     else:
-        #         current_piece.x = 4
-        #         current_piece.y = 2
-        #         aux = saved_piece
-        #         saved_piece = current_piece
-        #         current_piece = aux
-        #     already_saved = True
-        #     save_piece = False
-
-        draw_window(win, board.grid_colors(), score, last_score)
-        draw_next_shape(win, board.bag)
-        # if saved_piece:
-        #     swap_piece(saved_piece, win)
-        # draw_next_shape(piece_array, win)
-        # pygame.display.update()
-
-        # if check_lost(locked_positions):
-        #     draw_text_middle(win, "YOU LOST!", 80, (255, 255, 255))
-        #     pygame.display.update()
-        #     pygame.time.delay(1500)
-        #     run = False
-        #     update_score(score)
+        draw_window(win, board.grid_colors(), board.score, last_score)
+        draw_next_shapes(win, board.bag)
+        draw_stored_piece(win, board.storedPiece)
+        pygame.display.update()
 
 def input_controller(event, board):
     if event.type == pygame.KEYDOWN:
@@ -204,8 +183,8 @@ def input_controller(event, board):
             board.rotate_piece(True, True)
         if event.key == pygame.K_a:  # Rotate left
             board.rotate_piece(False, True)
-        # if event.key == pygame.K_SPACE:  # Save piece
-        #     save_piece = True
+        if event.key == pygame.K_SPACE:  # Save piece
+            board.swap_piece()
 
         # if event.type == pygame.KEYUP:
         #     if event.key == pygame.K_LEFT:

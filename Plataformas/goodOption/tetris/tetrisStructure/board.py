@@ -1,28 +1,32 @@
 import numpy as np
 import random as rnd
-import tile as tc
-import piece as pc
+import tetrisStructure.tile as tc
+import tetrisStructure.piece as pc
 
 class Board():
 
     def __init__(self):
-
+        self.gameOver = False
         self.gridSizeY = 20
         self.gridSizeX = 10
         self.grid = self.create_grid()
 
         self.bag = [] # list off upcoming pieces
         self.fill_bag()
-
-        self.piecePos = np.array([0,0])
-        self.mainPiece = self.spawn_piece()
-        # print(self)
         
+        self.piecePos = None
+        self.mainPiece = self.spawn_piece()
+
+        self.storedPiece = None
+        self.canStore = True
+
+        self.score = 0
         
     # Creates a grid of sized based off of gridSizeX and gridSizeY variables
     def create_grid(self):
-        grid = [[0 for col in range(self.gridSizeX)] for row in range(self.gridSizeY)]
-        for y in range(self.gridSizeY):
+        # We add an extra row to manage pieces out of the players sight
+        grid = [[0 for col in range(self.gridSizeX)] for row in range(self.gridSizeY+1)]
+        for y in range(self.gridSizeY+1):
             for x in range(self.gridSizeX):
                 grid[y][x] = GridCell()
         return grid
@@ -41,30 +45,41 @@ class Board():
                     out[y] = replacement
         out.reverse()
         return '\n'.join(out)
-
+    
     def spawn_piece(self):
-        pieces = {
-            0: pc.IPiece(),
-            1: pc.JPiece(),
-            2: pc.LPiece(),
-            3: pc.OPiece(),
-            4: pc.SPiece(),
-            5: pc.TPiece(),
-            6: pc.ZPiece()
-        }
         # Append next bag if current bag is under 7
         if len(self.bag) < 7:  # check to see if list is empty
             self.fill_bag()
 
-        current_piece = pieces.get(self.bag.pop(0), pc.Piece())  # get current piece
-        current_piece.make_shape()
-        self.piecePos = np.array([4,21])
+        current_piece = self.bag.pop(0)# get current piece
+        self.piecePos =  np.array([4,21])
+        self.canStore = True
         return current_piece
     
     def fill_bag(self):
-        piecesToAdd = [0, 1, 2, 3, 4, 5, 6]  # refill list
-        rnd.shuffle(piecesToAdd)  # shuffle list
-        self.bag.extend(piecesToAdd)  # add new pieces
+        pieces = [
+            pc.IPiece(),
+            pc.JPiece(),
+            pc.LPiece(),
+            pc.OPiece(),
+            pc.SPiece(),
+            pc.TPiece(),
+            pc.ZPiece()
+        ]
+
+        rnd.shuffle(pieces)  # shuffle list
+        self.bag.extend(pieces)  # add new pieces
+
+    def swap_piece(self):
+        if not self.storedPiece:
+            self.storedPiece = self.mainPiece
+            self.mainPiece = self.spawn_piece()
+        elif self.canStore:
+            aux = self.storedPiece
+            self.storedPiece = self.mainPiece
+            self.mainPiece = aux
+            self.canStore = False
+            self.piecePos = np.array([4,21])
 
     def rotate_piece(self, clockwise, shouldOffset):
         oldRotation = self.mainPiece.rotationIndex
@@ -112,13 +127,19 @@ class Board():
         return positions
 
     def lock_piece(self):
+        _, y = self.piecePos
+        if y >= 20:
+            self.gameOver = True
+            return
         for tile in self.mainPiece.tiles:
             globalTilePos = self.piecePos + tile.position
             x, y = globalTilePos
             self.grid[y][x].isOccupied = True
             self.grid[y][x].block = tile
-        self.check_line_clears()
+
         self.mainPiece = self.spawn_piece()
+        self.check_line_clears()
+        
         
     def drop_piece(self):
         canDrop = True
@@ -152,16 +173,6 @@ class Board():
         for x in range(self.gridSizeX):
             self.grid[line][x].block = None
             self.grid[line][x].isOccupied = False
-            # curBlock = self.grid[line][x].block
-            # # curBlock.tiles[grid[line][x].block.tileIndex] = None # Delete tile itself
-            # # clearLine!!!
-            # # Destroy(fullGrid[x, lineToClear].tileOnGridUnit)
-
-            # if not curBlock.AnyTilesLeft():
-            #     # Also clear block
-            #     # Destroy(curBlock.gameObject)
-            #     self.grid[line][x].block = None
-            #     self.grid[line][lixne].isOccupied = False
     
     def check_line_clears(self):
         linesToClear = []
@@ -180,9 +191,10 @@ class Board():
                 if consecutiveLineClears == 4:
                     # print TETRIS! and add points
                     print("TETRIS!")
-                
+                self.score += 1
                 self.clear_line(y)
 
+        linesToClear.reverse()
         # //Once the lines have been cleared, the lines above those will drop to fill in the empty space
         if len(linesToClear) > 0:
             for i in range(len(linesToClear)):
@@ -194,55 +206,29 @@ class Board():
                 for lineToDrop in range(linesToClear[i] + 1 - i, self.gridSizeY):
                     for x in range(self.gridSizeX):
                         cell = self.grid[lineToDrop][x]     
-                        if cell.isOccupied and lineToDrop < 20:
-
-                            self.grid[lineToDrop][x].block = cell.block
-                            self.grid[lineToDrop][x].isOccupied = True
+                        if cell.isOccupied:
+                            self.grid[lineToDrop-1][x].block = cell.block
+                            self.grid[lineToDrop-1][x].isOccupied = cell.isOccupied
                             cell.block = None
                             cell.isOccupied = False
 
-                            # self.move_tile_down(cell)
-
-    def move_tile_down(self, cell):
-        block = cell.block
-        block.move_tile(np.array([0, -1])) # Move down
-        block.set_tile()
-        cell.block = None
-        cell.isOccupied = False
-
+    # Returns a matrix containing the colors of the tiles
     def grid_colors(self):
-        gridColors = [[0 for col in range(self.gridSizeX)] for row in range(self.gridSizeY)]
+        gridColors = [[(0, 0, 0) for col in range(self.gridSizeX)] for row in range(self.gridSizeY)]
         tilePositions = self.global_piece_positions()
         for y in range(0, self.gridSizeY):
             for x in range(0, self.gridSizeX):
                 block = self.grid[y][x].block
-                color = block.color if block else (0, 0, 0)
-                gridColors[y][x] = color
+                if block:
+                    color = block.color
+                    gridColors[y][x] = color
 
         for pos in tilePositions:
             x, y = pos
             if y < 20:
                 gridColors[y][x] = self.mainPiece.color
         gridColors.reverse()
-        return gridColors
-
-
-    # def piece_removed(self, pieceCoords):
-    #     for coords in pieceCoords:
-    #         cell =self.grid[coords.x, coords.y]
-    #         cell.tileOnGridUnit = None
-    #         cell.isOccupied = False
-        
-
-    #     for i in range(len(pieceCoords)):
-    #         for y in range(pieceCoords[i].y + 1,self.gridSizeY):
-    #             cell =self.grid[pieceCoords[i].x, y]
-    #             if cell.isOccupied:
-    #                 move_tile_down(cell)
-                  
-    #     check_line_clears()           
-                
-                   
+        return gridColors                   
 
 class GridCell:
     def __init__(self):
