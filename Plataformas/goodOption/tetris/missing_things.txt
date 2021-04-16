@@ -1,7 +1,0 @@
-Actual way to delete a block?
-Swap saved piece en game controller
-drop pieces when line clear
-
-# board controller has a piece object (which has tile objects) and its global position.
-# piece class has only local coordinates
-# one parent piece class and multiple child classes

@@ -17,7 +17,7 @@ left_pad = 'a'
 right_pad = 'd'
 a_button = 'l'
 b_button = 'k'
-r_button = 'j'
+l_button = 'j'
 
 # Number of frames to waste
 wait_time = 0
@@ -45,18 +45,26 @@ def controller(k):
     #     ctrler.send_cmd()
     if k == up_pad:
         ctrler.send_cmd(ctrler.DPAD_U)
+
     if k == left_pad:
         ctrler.send_cmd(ctrler.DPAD_L)
+
     if k == down_pad:
         ctrler.send_cmd(ctrler.DPAD_D)
+
     if k == right_pad:
         ctrler.send_cmd(ctrler.DPAD_R)
+
     if k == a_button:
         ctrler.send_cmd(ctrler.BTN_A)
+
     if k == b_button:
         ctrler.send_cmd(ctrler.BTN_B)
-    if k == r_button:
+
+    if k == l_button:
         ctrler.send_cmd(ctrler.BTN_L)
+
+        
 
     # last_k = k
     # if auto pilot is active actions are delayed
@@ -180,6 +188,7 @@ def main():
             state_controller()
         # Player controller mode
         else:
+
             command = chr(k)
             adjust_wait_time(command)
             controller(command)

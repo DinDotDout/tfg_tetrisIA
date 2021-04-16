@@ -1,27 +1,15 @@
 Heuristica - https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/ 
 
-MaTris hecho con pyGame (python). Entorno de entreno rapido?
-
 TetrisIa - http://cs231n.stanford.edu/reports/2016/pdfs/121_Report.pdf
 
 Premiar limpiar mas bloques de golpe
 
 Penalizar game over
 
-penalizar movimientos repetidos o rapidos para evitar cargarnos la switch
-
-Conectar pc a switch - https://github.com/mart1nro/joycontrol
-
-Linux - https://pop.system76.com/
-Ubuntu 20.10
-
 Reinforcement tetris -  https://github.com/asimon-1/machine-learning-tetris
                         https://github.com/nuno-faria/tetris-ai
                         https://github.com/charlesyz/Tetris-Ai/
                         https://github.com/Code-Bullet/Tetris-AI-Javascript (Code Bullet)
                         https://levelup.gitconnected.com/tetris-ai-in-python-bd194d6326ae
-
-Testeo -    https://tetr.io/
-            https://jstris.jezevec10.com/
 
 https://towardsdatascience.com/beating-the-world-record-in-tetris-gb-with-genetics-algorithm-6c0b2f5ace9b

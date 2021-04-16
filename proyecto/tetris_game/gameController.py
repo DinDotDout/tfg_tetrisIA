@@ -11,12 +11,15 @@ pygame.font.init()
 # GLOBALS VARS
 s_width = 750
 s_height = 650
-play_width = 300  # meaning 300 // 10 = 30 width per block
-play_height = 600  # meaning 600 // 20 = 30 height per block
+
 block_size = 30
 
+play_width = 300  # meaning 300 // 10 = 30 width per block
+play_height = block_size*20 # meaning 600 // 20 = 30 height per block
+
+
 top_left_x = (s_width - play_width) // 2
-top_left_y = s_height - play_height
+top_left_y = block_size*1.5
 
 UP = np.array([0,1])
 DOWN = np.array([0,-1])
@@ -33,8 +36,9 @@ def draw_text_middle(surface, text, size, color):
 def draw_grid(surface, grid):
     sx = top_left_x
     sy = top_left_y
+    linesToOmmit =  len(grid) - 20
 
-    for i in range(len(grid)):
+    for i in range(len(grid)-linesToOmmit): # draw opnly 20 lines
         pygame.draw.line(surface, (128, 128, 128), (sx, sy +
                                                     i*block_size), (sx+play_width, sy + i*block_size))
         for j in range(len(grid[i])):
@@ -49,8 +53,7 @@ def draw_window(surface, grid, score=0, last_score=0):
     font = pygame.font.SysFont('comicsans', 60)
     label = font.render('Tetris', 1, (255, 255, 255))
 
-    surface.blit(label, (top_left_x + play_width /
-                         2 - (label.get_width() / 2), 5))
+    surface.blit(label, (top_left_x - label.get_width() - block_size, 5))
 
     # current score
     font = pygame.font.SysFont('comicsans', 30)
@@ -68,11 +71,14 @@ def draw_window(surface, grid, score=0, last_score=0):
 
     surface.blit(label, (sx + 20, sy + 160))
 
+    linesToOmmit =  len(grid) - 20
+
     # draw placed blocks and main piece
     for i in range(len(grid)):
         for j in range(len(grid[i])):
-            pygame.draw.rect(surface, grid[i][j], (top_left_x + j*block_size,
-                                                   top_left_y + i*block_size, block_size, block_size), 0)
+            if  grid[i][j]:
+                pygame.draw.rect(surface, grid[i][j], (top_left_x + j*block_size,
+                                                     top_left_y + (i-linesToOmmit)*block_size, block_size, block_size), 0)
 
     pygame.draw.rect(surface, (255, 0, 0), (top_left_x,
                                             top_left_y, play_width, play_height), 5)
@@ -127,10 +133,9 @@ def max_score():
             score = "0"
     return score
 
-def main(win):  # *
+def main(win):
     last_score = max_score()
     board = b.Board()
-    board.create_grid()
 
     change_piece = False
     save_piece = False
@@ -153,6 +158,11 @@ def main(win):  # *
             level_time = 0
             if level_time > 0.12:
                 level_time -= 0.005
+
+        # Reset drop timer if we just changed a piece
+        if board.reseted:
+            fall_time = 0
+            board.reseted = False
 
         if fall_time/1000 > fall_speed:
             fall_time = 0

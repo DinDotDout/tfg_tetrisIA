@@ -44,13 +44,14 @@ class Piece(object, metaclass=ABCMeta):
     def __init__(self):
         self.rotationIndex = 0
         self.tiles = [tc.Tile() for i in range(4)]
-        self.make_shape()
+        self._make_shape()
 
     # def __str__(self):
     #     return super().__str__()
     
     @abstractmethod
-    def make_shape(self):
+    def _make_shape(self):
+        "Creates the corresponding piece shape"
         raise NotImplementedError
 
     def rotate(self, clockwise):
@@ -82,11 +83,8 @@ class Piece(object, metaclass=ABCMeta):
 
 class SPiece(Piece):
     color = (0, 255, 0)
-    # def __init__(self):
-    #     Piece.__init__(self)
-    #     make_shape()
 
-    def make_shape(self):
+    def _make_shape(self):
         for tile in self.tiles:
             tile.color = self.color
         self.tiles[1].position = np.array([-1,0])
@@ -96,7 +94,7 @@ class SPiece(Piece):
 class ZPiece(Piece):
     color = (255, 0, 0)
 
-    def make_shape(self):
+    def _make_shape(self):
         for tile in self.tiles:
             tile.color = self.color
         self.tiles[1].position = np.array([0,1])
@@ -141,7 +139,7 @@ class IPiece(Piece):
         ]
     )
 
-    def make_shape(self):
+    def _make_shape(self):
         for tile in self.tiles:
             tile.color = self.color
         self.tiles[1].position = np.array([-1,0])
@@ -161,7 +159,7 @@ class OPiece(Piece):
         ]
     )
 
-    def make_shape(self):
+    def _make_shape(self):
         for tile in self.tiles:
             tile.color = self.color
         self.tiles[1].position = np.array([1,0])
@@ -171,7 +169,7 @@ class OPiece(Piece):
 class LPiece(Piece):
     color = (255, 165, 0)
 
-    def make_shape(self):
+    def _make_shape(self):
         for tile in self.tiles:
             tile.color = self.color
         self.tiles[1].position = np.array([-1,0])
@@ -181,7 +179,7 @@ class LPiece(Piece):
 class JPiece(Piece):
     color = (0, 0, 255)
 
-    def make_shape(self):
+    def _make_shape(self):
         for tile in self.tiles:
             tile.color = self.color
         self.tiles[1].position = np.array([-1,0])
@@ -191,7 +189,7 @@ class JPiece(Piece):
 class TPiece(Piece):
     color = (128, 0, 128)
 
-    def make_shape(self):
+    def _make_shape(self):
         for tile in self.tiles:
             tile.color = self.color
         self.tiles[1].position = np.array([-1,0])
