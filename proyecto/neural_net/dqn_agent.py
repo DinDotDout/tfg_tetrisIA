@@ -115,7 +115,7 @@ class DQNAgent:
         return best_state
 
     def save(self):
-        self.model.save('models/tetris_model.h5')
+        self.model.save('neural_net/models/tetris_model.h5')
 
     def train(self, batch_size=32, epochs=3):
         '''Trains the agent'''

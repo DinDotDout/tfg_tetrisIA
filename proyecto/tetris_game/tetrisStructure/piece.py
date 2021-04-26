@@ -1,5 +1,5 @@
 import numpy as np
-import tetrisStructure.tile as tc
+from . import tile as tc
 from abc import ABCMeta, abstractmethod
 
 # __all__ = ['ZPiece', 'IPiece', 'OPiece', 'SPiece', 'TPiece', 'JPiece', 'LPiece']
@@ -45,9 +45,6 @@ class Piece(object, metaclass=ABCMeta):
         self.rotationIndex = 0
         self.tiles = [tc.Tile() for i in range(4)]
         self._make_shape()
-
-    # def __str__(self):
-    #     return super().__str__()
     
     @abstractmethod
     def _make_shape(self):
@@ -60,6 +57,9 @@ class Piece(object, metaclass=ABCMeta):
         self.rotationIndex %= 4
         for i in range(len(self.tiles)):
             self.tiles[i].rotate_tile(self.tiles[0].position, clockwise)
+
+    def reset_rotation(self):
+        self._make_shape()
         
     @property
     def color(self):

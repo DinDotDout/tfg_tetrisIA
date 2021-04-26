@@ -1,37 +1,41 @@
 import numpy as np
 import random as rnd
-import tetrisStructure.tile as tc
-import tetrisStructure.piece as pc
+from . import tile as tc
+from . import piece as pc
 
 class Board():
-
-    def __init__(self):
+    gridSizeY = 24
+    gridSizeX = 10
+    killHeight = 21
+    def __init__(self, grid = None, bag = [], piecePos = None,
+                    mainPiece = None, storedPiece = None, canStore = False):
         self.gameOver = False
-        self.gridSizeY = 24
-        self.gridSizeX = 10
-        self.killHeight = 21
 
-        self.grid = self._create_grid()
+        if grid:
+            self.grid = grid
+        else:
+            self.grid = self._create_grid()
 
-        self.bag = [] # list off upcoming pieces
-        self._fill_bag()
+        self.bag = bag # list off upcoming pieces
         
-        self.piecePos = None
-        self.mainPiece = None
-        self._spawn_piece()
-
-        self.storedPiece = None
-        self.canStore = True
+        if  mainPiece and piecePos:
+            self.piecePos = piecePos
+            self.mainPiece = mainPiece
+        else:
+            self._spawn_piece()
+       
+        self.storedPiece = storedPiece
+        self.canStore = canStore
         self.reseted = False
         self.score = 0
          
     def _create_grid(self):
         "Creates a grid of sized based off of gridSizeX and gridSizeY variables"
         # We add an extra row to manage pieces out of the players sight
-        grid = [[0 for col in range(self.gridSizeX)] for row in range(self.gridSizeY)]
-        for y in range(self.gridSizeY):
-            for x in range(self.gridSizeX):
-                grid[y][x] = GridCell()
+        grid = [[GridCell() for col in range(self.gridSizeX)] for row in range(self.gridSizeY)]
+        # for y in range(self.gridSizeY):
+        #     for x in range(self.gridSizeX):
+        #         grid[y][x] = GridCell()
         return grid
 
     def __str__(self):
@@ -61,8 +65,8 @@ class Board():
         self.canStore = True
         self.reseted = True
     
-    def _spawn_height(self):
-        spawn_pos = np.array([4,18])
+    def _spawn_height(self, height = np.array([4,18])):
+        spawn_pos = np.copy(height)
         if not self._can_spawn_piece(spawn_pos):
             spawn_pos[1] += 1
             if not self._can_spawn_piece(spawn_pos):
@@ -89,9 +93,11 @@ class Board():
     def swap_piece(self):
         "stores main piece and draws out the stored one or a new one"
         if not self.storedPiece:
+            self.mainPiece.reset_rotation()
             self.storedPiece = self.mainPiece
             self._spawn_piece()
         elif self.canStore:
+            self.mainPiece.reset_rotation()
             aux = self.storedPiece
             self.storedPiece = self.mainPiece
             self.mainPiece = aux
@@ -163,10 +169,9 @@ class Board():
         while canDrop:
             canDrop = self.move_piece(down)
 
-    def _is_in_bounds(self, pos):
+    def _is_in_bounds(self, pos, ):
         "Checks to see if the coordinate is within the tetris board bounds"
         x, y = pos
-
         if x < 0 or x >= self.gridSizeX or y < 0:
             return False
         else:
@@ -175,9 +180,6 @@ class Board():
     def _is_cell_empty(self, pos):
         "Checks to see if the coordinates are occupied by a block"
         x, y = pos
-        # if y >= self.gridSizeY: # Pieces max spawn height is 20 but blocks can be higher when rotated
-        #     self.gameOver = True
-        #     return False
         if self.grid[y][x].isOccupied:
             return False
         else:
@@ -247,7 +249,8 @@ class Board():
 
         for tile in self.mainPiece.tiles:
             x, y = self.piecePos + tile.position
-            gridColors[y][x] = self.mainPiece.color
+            if x >= 0 and x < self.gridSizeX: # Checks only pieces within grid
+                gridColors[y][x] = self.mainPiece.color
         gridColors.reverse()
         return gridColors
 
