@@ -3,7 +3,7 @@ import numpy as np
 from time import sleep
 import copy
 
-from .tetrisStructure.piece import OPiece, SPiece, ZPiece, IPiece
+from tetris_game.tetrisStructure.piece import OPiece, SPiece, ZPiece, IPiece
 
 
 def _number_of_holes(board):

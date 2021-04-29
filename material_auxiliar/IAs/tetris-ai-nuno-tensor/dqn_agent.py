@@ -139,7 +139,7 @@ class DQNAgent:
                     new_q = reward + self.discount * next_qs[i]
                 else:
                     new_q = reward
-
+                print(new_q)
                 x.append(state)
                 y.append(new_q)
 

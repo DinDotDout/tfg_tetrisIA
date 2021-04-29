@@ -120,7 +120,6 @@ class DQNAgent:
     def train(self, batch_size=32, epochs=3):
         '''Trains the agent'''
         n = len(self.memory)
-    
         if n >= self.replay_start_size and n >= batch_size:
 
             batch = random.sample(self.memory, batch_size)
@@ -139,10 +138,8 @@ class DQNAgent:
                     new_q = reward + self.discount * next_qs[i]
                 else:
                     new_q = reward
-
                 x.append(state)
                 y.append(new_q)
-
             # Fit the model to the given values
             self.model.fit(np.array(x), np.array(y), batch_size=batch_size, epochs=epochs, verbose=0)
 

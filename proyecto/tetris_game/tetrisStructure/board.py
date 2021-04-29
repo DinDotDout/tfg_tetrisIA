@@ -9,26 +9,42 @@ class Board():
     killHeight = 21
     def __init__(self, grid = None, bag = [], piecePos = None,
                     mainPiece = None, storedPiece = None, canStore = False):
+        self.reset()
+        # self.gameOver = False
+
+        # if grid:
+        #     self.grid = grid
+        # else:
+        #     self.grid = self._create_grid()
+
+        # self.bag = bag # list off upcoming pieces
+        
+        # if  mainPiece and piecePos:
+        #     self.piecePos = piecePos
+        #     self.mainPiece = mainPiece
+        # else:
+        #     self._spawn_piece()
+       
+        # self.storedPiece = storedPiece
+        # self.canStore = canStore
+        # self.reseted = False
+        # self.score = 0
+    
+    def reset(self):
         self.gameOver = False
 
-        if grid:
-            self.grid = grid
-        else:
-            self.grid = self._create_grid()
+        self.grid = self._create_grid()
 
-        self.bag = bag # list off upcoming pieces
+        self.bag = [] # list off upcoming pieces
         
-        if  mainPiece and piecePos:
-            self.piecePos = piecePos
-            self.mainPiece = mainPiece
-        else:
-            self._spawn_piece()
+        self._spawn_piece()
        
-        self.storedPiece = storedPiece
-        self.canStore = canStore
+        self.storedPiece = None
+        self.canStore = True
         self.reseted = False
         self.score = 0
-         
+
+
     def _create_grid(self):
         "Creates a grid of sized based off of gridSizeX and gridSizeY variables"
         # We add an extra row to manage pieces out of the players sight
@@ -96,6 +112,7 @@ class Board():
             self.mainPiece.reset_rotation()
             self.storedPiece = self.mainPiece
             self._spawn_piece()
+            self.canStore = False
         elif self.canStore:
             self.mainPiece.reset_rotation()
             aux = self.storedPiece
@@ -168,7 +185,6 @@ class Board():
         down = np.array([0,-1])
         while canDrop:
             canDrop = self.move_piece(down)
-
     def _is_in_bounds(self, pos, ):
         "Checks to see if the coordinate is within the tetris board bounds"
         x, y = pos
@@ -201,40 +217,54 @@ class Board():
         for x in range(self.gridSizeX):
             self.grid[line][x].block = None
             self.grid[line][x].isOccupied = False
-    
+        for lineToDrop in range(line+1, self.gridSizeY):
+                for x in range(self.gridSizeX):
+                    cell = self.grid[lineToDrop][x]     
+                    if cell.isOccupied:
+        
+                        self.grid[lineToDrop-1][x].block = cell.block
+                        self.grid[lineToDrop-1][x].isOccupied = cell.isOccupied
+                        cell.block = None
+                        cell.isOccupied = False
+
     def _check_line_clears(self):
-        linesToClear = []
+        # linesToClear = []
         consecutiveLineClears = 0
 
-        for y in range(self.gridSizeY):
+        for y in range(self.gridSizeY-1, -1, -1): #loop from top to bottom
             lineClear = True
             for x in range(self.gridSizeX):
                 if not self.grid[y][x].isOccupied:
                     lineClear = False
-                    consecutiveLineClears = 0
+                    # consecutiveLineClears = 0
+                    break
                 
             if lineClear:
-                linesToClear.append(y)
+                # linesToClear.append(y)
                 consecutiveLineClears += 1
                 if consecutiveLineClears == 4:
                     # print TETRIS! and add points
                     print("TETRIS!")
                 self._clear_line(y)
-            self.score = len(linesToClear)*2
-        linesToClear.reverse()
+        self.score += consecutiveLineClears**2
+            # self.score = len(linesToClear)*2
+        # linesToClear.reverse()
 
         # Drop lines above lines cleared in inverse order
         # Some lines will drop more than once depending on the lines cleared
-        if len(linesToClear) > 0:
-            for i in range(len(linesToClear)):
-                for lineToDrop in range(linesToClear[i] + 1 - i, self.gridSizeY):
-                    for x in range(self.gridSizeX):
-                        cell = self.grid[lineToDrop][x]     
-                        if cell.isOccupied:
-                            self.grid[lineToDrop-1][x].block = cell.block
-                            self.grid[lineToDrop-1][x].isOccupied = cell.isOccupied
-                            cell.block = None
-                            cell.isOccupied = False
+        # if len(linesToClear) > 0:
+        #     for i in range(len(linesToClear)):
+        #         # for lineToDrop in range(linesToClear[i] + 1 - i, self.gridSizeY):
+        #         for lineToDrop in range(linesToClear[i] , self.gridSizeY):
+        #             print(lineToDrop)
+        #             for x in range(self.gridSizeX):
+        #                 cell = self.grid[lineToDrop][x]     
+        #                 if cell.isOccupied:
+            
+        #                     self.grid[lineToDrop-1][x].block = cell.block
+        #                     self.grid[lineToDrop-1][x].isOccupied = cell.isOccupied
+        #                     cell.block = None
+        #                     cell.isOccupied = False
 
     # Returns a matrix containing the colors of the cells
     def grid_colors(self):

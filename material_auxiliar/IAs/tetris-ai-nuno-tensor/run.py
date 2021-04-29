@@ -12,9 +12,9 @@ from tqdm import tqdm
 # Run dqn with Tetris
 def dqn():
     env = Tetris()
-    episodes = 2000
+    episodes = 470
     max_steps = None
-    epsilon_stop_episode = 1500
+    epsilon_stop_episode = 2000
     mem_size = 20000
     discount = 0.95
     batch_size = 512

@@ -1,7 +1,7 @@
 import pygame
 from menu import *
 import tetris_game.tetris as tetris
-import neural_net.run as nn
+import neural_net.run_net as nn
 import os
 x = 100
 y = 45
@@ -29,8 +29,7 @@ class Controller():
         
         # self.font_name = pygame.font.get_default_font()
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
-        self.main_menu = Menu(self)
-        self.curr_menu = self.main_menu
+        self.curr_menu = Menu(self)
 
     # def game_loop(self):
     #     while self.playing:

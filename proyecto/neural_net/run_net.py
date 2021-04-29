@@ -3,19 +3,20 @@ from time import sleep
 from neural_net.dqn_agent import DQNAgent
 from datetime import datetime
 from statistics import mean, median
-import randoms
+import random
 from .logs import CustomTensorBoard
 from tqdm import tqdm
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-from tetris_game import heuristic_calc as h_c, tetris as tn
+from neural_net import heuristic_calc as h_c
+from tetris_game import tetris as tn
 from tetris_game.tetrisStructure import board as b
 
 
 # Run dqn with Tetris
 def dqn():
-    env = None
+    env = b.Board()
     episodes = 2000
     max_steps = None
     epsilon_stop_episode = 1500
@@ -24,9 +25,9 @@ def dqn():
     batch_size = 512
     epochs = 1
     render_every = 100
-    log_every = 50
+    log_every = 100
     replay_start_size = 2000
-    train_every = 1
+    train_every = 2000
     n_neurons = [32, 32]
     render_delay = None
     activations = ['relu', 'relu', 'linear']
@@ -42,8 +43,8 @@ def dqn():
     scores = []
 
     for episode in tqdm(range(episodes)):
-        env = b.Board()
-        current_state = h_c.get_board_props(env)
+        env.reset()
+        current_state = h_c.get_board_props(env, 0)
         done = False
         steps = 0
 
@@ -69,12 +70,14 @@ def dqn():
             if render:
                 tn.draw(env)
                 # print()
+                # sleep(0.8)
 
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
             current_state = next_states[best_action]
             steps += 1
         if render:
             tn.end()
+           
         scores.append(env.score)
 
         # Train
@@ -96,7 +99,7 @@ def test_model(model):
 
     env = b.Board()
     agent = DQNAgent(model = model, state_size = h_c.get_state_size(), epsilon = 0)
-    current_state = h_c.get_board_props(env)
+    current_state = h_c.get_board_props(env, 0)
     done = False
     steps = 0
     max_steps = None
@@ -118,11 +121,14 @@ def test_model(model):
                 break
         reward, done = h_c.play(env, best_action[0], best_action[1], render=render,
                                 render_delay=render_delay) # enviar secuencia de comandos a la stich
+        # if reward > 11:
+        #     sleep(2)
+        #     print("eeeeeeeeeeee")
+        # print(reward)
         tn.draw(env)
-        sleep(0.1)
+        # sleep(0.8)
         # enviar secuencia de comandos a la switch
         current_state = next_states[best_action] # Estado en el que se supone nos deberemos encontrar tras realizar los moviemientos
-        # steps += 1
 
 def train():
     dqn()
