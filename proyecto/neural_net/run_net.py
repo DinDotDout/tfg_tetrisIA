@@ -120,13 +120,15 @@ def test_model(model):
                 best_action = action
                 break
         reward, done = h_c.play(env, best_action[0], best_action[1], render=render,
-                                render_delay=render_delay) # enviar secuencia de comandos a la stich
+                                render_delay=render_delay) # enviar secuencia de comandos a la swtich
         # if reward > 11:
-        #     sleep(2)
-        #     print("eeeeeeeeeeee")
+        
+
         # print(reward)
         tn.draw(env)
-        # sleep(0.8)
+        # print(best_state)
+        # sleep(2)
+        sleep(0.8)
         # enviar secuencia de comandos a la switch
         current_state = next_states[best_action] # Estado en el que se supone nos deberemos encontrar tras realizar los moviemientos
 

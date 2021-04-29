@@ -7,6 +7,7 @@ class Board():
     gridSizeY = 24
     gridSizeX = 10
     killHeight = 21
+
     def __init__(self, grid = None, bag = [], piecePos = None,
                     mainPiece = None, storedPiece = None, canStore = False):
         self.reset()
@@ -30,17 +31,25 @@ class Board():
         # self.reseted = False
         # self.score = 0
     
-    def reset(self):
+    def reset(self, grid = None, bag = [], piecePos = None,
+                    mainPiece = None, storedPiece = None, canStore = False):
         self.gameOver = False
 
-        self.grid = self._create_grid()
+        if grid:
+            self.grid = grid
+        else:
+            self.grid = self._create_grid()
 
-        self.bag = [] # list off upcoming pieces
-        
-        self._spawn_piece()
+        self.bag = bag # list off upcoming pieces
+
+        if mainPiece and piecePos is not None:
+            self.piecePos = piecePos
+            self.mainPiece = mainPiece
+        else:
+            self._spawn_piece()
        
-        self.storedPiece = None
-        self.canStore = True
+        self.storedPiece = storedPiece
+        self.canStore = canStore
         self.reseted = False
         self.score = 0
 
@@ -48,7 +57,7 @@ class Board():
     def _create_grid(self):
         "Creates a grid of sized based off of gridSizeX and gridSizeY variables"
         # We add an extra row to manage pieces out of the players sight
-        grid = [[GridCell() for col in range(self.gridSizeX)] for row in range(self.gridSizeY)]
+        grid = [[None for col in range(self.gridSizeX)] for row in range(self.gridSizeY)]
         # for y in range(self.gridSizeY):
         #     for x in range(self.gridSizeX):
         #         grid[y][x] = GridCell()
@@ -69,13 +78,26 @@ class Board():
         out.reverse()
         return '\n'.join(out)
     
+    def get_piece_type(self, n):
+        pieces = [
+            pc.IPiece(),
+            pc.JPiece(),
+            pc.LPiece(),
+            pc.OPiece(),
+            pc.SPiece(),
+            pc.TPiece(),
+            pc.ZPiece()
+        ]
+        return pieces[n]
+
     def _spawn_piece(self):
         "Refills bag if necessary and sets next piece in bag as main piece"
+        
         # Append next bag if current bag is under 7
         if len(self.bag) < 7:  # check to see if list is empty
             self._fill_bag()
 
-        self.mainPiece = self.bag.pop(0) # get current piece
+        self.mainPiece = self.get_piece_type(self.bag.pop(0)) # get current piece
         self.piecePos = self._spawn_height()    
 
         self.canStore = True
@@ -93,18 +115,18 @@ class Board():
 
     def _fill_bag(self):
         "Refills bag with a random order"
-        pieces = [
-            pc.IPiece(),
-            pc.JPiece(),
-            pc.LPiece(),
-            pc.OPiece(),
-            pc.SPiece(),
-            pc.TPiece(),
-            pc.ZPiece()
+        pieceIndex = [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
         ]
 
-        rnd.shuffle(pieces)  # shuffle list
-        self.bag.extend(pieces)  # add new pieces
+        rnd.shuffle(pieceIndex)  # shuffle list
+        self.bag.extend(pieceIndex)  # add new pieces
 
     def swap_piece(self):
         "stores main piece and draws out the stored one or a new one"
@@ -171,9 +193,8 @@ class Board():
             if y >= self.killHeight:
                 self.gameOver = True
                 return
-
-            self.grid[y][x].isOccupied = True
-            self.grid[y][x].block = tile
+            
+            self.grid[y][x] = tile.color
 
         self._spawn_piece()
         self._check_line_clears()
@@ -196,7 +217,7 @@ class Board():
     def _is_cell_empty(self, pos):
         "Checks to see if the coordinates are occupied by a block"
         x, y = pos
-        if self.grid[y][x].isOccupied:
+        if self.grid[y][x]:
             return False
         else:
             return True
@@ -215,17 +236,14 @@ class Board():
             return
         
         for x in range(self.gridSizeX):
-            self.grid[line][x].block = None
-            self.grid[line][x].isOccupied = False
+            self.grid[line][x] = None
         for lineToDrop in range(line+1, self.gridSizeY):
                 for x in range(self.gridSizeX):
-                    cell = self.grid[lineToDrop][x]     
-                    if cell.isOccupied:
-        
-                        self.grid[lineToDrop-1][x].block = cell.block
-                        self.grid[lineToDrop-1][x].isOccupied = cell.isOccupied
-                        cell.block = None
-                        cell.isOccupied = False
+                    color = self.grid[lineToDrop][x]     
+                    if color:
+                        self.grid[lineToDrop-1][x] = color
+                        self.grid[lineToDrop][x]  = None
+
 
     def _check_line_clears(self):
         # linesToClear = []
@@ -234,7 +252,7 @@ class Board():
         for y in range(self.gridSizeY-1, -1, -1): #loop from top to bottom
             lineClear = True
             for x in range(self.gridSizeX):
-                if not self.grid[y][x].isOccupied:
+                if not self.grid[y][x]:
                     lineClear = False
                     # consecutiveLineClears = 0
                     break
@@ -271,9 +289,8 @@ class Board():
         gridColors = [[None for col in range(self.gridSizeX)] for row in range(self.gridSizeY)]
         for y in range(self.gridSizeY-4): # don't show info on placed pieces out of grid
             for x in range(0, self.gridSizeX):
-                if self.grid[y][x].isOccupied:
-                    color = self.grid[y][x].block.color
-                    gridColors[y][x] = color
+                if self.grid[y][x]:
+                    gridColors[y][x] = self.grid[y][x]
                 else:
                     gridColors[y][x] = (0, 0, 0)
 
@@ -284,11 +301,11 @@ class Board():
         gridColors.reverse()
         return gridColors
 
-class GridCell:
-    def __init__(self):
-        # self.location = vector(x,y)
-        self.isOccupied = False
-        self.block = None
+# class GridCell:
+#     def __init__(self):
+#         # self.location = vector(x,y)
+#         self.isOccupied = False
+#         self.block = None
 
-    def __str__(self):
-        return str(1 if self.isOccupied else 0)
+#     def __str__(self):
+#         return str(1 if self.isOccupied else 0)

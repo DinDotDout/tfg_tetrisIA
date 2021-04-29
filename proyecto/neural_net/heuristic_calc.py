@@ -12,9 +12,9 @@ def _number_of_holes(board):
     for x in range(board.gridSizeX):
         n = 0
         for y in range(board.killHeight):
-            if not board.grid[y][x].isOccupied:
+            if not board.grid[y][x]:
                 n += 1
-            if board.grid[y+1][x].isOccupied:
+            if board.grid[y+1][x]:
                 holes += n
                 n = 0
     return holes
@@ -31,7 +31,7 @@ def _bumpiness(board):
         height = 0
         bumpiness = 0
         for y in range(board.killHeight, -1, -1):
-            if board.grid[y][x].isOccupied:
+            if board.grid[y][x]:
                 height = y+1 # 0 height will be counted as 1
                 break
         if x > 0: # We won't calculate 0 and the first column height
@@ -50,7 +50,7 @@ def _height(board):
     for x in range(board.gridSizeX):
         height = 0
         for y in range(board.killHeight, -1, -1):
-            if board.grid[y][x].isOccupied:
+            if board.grid[y][x]:
                 height = y+1 # 0 row will be counted as height 1
                 break
         sum_height += height
@@ -86,27 +86,43 @@ def get_next_states(board):
         rotations = 2
 
     initialBoard = copy.deepcopy(board) # Save initial board state
+    # initialPos = initialBoard.piecePos
     initialScore = initialBoard.score
-
     gamePiece = copy.deepcopy(mainPiece) # We will use this piece to preserve rotation
 
     # For all rotations
     for rotation in range(rotations):
-        # For all positions   
+        # For all positions
+        
         for displacement in displacements:
-            for i in range(rotation):
-                board.rotate_piece(True, True)
- 
-            isValid = board.move_piece(displacement*movement)          
+            # for i in range(rotation):
+            #     board.rotate_piece(True, True)
+                
+            isValid = board.move_piece(displacement*movement) 
             if isValid:
                 board.drop_piece()
                 # Calculate score obtained and insert it in the list
                 props = get_board_props(board, initialScore)
                 states[(displacement, rotation)] = props
                 # boardList.append(board)
-            board = copy.deepcopy(initialBoard) # Reset board state given that board.move_piece alters it
 
+            grid = [x[:] for x in initialBoard.grid] # reset board game
+            bag = [x for x in initialBoard.bag] # reset board bag
+            board.reset(grid = grid, bag = bag, piecePos = copy.deepcopy(initialBoard.piecePos),
+                mainPiece = copy.deepcopy(gamePiece), storedPiece = initialBoard.storedPiece, canStore = initialBoard.canStore)
+                # board = copy.deepcopy(initialBoard) # reset board game
+                
+        board.rotate_piece(True, True)
+       
+    # print()
+            # board = copy.deepcopy(initialBoard) # Reset board state given that board.move_piece alters it
+    # props = get_board_props(board, initialScore)
+    # states[(2, 2)] = props
+    # for x in range(1000):
+    #     gamePiece = copy.deepcopy(mainPiece) # We will use this piece to preserve rotation
     return states, initialBoard
+    
+    # return states, initialBoard
 
 def play(board, displacement, rotation, render=False, render_delay=None):
     '''Makes a play given a position and a rotation, returning the reward and if the game is over'''

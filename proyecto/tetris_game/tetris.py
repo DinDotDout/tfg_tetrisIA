@@ -5,7 +5,7 @@ import numpy as np
 
 
 from .tetrisStructure import board as b
-from . import heuristic_calc as h_c
+# from . import heuristic_calc as h_c
 
 
 # GLOBALS VARS
@@ -83,7 +83,8 @@ def draw_window(surface, grid, score=0, last_score=0):
 
     draw_grid(surface, grid) #draws delimiters between cells
 
-def draw_next_shapes(surface, bag):
+def draw_next_shapes(surface, board):
+
     font = pygame.font.SysFont('comicsans', 30)
     label = font.render('Next Shape', 1, (255, 255, 255))
 
@@ -93,7 +94,8 @@ def draw_next_shapes(surface, bag):
     sx += 1.5*block_size
     sy += 3*block_size
     for i in range(6):
-        pieceTiles = bag[i].tiles
+        piece = board.get_piece_type(board.bag[i])
+        pieceTiles = piece.tiles
         for tile in pieceTiles:
             x, y = tile.position
             pygame.draw.rect(surface, tile.color, (sx + x *
@@ -171,7 +173,7 @@ def game_loop(win):
             input_controller(event, board)
            
         draw_window(win, board.grid_colors(), board.score, last_score)
-        draw_next_shapes(win, board.bag)
+        draw_next_shapes(win, board)
         draw_stored_piece(win, board.storedPiece)
         pygame.display.update()
 
@@ -202,68 +204,6 @@ def game_menu():
     # pygame.quit()
     # exit()
 
-def tetris_training(win):
-    last_score = max_score()
-    board = b.Board()
-
-    change_piece = False
-    save_piece = False
-    already_saved = False
-    run = True
-
-    saved_piece = None
-
-    clock = pygame.time.Clock()
-    fall_time = 0
-    fall_speed = 1
-    level_time = 0
-
-    statesIndex = 0
-
-    states, board = h_c.get_next_states(board)
-
-    while run and not board.gameOver:
-        fall_time += clock.get_rawtime()
-        level_time += clock.get_rawtime()
-        clock.tick()
-
-        key = pygame.key.get_pressed()
-        if key[pygame.K_d ]:
-            randomStateInt = random.randint(0, len(states))
-            i = 0
-            for action, state in states.items():
-                if i == randomStateInt:
-                    reward, done = h_c.play(board, action[0], action[1], render=False,
-                                render_delay=None)
-                    states, board = h_c.get_next_states(board)
-                i +=1
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-        
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_s:
-                    randomStateInt = random.randint(0, len(states))
-                    i = 0
-                    for action, state in states.items():
-                        if i == randomStateInt:
-                            reward, done = h_c.play(board, action[0], action[1], render=False,
-                                        render_delay=None)
-                            states, board = h_c.get_next_states(board)
-                        i +=1
-
-                # prinddt(y)
-        draw_window(win, board.grid_colors(), board.score, last_score)
-        draw_next_shapes(win, board.bag)
-        draw_stored_piece(win, board.storedPiece)
-        pygame.display.update()
-    
-
-def tetris_autoplay(win):
-    pass
-
-
 def draw(board):
     # pygame.init()
     win = pygame.display.set_mode((s_width, s_height))
@@ -272,7 +212,7 @@ def draw(board):
     # pygame.display.quit()
     # pygame.quit()
     draw_window(win, board.grid_colors(), board.score, 0)
-    draw_next_shapes(win, board.bag)
+    draw_next_shapes(win, board)
     draw_stored_piece(win, board.storedPiece)
     pygame.display.update()
 
