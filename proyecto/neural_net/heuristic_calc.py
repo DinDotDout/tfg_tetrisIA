@@ -34,7 +34,7 @@ def _bumpiness(board):
             if board.grid[y][x]:
                 height = y+1 # 0 height will be counted as 1
                 break
-        if x > 0: # We won't calculate 0 and the first column height
+        if x > 0 and x < board.gridSizeX: # We won't calculate 0 and the first column height
             bumpiness = abs(height-lastHeight)
             totalBumpiness += bumpiness
         lastHeight = height
@@ -54,13 +54,14 @@ def _height(board):
                 height = y+1 # 0 row will be counted as height 1
                 break
         sum_height += height
+
         if height > max_height:
             max_height = height
         elif height < min_height:
             min_height = height
     return sum_height, max_height, min_height
 
-def get_board_props(board, initialScore):
+def get_board_props(board, initialScore = 0):
     '''Get properties of the board'''
     # lines, board = self._clear_lines(board)
     newScore = board.score - initialScore
@@ -84,7 +85,7 @@ def get_next_states(board):
         rotations = 1
     elif pieceType is SPiece or pieceType is ZPiece or pieceType is IPiece: # Rotations 3 and 4 are similar to 1 and 2
         rotations = 2
-
+    
     initialBoard = copy.deepcopy(board) # Save initial board state
     # initialPos = initialBoard.piecePos
     initialScore = initialBoard.score
@@ -97,12 +98,21 @@ def get_next_states(board):
         for displacement in displacements:
             # for i in range(rotation):
             #     board.rotate_piece(True, True)
-                
             isValid = board.move_piece(displacement*movement) 
             if isValid:
+                # print("New move")
+                # print(board)
+                
                 board.drop_piece()
+                # print()
+                # print(board)
+
                 # Calculate score obtained and insert it in the list
                 props = get_board_props(board, initialScore)
+                # print(displacement, end =", ")
+                # print(rotation, end =": ")
+                # print(props)
+                # print()
                 states[(displacement, rotation)] = props
                 # boardList.append(board)
 
@@ -111,34 +121,39 @@ def get_next_states(board):
             board.reset(grid = grid, bag = bag, piecePos = copy.deepcopy(initialBoard.piecePos),
                 mainPiece = copy.deepcopy(gamePiece), storedPiece = initialBoard.storedPiece, canStore = initialBoard.canStore)
                 # board = copy.deepcopy(initialBoard) # reset board game
-                
+        
+            # for i in range(rotation):
         board.rotate_piece(True, True)
-       
+        gamePiece = copy.deepcopy(board.mainPiece) # make a copy to preserve rotation
     # print()
             # board = copy.deepcopy(initialBoard) # Reset board state given that board.move_piece alters it
     # props = get_board_props(board, initialScore)
     # states[(2, 2)] = props
     # for x in range(1000):
     #     gamePiece = copy.deepcopy(mainPiece) # We will use this piece to preserve rotation
+
     return states, initialBoard
     
     # return states, initialBoard
 
-def play(board, displacement, rotation, render=False, render_delay=None):
+def play(board, displacement, rotation):
     '''Makes a play given a position and a rotation, returning the reward and if the game is over'''
     initialScore = board.score
     displacement = displacement*np.array([1, 0])
+    # print(displacement)
     for i in range(rotation):
+        # print(i)
         board.rotate_piece(True, True)
     # Move piece to column
     board.move_piece(displacement)
     
     # Drop piece
     board.drop_piece()
-    score = 1 + (board.score - initialScore) * board.gridSizeX # bloack placed + blocks cleared ^2
-    if board.gameOver:
-        score = -1
 
+    score = 1 + ((board.score - initialScore)**2) * board.gridSizeX # bloack placed + blocks cleared ^2
+    if board.gameOver:
+        score -= 2
+    # print(score)
     return score, board.gameOver
 
 def get_state_size():

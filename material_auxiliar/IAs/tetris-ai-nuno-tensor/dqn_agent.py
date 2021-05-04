@@ -103,11 +103,15 @@ class DQNAgent:
         best_state = None
 
         if random.random() <= self.epsilon:
-            return random.choice(list(states))
+            state = random.choice(list(states))
+            return state
 
         else:
+            # print("agent")
             for state in states:
+                # print(state, end =": ")
                 value = self.predict_value(np.reshape(state, [1, self.state_size]))
+                # print(value)
                 if not max_value or value > max_value:
                     max_value = value
                     best_state = state
@@ -139,7 +143,7 @@ class DQNAgent:
                     new_q = reward + self.discount * next_qs[i]
                 else:
                     new_q = reward
-                print(new_q)
+                # print(new_q)
                 x.append(state)
                 y.append(new_q)
 

@@ -65,7 +65,14 @@ class Board():
 
     def __str__(self):
         out = []
-        for row in self.grid:
+        NoneTo0 = [x[:] for x in self.grid]
+        for i in range(self.gridSizeY):
+            for j in range(self.gridSizeX):
+                if not NoneTo0[i][j]:
+                    NoneTo0[i][j] = 0
+                else:
+                    NoneTo0[i][j] = 1
+        for row in NoneTo0:
             out.append(''.join([str(cell) for cell in row]))
 
         mainBlocks = []
@@ -264,7 +271,7 @@ class Board():
                     # print TETRIS! and add points
                     print("TETRIS!")
                 self._clear_line(y)
-        self.score += consecutiveLineClears**2
+        self.score += consecutiveLineClears
             # self.score = len(linesToClear)*2
         # linesToClear.reverse()
 

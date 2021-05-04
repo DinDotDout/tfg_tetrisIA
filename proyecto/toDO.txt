@@ -1,1 +1,3 @@
 fix line clear
+intentar que el best state haga match con el movimiento/asociar indice para aumentar velocidad?
+

@@ -5,7 +5,7 @@ import numpy as np
 
 
 from .tetrisStructure import board as b
-# from . import heuristic_calc as h_c
+from neural_net import heuristic_calc as h_c
 
 
 # GLOBALS VARS

@@ -7,14 +7,15 @@ from statistics import mean, median
 import random
 from logs import CustomTensorBoard
 from tqdm import tqdm
+from time import sleep
         
 
 # Run dqn with Tetris
 def dqn():
     env = Tetris()
-    episodes = 470
+    episodes = 2000
     max_steps = None
-    epsilon_stop_episode = 2000
+    epsilon_stop_episode = 1500
     mem_size = 20000
     discount = 0.95
     batch_size = 512
@@ -22,7 +23,7 @@ def dqn():
     render_every = 50
     log_every = 50
     replay_start_size = 2000
-    train_every = 1
+    train_every = 200
     n_neurons = [32, 32]
     render_delay = None
     activations = ['relu', 'relu', 'linear']
@@ -54,13 +55,19 @@ def dqn():
             
             best_action = None
             for action, state in next_states.items():
+                print(action, end = ": ")
+                print(state)
                 if state == best_state:
                     best_action = action
                     break
 
             reward, done = env.play(best_action[0], best_action[1], render=render,
                                     render_delay=render_delay)
-            
+            if render:
+                print("best state")
+                print(best_state)
+                print()
+                sleep(0.8)
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
             current_state = next_states[best_action]
             steps += 1
@@ -100,13 +107,17 @@ def test_model(model):
         
         best_action = None
         for action, state in next_states.items():
+            print(action, end = ": ")
+            print(state)
             if state == best_state:
                 best_action = action
                 break
 
         reward, done = env.play(best_action[0], best_action[1], render=render,
                                 render_delay=render_delay) # enviar secuencia de comandos a la stich
-        
+        print("best state")
+        print()
+        sleep(0.8)
         # agent.add_to_memory(current_state, next_states[best_action], reward, done)
         
         current_state = next_states[best_action] # Estado en el que se supone nos deberemos encontrar tras realizar los moviemientos

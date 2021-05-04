@@ -253,7 +253,6 @@ class Tetris:
             # For all positions
             for x in range(-min_x, Tetris.BOARD_WIDTH - max_x):
                 pos = [x, 0]
-
                 # Drop piece
                 while not self._check_collision(piece, pos):
                     pos[1] += 1
@@ -262,7 +261,8 @@ class Tetris:
                 # Valid move
                 if pos[1] >= 0:
                     board = self._add_piece_to_board(piece, pos)
-                    states[(x, rotation)] = self._get_board_props(board)
+                    props = self._get_board_props(board)
+                    states[(x, rotation)] = props
 
         return states
 

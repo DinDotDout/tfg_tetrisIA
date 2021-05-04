@@ -31,7 +31,7 @@ class DQNAgent:
         replay_start_size: Minimum size needed to train
     '''
  
-    def __init__(self, model = None,state_size = None, mem_size=10000, discount=0.95,
+    def __init__(self, state_size, model = None, mem_size=10000, discount=0.95,
                  epsilon=1, epsilon_min=0, epsilon_stop_episode=500,
                  n_neurons=[32,32], activations=['relu', 'relu', 'linear'],
                  loss='mse', optimizer='adam', replay_start_size=None):
@@ -97,22 +97,32 @@ class DQNAgent:
             return self.predict_value(state)
 
 
-    def best_state(self, states):
+    def best_action(self, states):
         '''Returns the best state for a given collection of states'''
         max_value = None
-        best_state = None
+        best_action = None
 
         if random.random() <= self.epsilon:
-            return random.choice(list(states))
+            # print("random")
+            # print(list(states))
+            return random.choice(list(states.keys()))
+            print()
+            return random.choice(list(states.keys()))
 
         else:
-            for state in states:
+            # print(list(states))
+            for action, state in states.items():
+                # print("state: ", end ="")
+                # print(state.value)
                 value = self.predict_value(np.reshape(state, [1, self.state_size]))
                 if not max_value or value > max_value:
                     max_value = value
+                    best_action = action
                     best_state = state
-
-        return best_state
+                # print("best state")
+                # print(best_action, end = ": ")
+                # print(best_state)
+        return best_action
 
     def save(self):
         self.model.save('neural_net/models/tetris_model.h5')

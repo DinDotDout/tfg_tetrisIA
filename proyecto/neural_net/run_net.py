@@ -27,7 +27,7 @@ def dqn():
     render_every = 100
     log_every = 100
     replay_start_size = 2000
-    train_every = 2000
+    train_every = 1
     n_neurons = [32, 32]
     render_delay = None
     activations = ['relu', 'relu', 'linear']
@@ -44,7 +44,7 @@ def dqn():
 
     for episode in tqdm(range(episodes)):
         env.reset()
-        current_state = h_c.get_board_props(env, 0)
+        current_state = h_c.get_board_props(env)
         done = False
         steps = 0
 
@@ -57,27 +57,33 @@ def dqn():
         while not done and (not max_steps or steps < max_steps):
             next_states, env = h_c.get_next_states(env)
             # print(next_states.values())
-            best_state = agent.best_state(next_states.values())
+            best_action = agent.best_action(next_states)
             
-            best_action = None
-            for action, state in next_states.items():
-                if state == best_state:
-                    best_action = action
-                    break
+            # best_action = None
+            # for action, state in next_states.items():
+            #     if state == best_state:
+            #         best_action = action
+            #         break
 
-            reward, done = h_c.play(env, best_action[0], best_action[1], render=render,
-                                    render_delay=render_delay)
+            reward, done = h_c.play(env, best_action[0], best_action[1])
             if render:
                 tn.draw(env)
-                # print()
-                # sleep(0.8)
+                sleep(0.3)
+            if reward > 11:
+                print(reward)
+            #     print("best state")
+            #     # print(best_action, end = ": ")
+            #     print(best_state)
+            #     print()
+            #     sleep(1)
 
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
             current_state = next_states[best_action]
             steps += 1
         if render:
             tn.end()
-           
+            
+        
         scores.append(env.score)
 
         # Train
@@ -109,25 +115,34 @@ def test_model(model):
 
     # Game
     while not done :
+        
     # and (not max_steps or steps < max_steps):
         next_states, env = h_c.get_next_states(env) # analizar todos los siguientes estados posibles del tetris de la switch
-        
-        best_state = agent.best_state(next_states.values())
-        
-        best_action = None
-        for action, state in next_states.items():
-            if state == best_state:
-                best_action = action
-                break
-        reward, done = h_c.play(env, best_action[0], best_action[1], render=render,
-                                render_delay=render_delay) # enviar secuencia de comandos a la swtich
-        # if reward > 11:
-        
+        # print("items")
+        # print(next_states.items())
+        # print("values")
+        # print(next_states.values())
+        # print()
 
-        # print(reward)
-        tn.draw(env)
+        best_action = agent.best_action(next_states)
+
+        # best_action = None
+        # for action, state in next_states.items():
+        #     # print(action, end = ": ")
+        #     # print(state)
+        #     if state == best_state:
+        #         best_action = action
+        #         break
+        # print("best state")
+        # print(best_action, end = ": ")
         # print(best_state)
-        # sleep(2)
+        reward, done = h_c.play(env, best_action[0], best_action[1]) # enviar secuencia de comandos a la swtich
+        # if reward > 11:
+
+
+        
+        tn.draw(env)
+        # print()
         sleep(0.8)
         # enviar secuencia de comandos a la switch
         current_state = next_states[best_action] # Estado en el que se supone nos deberemos encontrar tras realizar los moviemientos
