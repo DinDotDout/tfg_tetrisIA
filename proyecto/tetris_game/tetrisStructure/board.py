@@ -267,9 +267,8 @@ class Board():
             if lineClear:
                 # linesToClear.append(y)
                 consecutiveLineClears += 1
-                if consecutiveLineClears == 4:
-                    # print TETRIS! and add points
-                    print("TETRIS!")
+                # if consecutiveLineClears == 4:
+                #     print("TETRIS!")
                 self._clear_line(y)
         self.score += consecutiveLineClears
             # self.score = len(linesToClear)*2

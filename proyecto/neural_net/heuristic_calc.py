@@ -87,9 +87,18 @@ def get_next_states(board):
         rotations = 2
     
     initialBoard = copy.deepcopy(board) # Save initial board state
-    # initialPos = initialBoard.piecePos
+
     initialScore = initialBoard.score
     gamePiece = copy.deepcopy(mainPiece) # We will use this piece to preserve rotation
+
+    if board.canStore:
+        board.swap_piece()
+        props = get_board_props(board, initialScore)
+        states[(6, 0)] = props
+        grid = [x[:] for x in initialBoard.grid] # reset board game
+        bag = [x for x in initialBoard.bag] # reset board bag
+        board.reset(grid = grid, bag = bag, piecePos = copy.deepcopy(initialBoard.piecePos),
+            mainPiece = copy.deepcopy(gamePiece), storedPiece = initialBoard.storedPiece, canStore = initialBoard.canStore)
 
     # For all rotations
     for rotation in range(rotations):
@@ -100,22 +109,14 @@ def get_next_states(board):
             #     board.rotate_piece(True, True)
             isValid = board.move_piece(displacement*movement) 
             if isValid:
-                # print("New move")
-                # print(board)
-                
+                # Drop piece to bottom
                 board.drop_piece()
-                # print()
-                # print(board)
 
-                # Calculate score obtained and insert it in the list
+                # Calculate heuristic and add it to dictionary as a valid route
                 props = get_board_props(board, initialScore)
-                # print(displacement, end =", ")
-                # print(rotation, end =": ")
-                # print(props)
-                # print()
                 states[(displacement, rotation)] = props
-                # boardList.append(board)
 
+            # board = copy.deepcopy(initialBoard)
             grid = [x[:] for x in initialBoard.grid] # reset board game
             bag = [x for x in initialBoard.bag] # reset board bag
             board.reset(grid = grid, bag = bag, piecePos = copy.deepcopy(initialBoard.piecePos),
@@ -131,7 +132,7 @@ def get_next_states(board):
     # states[(2, 2)] = props
     # for x in range(1000):
     #     gamePiece = copy.deepcopy(mainPiece) # We will use this piece to preserve rotation
-
+    # print(states)
     return states, initialBoard
     
     # return states, initialBoard
@@ -139,22 +140,26 @@ def get_next_states(board):
 def play(board, displacement, rotation):
     '''Makes a play given a position and a rotation, returning the reward and if the game is over'''
     initialScore = board.score
-    displacement = displacement*np.array([1, 0])
-    # print(displacement)
-    for i in range(rotation):
-        # print(i)
-        board.rotate_piece(True, True)
-    # Move piece to column
-    board.move_piece(displacement)
-    
-    # Drop piece
-    board.drop_piece()
+    if displacement == 6:
+        board.swap_piece()
+    else:
+        displacement = displacement*np.array([1, 0])
+        # print(displacement)
+        for i in range(rotation):
+            # print(i)
+            board.rotate_piece(True, True)
+        # Move piece to column
+        board.move_piece(displacement)
+        
+        # Drop piece
+        board.drop_piece()
 
-    score = 1 + ((board.score - initialScore)**2) * board.gridSizeX # bloack placed + blocks cleared ^2
+    score = 1 + ((board.score - initialScore)**2)
     if board.gameOver:
         score -= 2
     # print(score)
     return score, board.gameOver
+
 
 def get_state_size():
     '''Size of the state'''

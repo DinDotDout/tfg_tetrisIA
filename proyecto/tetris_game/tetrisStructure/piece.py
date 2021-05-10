@@ -81,7 +81,7 @@ class Piece(object, metaclass=ABCMeta):
     def rotationIndex(self, rotationIndex):
         self._rotationIndex = rotationIndex
 
-class SPiece(Piece):
+class SPiece(Piece): # 
     color = (0, 255, 0)
 
     def _make_shape(self):
@@ -89,7 +89,7 @@ class SPiece(Piece):
             tile.color = self.color
         self.tiles[1].position = np.array([-1,0])
         self.tiles[2].position = np.array([1,1])
-        self.tiles[3].position = np.array([0,1])
+        self.tiles[3].position = np.array([0,1]) # primera deteccion
 
 class ZPiece(Piece):
     color = (255, 0, 0)
@@ -98,7 +98,7 @@ class ZPiece(Piece):
         for tile in self.tiles:
             tile.color = self.color
         self.tiles[1].position = np.array([0,1])
-        self.tiles[2].position = np.array([-1,1])
+        self.tiles[2].position = np.array([-1,1]) # primera deteccion
         self.tiles[3].position = np.array([1,0])
 
 class IPiece(Piece):
@@ -142,11 +142,11 @@ class IPiece(Piece):
     def _make_shape(self):
         for tile in self.tiles:
             tile.color = self.color
-        self.tiles[1].position = np.array([-1,0])
+        self.tiles[1].position = np.array([-1,0]) # primera deteccion
         self.tiles[2].position = np.array([1,0]) * 2
         self.tiles[3].position = np.array([1,0])
 
-class OPiece(Piece):
+class OPiece(Piece): # 2,2
     color = (255, 255, 0)
     offset_list = np.array(
         [
@@ -163,8 +163,8 @@ class OPiece(Piece):
         for tile in self.tiles:
             tile.color = self.color
         self.tiles[1].position = np.array([1,0])
-        self.tiles[2].position = np.array([1,1])
-        self.tiles[3].position = np.array([0,1])
+        self.tiles[2].position = np.array([1,1]) 
+        self.tiles[3].position = np.array([0,1]) # primera deteccion
 
 class LPiece(Piece):
     color = (255, 165, 0)
@@ -173,25 +173,25 @@ class LPiece(Piece):
         for tile in self.tiles:
             tile.color = self.color
         self.tiles[1].position = np.array([-1,0])
-        self.tiles[2].position = np.array([1,1])
+        self.tiles[2].position = np.array([1,1]) # primera deteccion
         self.tiles[3].position = np.array([1,0])
 
-class JPiece(Piece):
+class JPiece(Piece): #  -1,1
     color = (0, 0, 255)
 
     def _make_shape(self):
         for tile in self.tiles:
             tile.color = self.color
         self.tiles[1].position = np.array([-1,0])
-        self.tiles[2].position = np.array([-1,1])
+        self.tiles[2].position = np.array([-1,1]) # primera deteccion
         self.tiles[3].position = np.array([1,0])
 
-class TPiece(Piece):
+class TPiece(Piece): # 0,1
     color = (128, 0, 128)
 
     def _make_shape(self):
         for tile in self.tiles:
             tile.color = self.color
         self.tiles[1].position = np.array([-1,0])
-        self.tiles[2].position = np.array([0,1])
+        self.tiles[2].position = np.array([0,1]) # primera deteccion
         self.tiles[3].position = np.array([1,0])

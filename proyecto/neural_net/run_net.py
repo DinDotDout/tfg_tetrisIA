@@ -13,19 +13,22 @@ from neural_net import heuristic_calc as h_c
 from tetris_game import tetris as tn
 from tetris_game.tetrisStructure import board as b
 
+agent = None
 
 # Run dqn with Tetris
-def dqn():
+def train():
+    global agent
+
     env = b.Board()
-    episodes = 2000
+    episodes = 10000
     max_steps = None
-    epsilon_stop_episode = 1500
+    epsilon_stop_episode = 9500
     mem_size = 20000
     discount = 0.95
     batch_size = 512
     epochs = 1
-    render_every = 100
-    log_every = 100
+    render_every = 1000
+    log_every = 1000
     replay_start_size = 2000
     train_every = 1
     n_neurons = [32, 32]
@@ -55,27 +58,18 @@ def dqn():
 
         # Game
         while not done and (not max_steps or steps < max_steps):
+            if(steps == 10000):
+                print("Llevo 10000")
+            if(steps == 100000):
+                print("Llevo 10000")
+
             next_states, env = h_c.get_next_states(env)
-            # print(next_states.values())
             best_action = agent.best_action(next_states)
-            
-            # best_action = None
-            # for action, state in next_states.items():
-            #     if state == best_state:
-            #         best_action = action
-            #         break
 
             reward, done = h_c.play(env, best_action[0], best_action[1])
             if render:
                 tn.draw(env)
                 sleep(0.3)
-            if reward > 11:
-                print(reward)
-            #     print("best state")
-            #     # print(best_action, end = ": ")
-            #     print(best_state)
-            #     print()
-            #     sleep(1)
 
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
             current_state = next_states[best_action]
@@ -83,7 +77,6 @@ def dqn():
         if render:
             tn.end()
             
-        
         scores.append(env.score)
 
         # Train
@@ -101,58 +94,47 @@ def dqn():
                     
         agent.save()
 
-def test_model(model):
+def test_model(agent):
 
-    env = b.Board()
-    agent = DQNAgent(model = model, state_size = h_c.get_state_size(), epsilon = 0)
+    env = b.Board()    
     current_state = h_c.get_board_props(env, 0)
     done = False
-    steps = 0
-    max_steps = None
-    
-    render_delay = None
-    render = True
 
     # Game
     while not done :
         
-    # and (not max_steps or steps < max_steps):
         next_states, env = h_c.get_next_states(env) # analizar todos los siguientes estados posibles del tetris de la switch
-        # print("items")
-        # print(next_states.items())
-        # print("values")
-        # print(next_states.values())
-        # print()
-
         best_action = agent.best_action(next_states)
-
-        # best_action = None
-        # for action, state in next_states.items():
-        #     # print(action, end = ": ")
-        #     # print(state)
-        #     if state == best_state:
-        #         best_action = action
-        #         break
-        # print("best state")
-        # print(best_action, end = ": ")
-        # print(best_state)
         reward, done = h_c.play(env, best_action[0], best_action[1]) # enviar secuencia de comandos a la swtich
         # if reward > 11:
-
-
         
         tn.draw(env)
         # print()
-        sleep(0.8)
+        sleep(0.1)
         # enviar secuencia de comandos a la switch
-        current_state = next_states[best_action] # Estado en el que se supone nos deberemos encontrar tras realizar los moviemientos
-
-def train():
-    dqn()
+        current_state = next_states[best_action] # Estado en el que se supone nos deberemos encontrar tras realizar los moviemientos  
 
 def test():
+    load_net()
+    test_model(agent)
+
+def load_net():
+    global agent
     if os.path.isfile('neural_net/models/tetris_model.h5'):
         model = load_model('neural_net/models/tetris_model.h5')
-        test_model(model)
+        agent = DQNAgent(model = model, state_size = h_c.get_state_size(), epsilon = 0)
     else:
         print("No neural net data stored")
+
+def get_net_output(env):
+    current_state = h_c.get_board_props(env, 0)
+    next_states, env = h_c.get_next_states(env) # analizar todos los siguientes estados posibles del tetris de la switch
+    best_action = agent.best_action(next_states)
+
+    # reward, done = h_c.play(env, best_action[0], best_action[1]) # enviar secuencia de comandos a la swtich
+    # tn.draw(env)
+    # print("action: ", end = "")
+    # print(best_action[0], end = ", ")
+    # print(best_action[1])
+    return best_action[0], best_action[1]
+    # print()

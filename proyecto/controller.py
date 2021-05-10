@@ -2,6 +2,7 @@ import pygame
 from menu import *
 import tetris_game.tetris as tetris
 import neural_net.run_net as nn
+from img_proc import main as img_proc
 import os
 x = 100
 y = 45
@@ -15,7 +16,8 @@ class Controller():
         self.stateList = [
             tetris.game_menu,
             nn.train,
-            nn.test
+            nn.test,
+            img_proc.main
         ]
         self.reset()
 

@@ -23,7 +23,7 @@ def dqn():
     render_every = 50
     log_every = 50
     replay_start_size = 2000
-    train_every = 200
+    train_every = 1
     n_neurons = [32, 32]
     render_delay = None
     activations = ['relu', 'relu', 'linear']

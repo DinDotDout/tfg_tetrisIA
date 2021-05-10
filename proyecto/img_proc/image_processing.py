@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 import math
+from tetris_game.tetrisStructure import board, piece as tetrisPiece
+
 
 S = [[0.56, 131.16, 52.36],[0.68, 162.72, 61.72]]
 Z = [[35.32, 11.56, 145.32],[41.72, 13.96, 163.3]]
@@ -13,19 +15,25 @@ GREY = [[73.96, 74.92, 76.04], [90.4, 91.6, 92.36]]
 NoMatch = [[255.0,255.0,255.0]]
 BLACK = [[10.0, 10.0, 10.0]]
 MAIN = [[165, 245, 27]]
-shapes = [BLACK, S, Z, I, O, L, J, T, GREY, MAIN,NoMatch]
-shapes_str = ["e", "S", "Z", "I", "O", "L", "J", "T", "gr", "m","No"]
+shapes = [BLACK, I, J, L, O, S, T, Z, GREY, MAIN, NoMatch]
+
+shapes_str = ["e", "I", "J", "L", "O", "S", "T", "Z", "gr", "m","No"]
 EMPTY = 0
+
 frame = None
+gameBoard = board.Board()
+pieceDetected = False
+canMove = True
 
 # GAME DETECTION
 # ------------------------------------------------
 # Draw game detection points and create matrixes with game info
 def game_processing():
     check_game_grid()
+    check_out_of_grid()
     check_next_pieces()
     check_stored_piece()
-
+    update_board_info()
 
 def pixelBGR2HSV(img, x, y):
     bgr_pixel = np.uint8([[img[y, x]]])
@@ -122,6 +130,7 @@ def piece_type(x, y):
     shape = 0
     found = False
     th_mean = 6
+    isMain = False
     for color in shapes:
         # Two darkness levels for some colors
         dark = 0
@@ -136,8 +145,8 @@ def piece_type(x, y):
         if found:
             break   
         shape = shape+1
-    if dark == 1:
-        return len(shapes)-2 # main piece
+    if dark == 1 and shape > 0 and shape < len(shapes)-3:
+        isMain = True # main piece
     # if no match found
     if found == False:
         # if the mean colour is very dark, the element is still considered an empty block
@@ -146,16 +155,19 @@ def piece_type(x, y):
             shape = 0
         else:
             shape = len(shapes)-1
-    return shape
+    return shape, isMain
 
 # Returns block colour found if a match is found, else it will not update the cell information
 # It also shows what was detected on screen
 def check_block(pixel_x, pixel_y, real_block, info_block):
     global frame
-    shape = piece_type(pixel_x, pixel_y)
+    shape, isMain = piece_type(pixel_x, pixel_y)
     if shape != EMPTY: # BLock is not empty
         if shape != len(shapes)-1: # If there was a match, update info
-            real_block = 1
+            if isMain:
+                real_block = 2
+            else:
+                real_block = 1
             info_block = shape
     else: # Empty block
         real_block = 0
@@ -182,6 +194,35 @@ def check_game_grid():
             pixel_x = pixel_x + box_spacing
         pixel_x = pixel_x_aux
         pixel_y = pixel_y + box_spacing
+
+# Returns block colour found if a match is found, else it will not update the cell information
+# It also shows what was detected on screen
+def check_outside_block(pixel_x, pixel_y, real_block, info_block):
+    global frame
+    shape, isMain = piece_type(pixel_x, pixel_y)
+    if isMain: # BLock is main
+        real_block = 2
+        info_block = shape
+    else: # Empty block
+        real_block = 0
+        info_block = 0
+    color = shapes[shape][0] # get correspondent dim color
+    cv2.putText(frame, shapes_str[info_block], (pixel_x,pixel_y), cv2.FONT_HERSHEY_SIMPLEX, 0.4, color) # Output info to screen
+    return real_block, info_block   
+
+game_out_matrix = [0 for col in range(grid_x_size)]
+info_out_matrix = [0 for col in range(grid_x_size)]
+def check_out_of_grid():
+    global shapes
+    global EMPTY
+    pixel_x = 496
+    pixel_y = 24
+    box_spacing = 32
+    pixel_x_aux = pixel_x
+
+    for x in range(grid_x_size):
+        game_out_matrix[x], info_out_matrix[x] = check_outside_block(pixel_x, pixel_y, game_out_matrix[x], info_out_matrix[x])
+        pixel_x = pixel_x + box_spacing
 
 # Given a position and how far appart blocks are it gets the shape of a piece
 def check_piece(pixel_x, pixel_y, space, piece, piece_info):
@@ -242,6 +283,142 @@ def check_stored_piece():
     # print('\n'.join([''.join(['{:4}'.format(item) for item in row]) 
     # for row in stored_piece_info]))
     # print("________")
+
+# def check_piece_coords(startX, startY):
+#     pieceGlobalCoords = [[startX, startY]]
+#     if startY == 0:
+#         for i in range(startX, grid_x_size):
+#             if game_out_matrix[i] == 2:
+#                 pieceGlobalCoords.append([i, startY])
+#     for i in range(0, 2):
+#             for j in range(grid_x_size):
+#                 if game_matrix[i][j] == 2:
+#                      pieceGlobalCoords.append([i+1, j])
+#     alturas = 0    
+#     for x,y in pieceGlobalCoords:
+
+def img_to_tetris_piece(startX, startY):
+    piece = None
+    totalGridYSize = grid_y_size-1
+
+    if startY == -1: # get piece type from out of border
+        piece = gameBoard.get_piece_type(info_out_matrix[startX]-1)
+        # piece pos switch canviara
+        piecePosSwitch= {
+            tetrisPiece.SPiece: np.array([startX, totalGridYSize-(startY+1)]),
+            tetrisPiece.ZPiece: np.array([startX-1, totalGridYSize-(startY+1)]),
+            tetrisPiece.IPiece: np.array([startX-1, totalGridYSize-(startY)]), 
+            tetrisPiece.OPiece: np.array([startX, totalGridYSize-(startY+1)]),
+            tetrisPiece.LPiece: np.array([startX+1, totalGridYSize-(startY+1)]),
+            tetrisPiece.JPiece: np.array([startX-1, totalGridYSize-(startY+1)]),
+            tetrisPiece.TPiece: np.array([startX, totalGridYSize-(startY+1)])
+        }
+
+        piecePos = piecePosSwitch[type(piece)]
+    else: # get piece type from inside grid
+        piece = gameBoard.get_piece_type(info_matrix[startY][startX]-1)
+
+        piecePosSwitch = {
+            tetrisPiece.SPiece: np.array([startX, totalGridYSize-(startY+1)]),
+            tetrisPiece.ZPiece: np.array([startX+1, totalGridYSize-(startY+1)]),
+            tetrisPiece.IPiece: np.array([startX+1, totalGridYSize-(startY)]), 
+            tetrisPiece.OPiece: np.array([startX, totalGridYSize-(startY+1)]),
+            tetrisPiece.LPiece: np.array([startX-1, totalGridYSize-(startY+1)]),
+            tetrisPiece.JPiece: np.array([startX+1, totalGridYSize-(startY+1)]),
+            tetrisPiece.TPiece: np.array([startX, totalGridYSize-(startY+1)])
+        }
+
+        piecePos = piecePosSwitch[type(piece)]
+
+    return piece, piecePos
+
+def img_to_grid():
+    # "I", "J", "L", "O", "S", "T", "Z"
+    pieceColor = {
+        "gr": [90.4, 91.6, 92.36],
+        "I": tetrisPiece.IPiece.color,
+        "J": tetrisPiece.JPiece.color,
+        "L": tetrisPiece.IPiece.color,
+        "O": tetrisPiece.LPiece.color,
+        "S": tetrisPiece.SPiece.color,
+        "T": tetrisPiece.TPiece.color,
+        "Z": tetrisPiece.ZPiece.color,
+    }
+    topRows = [[None for col in range(grid_x_size)] for row in range(4)]
+    gameGrid = [[None for col in range(grid_x_size)] for row in range(grid_y_size)]
+    for i in range(len(info_matrix)):
+        for j in range(len(info_matrix[0])):
+            if game_matrix[i][j] != 2 and info_matrix[i][j] != 0:
+                gameGrid[i][j] = pieceColor[shapes_str[info_matrix[i][j]]]
+    gameGrid = np.vstack([topRows, gameGrid])
+    
+    # print('\n'.join([''.join(['{:4}'.format(item) for item in row]) 
+    #     for row in gameGrid.tolist()]))
+
+    return gameGrid[::-1].tolist()
+
+def img_to_stored():
+    startY = 0
+    startX = 0
+    stored = False
+    for i in range(n_box_y):
+        for j in range(n_box_x):
+            if stored_piece[i][j] == 1:
+                startY = i
+                startX = j
+                stored = True
+                break
+
+    pieceType = None
+    if stored: # there is a stored piece
+        if stored_piece_info[startX] != len(shapes)-3: # not grey ergo can store
+            pieceType = stored_piece_info[startX]-1
+    return pieceType
+
+def update_board_info():
+    # gameBoard.reset(grid = None, bag = [], piecePos = None,
+    #                 mainPiece = None, storedPiece = None, canStore = False)
+    global pieceDetected, canMove
+    pieceDetected = False
+    startX = 0
+    startY = -1
+    
+    for i in range(grid_x_size):
+        if game_out_matrix[i] == 2:
+            pieceDetected = True
+            startX = i
+            break
+    if not pieceDetected:
+        for i in range(2):
+            for j in range(grid_x_size):
+                if game_matrix[i][j] == 2:
+                    pieceDetected = True
+                    startY = i
+                    startX = j
+                    break
+            if pieceDetected: # break second
+                break
+    if pieceDetected:
+        if canMove:
+            piece, piecePos = img_to_tetris_piece(startX, startY)
+            # print()
+            # print("position: " , end = "")
+            # print(startY, end = ", ")
+            # print(startX)
+            # print("movedTo: ", end = "")
+            # print(piecePos)
+            gameGrid = img_to_grid()
+            storedPiece = img_to_stored()
+            
+            canStore = False
+            if storedPiece:
+                canStore = True
+            gameBoard.reset(grid = gameGrid, bag = [], piecePos = piecePos,
+                        mainPiece = piece, storedPiece = storedPiece, canStore = canStore)
+            # print(gameBoard)
+    else:
+        canMove = True
+            
 
 # SELECTION SCREEN DETECTION
 # ______________________________________________________________________________

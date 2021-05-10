@@ -6,18 +6,21 @@ import math
 
 import cv2
 
-import FileVideoStream as fvs
-import SwitchController as ctrler
-import image_processing as img_process
+from . import FileVideoStream as fvs
+from . import SwitchController as ctrler
+from . import image_processing as img_process
+from neural_net import heuristic_calc as hc, run_net as net
+from tetris_game.tetrisStructure import board
+
 
 # BUTTONS
 up_pad = 'w'
 down_pad = 's'
 left_pad = 'a'
 right_pad = 'd'
-a_button = 'l'
-b_button = 'k'
-l_button = 'j'
+a_button = 'l' # rotate right
+b_button = 'k' # rotate left
+l_button = 'j' # swap piece
 
 # Number of frames to waste
 wait_time = 0
@@ -43,27 +46,53 @@ def controller(k):
     #         ctrler.send_cmd()    
     # if last_k != k:
     #     ctrler.send_cmd()
-    if k == up_pad:
-        ctrler.send_cmd(ctrler.DPAD_U)
+
+    # command = {
+    #     up_pad:
+    #         ctrler.DPAD_U,
+
+    #     left_pad:
+    #         ctrler.DPAD_L,
+
+    #     down_pad:
+    #         ctrler.DPAD_D,
+
+    #     right_pad:
+    #         ctrler.DPAD_R,
+
+    #     a_button:
+    #         ctrler.BTN_A,
+
+    #     b_button:
+    #         ctrler.BTN_B,
+
+    #     l_button:
+    #         ctrler.BTN_L,
+    # }
+    # # ctrler.send_cmd
+    # ctrler.send_cmd(command[k])
+
+    # if k == up_pad:
+    #     ctrler.send_cmd(ctrler.DPAD_U)
 
     if k == left_pad:
         ctrler.send_cmd(ctrler.DPAD_L)
-
-    if k == down_pad:
+    elif k == up_pad:
+        ctrler.send_cmd(ctrler.DPAD_U)
+    elif k == down_pad:
         ctrler.send_cmd(ctrler.DPAD_D)
 
-    if k == right_pad:
+    elif k == right_pad:
         ctrler.send_cmd(ctrler.DPAD_R)
 
-    if k == a_button:
+    elif k == a_button:
         ctrler.send_cmd(ctrler.BTN_A)
 
-    if k == b_button:
+    elif k == b_button:
         ctrler.send_cmd(ctrler.BTN_B)
 
-    if k == l_button:
+    elif k == l_button:
         ctrler.send_cmd(ctrler.BTN_L)
-
         
 
     # last_k = k
@@ -107,7 +136,19 @@ def state_controller():
     }
     if not waste_frames():
         func = switcher.get(auto_state, "Invalid state")
+        # print('\n'.join([''.join(['{:4}'.format(item) for item in row]) 
+        #     for row in img_process.game_matrix]))
+        # print("")
         func()
+        if img_process.canMove and img_process.pieceDetected:
+            displacement, rotation = net.get_net_output(img_process.gameBoard)
+            queue_moves(displacement, rotation)
+            img_process.canMove = False
+            # for move in moves:
+
+            #     controller(move)
+            #     ctrler.p_wait(0.5)
+        # hc.get_board_props()
 
 def screen_selector():
     correct_screen = img_process.selection_screen_detection()
@@ -121,9 +162,36 @@ def screen_selector():
         controller(up_pad)
         start_frame_waste()
 
+def queue_moves(displacement, rotation):
+    # moves = []
+    if displacement == 6:
+        # moves.append(l_button)
+        controller(l_button)
+        ctrler.p_wait(0.05)
+        ctrler.send_cmd()
+    else:
+        # displacement = displacement*np.array([1, 0])
+        # print(displacement)
+        for i in range(4):
+            controller(right_pad)
+            ctrler.p_wait(0.05)
+            ctrler.send_cmd()
+            # moves.append(a_button)
+
+        # Move piece to column
+        # if displacement > 0:
+        #     for i in range(displacement):
+        #         moves.append(right_pad)
+        # elif displacement < 0:
+        #     for i in range(abs(displacement)):
+        #         moves.append(left_pad)
+        # Drop piece
+        # moves.append(up_pad)
+    # return moves
 # Main
 # -----------------------------------------------
 def main():
+    
     # We get the 2 arguments and process them for its use
     parser = argparse.ArgumentParser('Tetris gaming')
     parser.add_argument('port')
@@ -159,6 +227,9 @@ def main():
     print('Preparing frame buffer...')
     cap = fvs.FileVideoStream(args.cap, width = width, height = height).start()
     print('Frame buffer ready')
+
+    print("Loading neual net data")
+    net.load_net()
 
     # Name of the window we will use
     winname = 'Nintendo Switch'
@@ -202,5 +273,5 @@ def main():
     cv2.destroyAllWindows()
     ctrler.close
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()

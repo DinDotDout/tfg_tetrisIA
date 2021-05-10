@@ -1,10 +1,7 @@
 Heuristica - https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/ 
 
 TetrisIa - http://cs231n.stanford.edu/reports/2016/pdfs/121_Report.pdf
-
-Premiar limpiar mas bloques de golpe
-
-Penalizar game over
+er
 
 Reinforcement tetris -  https://github.com/asimon-1/machine-learning-tetris
                         https://github.com/nuno-faria/tetris-ai
