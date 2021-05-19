@@ -3,6 +3,7 @@ from threading import Thread
 import sys
 import cv2
 import time
+from . import image_processing as img_process
 
 # import the Queue class from Python 3
 if sys.version_info >= (3, 0):
@@ -65,7 +66,8 @@ class FileVideoStream:
 				# idle grabbing frames.
 				if self.transform:
 					frame = self.transform(frame)
-
+				# img_process.frame = frame
+				# img_process.game_processing()
 				# add the frame to the queue
 				self.Q.put(frame)
 			else:
@@ -82,6 +84,12 @@ class FileVideoStream:
 	# file stream.
 	def running(self):
 		return self.more() or not self.stopped
+
+	def has_frame(self):
+    		# return True if there are still frames in the queue. If stream is not stopped, try to wait a moment
+
+
+		return self.Q.qsize() > 0
 
 	def more(self):
 		# return True if there are still frames in the queue. If stream is not stopped, try to wait a moment

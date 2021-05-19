@@ -196,21 +196,19 @@ def input_controller(event, board):
             board.swap_piece()
             
 def game_menu():
-    # pygame.init()
+    pygame.init()
     win = pygame.display.set_mode((s_width, s_height))
     pygame.display.set_caption('Tetris')
     game_loop(win)
-    # pygame.display.quit()
-    # pygame.quit()
-    # exit()
+    pygame.display.quit()
+    pygame.quit()
 
-def draw(board):
-    # pygame.init()
+def init():
+    pygame.init()
     win = pygame.display.set_mode((s_width, s_height))
     pygame.display.set_caption('Tetris')
-    # game_loop(win)
-    # pygame.display.quit()
-    # pygame.quit()
+
+def draw(board):
     draw_window(win, board.grid_colors(), board.score, 0)
     draw_next_shapes(win, board)
     draw_stored_piece(win, board.storedPiece)
@@ -218,8 +216,7 @@ def draw(board):
 
 def end():
     pygame.display.quit()
-    # pygame.quit()
-    # exit()
+    pygame.quit()
 
 
 # def main():

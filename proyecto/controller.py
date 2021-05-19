@@ -33,16 +33,10 @@ class Controller():
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
         self.curr_menu = Menu(self)
 
-    # def game_loop(self):
-    #     while self.playing:
-    #         self.check_events()
-    #         if self.START_KEY:
-    #             self.playing= False
-    #         self.display.fill(self.BLACK)
-    #         self.draw_text('Thanks for Playing', 20, self.DISPLAY_W/2, self.DISPLAY_H/2)
-    #         self.window.blit(self.display, (0,0))
-    #         pygame.display.update()
-    #         self.reset_keys()
+    def kill(self):
+        pygame.display.quit()
+        pygame.quit()
+
 
     def check_events(self):
         for event in pygame.event.get():

@@ -22,7 +22,6 @@ EMPTY = 0
 
 frame = None
 gameBoard = board.Board()
-pieceDetected = False
 canMove = True
 
 # GAME DETECTION
@@ -123,13 +122,14 @@ def centerpoint_sd(x, y):
 
     return [sd_b, sd_g, sd_r]
 
+
 # Finds match between cell mean and all possible piece colours within a lower and upper limit
 def piece_type(x, y):
     bgr_mean = centerpoint_mean(x, y)
     # Check for matching mean colors
     shape = 0
     found = False
-    th_mean = 6
+    th_mean = 9
     isMain = False
     for color in shapes:
         # Two darkness levels for some colors
@@ -327,7 +327,7 @@ def img_to_tetris_piece(startX, startY):
             tetrisPiece.JPiece: np.array([startX+1, totalGridYSize-(startY+1)]),
             tetrisPiece.TPiece: np.array([startX, totalGridYSize-(startY+1)])
         }
-
+        # print(shapes_str[info_matrix[startY][startX]])
         piecePos = piecePosSwitch[type(piece)]
 
     return piece, piecePos
@@ -360,25 +360,25 @@ def img_to_grid():
 def img_to_stored():
     startY = 0
     startX = 0
-    stored = False
+    canStore = True # if empty can store
     for i in range(n_box_y):
         for j in range(n_box_x):
-            if stored_piece[i][j] == 1:
+            if stored_piece[i][j] == 1 or stored_piece[i][j] == 2:
                 startY = i
                 startX = j
-                stored = True
                 break
 
     pieceType = None
-    if stored: # there is a stored piece
-        if stored_piece_info[startX] != len(shapes)-3: # not grey ergo can store
-            pieceType = stored_piece_info[startX]-1
-    return pieceType
+    if stored_piece_info[startY][startX] != len(shapes)-3: # there is a stored piece, not grey ergo can store
+        # print(shapes_str[stored_piece_info[startY][startX]])
+        pieceType = gameBoard.get_piece_type(stored_piece_info[startY][startX]-1)
+    else:
+        canStore = False
+    return pieceType, canStore
 
 def update_board_info():
-    # gameBoard.reset(grid = None, bag = [], piecePos = None,
-    #                 mainPiece = None, storedPiece = None, canStore = False)
-    global pieceDetected, canMove
+    "Checks the info detected and creates a board object with it"
+    global canMove
     pieceDetected = False
     startX = 0
     startY = -1
@@ -401,6 +401,7 @@ def update_board_info():
     if pieceDetected:
         if canMove:
             piece, piecePos = img_to_tetris_piece(startX, startY)
+            print(type(piece))
             # print()
             # print("position: " , end = "")
             # print(startY, end = ", ")
@@ -408,16 +409,13 @@ def update_board_info():
             # print("movedTo: ", end = "")
             # print(piecePos)
             gameGrid = img_to_grid()
-            storedPiece = img_to_stored()
-            
-            canStore = False
-            if storedPiece:
-                canStore = True
+            storedPiece, canStore = img_to_stored()
+
             gameBoard.reset(grid = gameGrid, bag = [], piecePos = piecePos,
                         mainPiece = piece, storedPiece = storedPiece, canStore = canStore)
             # print(gameBoard)
-    else:
-        canMove = True
+            canMove = False
+        # print("")
             
 
 # SELECTION SCREEN DETECTION

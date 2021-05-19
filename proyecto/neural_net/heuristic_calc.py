@@ -99,14 +99,11 @@ def get_next_states(board):
         bag = [x for x in initialBoard.bag] # reset board bag
         board.reset(grid = grid, bag = bag, piecePos = copy.deepcopy(initialBoard.piecePos),
             mainPiece = copy.deepcopy(gamePiece), storedPiece = initialBoard.storedPiece, canStore = initialBoard.canStore)
-
+        
     # For all rotations
     for rotation in range(rotations):
         # For all positions
-        
         for displacement in displacements:
-            # for i in range(rotation):
-            #     board.rotate_piece(True, True)
             isValid = board.move_piece(displacement*movement) 
             if isValid:
                 # Drop piece to bottom
@@ -121,18 +118,10 @@ def get_next_states(board):
             bag = [x for x in initialBoard.bag] # reset board bag
             board.reset(grid = grid, bag = bag, piecePos = copy.deepcopy(initialBoard.piecePos),
                 mainPiece = copy.deepcopy(gamePiece), storedPiece = initialBoard.storedPiece, canStore = initialBoard.canStore)
-                # board = copy.deepcopy(initialBoard) # reset board game
         
-            # for i in range(rotation):
         board.rotate_piece(True, True)
-        gamePiece = copy.deepcopy(board.mainPiece) # make a copy to preserve rotation
-    # print()
-            # board = copy.deepcopy(initialBoard) # Reset board state given that board.move_piece alters it
-    # props = get_board_props(board, initialScore)
-    # states[(2, 2)] = props
-    # for x in range(1000):
-    #     gamePiece = copy.deepcopy(mainPiece) # We will use this piece to preserve rotation
-    # print(states)
+        gamePiece = copy.deepcopy(board.mainPiece) # replace gamePiece with new rotation
+
     return states, initialBoard
     
     # return states, initialBoard
@@ -152,13 +141,13 @@ def play(board, displacement, rotation):
         board.move_piece(displacement)
         
         # Drop piece
-        board.drop_piece()
+    lastPos = board.drop_piece()
 
-    score = 1 + ((board.score - initialScore)**2)
+    score = 1 + ((board.score - initialScore)**2) * board.gridSizeX
     if board.gameOver:
         score -= 2
     # print(score)
-    return score, board.gameOver
+    return score, board.gameOver, lastPos
 
 
 def get_state_size():

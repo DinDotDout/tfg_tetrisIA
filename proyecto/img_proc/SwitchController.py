@@ -261,10 +261,10 @@ def testbench_btn():
 
 # Test DPAD U / R / D / L
 def testbench_dpad():
-    send_cmd(DPAD_U) ; p_wait(0.5) ; send_cmd() ; p_wait(0.001)
+    # send_cmd(DPAD_U) ; p_wait(0.5) ; send_cmd() ; p_wait(0.001)
     send_cmd(DPAD_R) ; p_wait(0.5) ; send_cmd() ; p_wait(0.001)
-    send_cmd(DPAD_D) ; p_wait(0.5) ; send_cmd() ; p_wait(0.001)
-    send_cmd(DPAD_L) ; p_wait(0.5) ; send_cmd() ; p_wait(0.001)
+    # send_cmd(DPAD_D) ; p_wait(0.5) ; send_cmd() ; p_wait(0.001)
+    # send_cmd(DPAD_L) ; p_wait(0.5) ; send_cmd() ; p_wait(0.001)
 
 # Test DPAD Diagonals - Does not register on switch due to dpad buttons
 def testbench_dpad_diag():

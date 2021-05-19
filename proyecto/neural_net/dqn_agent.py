@@ -14,7 +14,6 @@ import copy
 # in constrast to the traditional way of finding the best
 # action for a particular state.
 class DQNAgent:
-
     '''Deep Q Learning Agent + Maximin
 
     Args:

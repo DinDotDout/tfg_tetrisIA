@@ -11,25 +11,6 @@ class Board():
     def __init__(self, grid = None, bag = [], piecePos = None,
                     mainPiece = None, storedPiece = None, canStore = False):
         self.reset()
-        # self.gameOver = False
-
-        # if grid:
-        #     self.grid = grid
-        # else:
-        #     self.grid = self._create_grid()
-
-        # self.bag = bag # list off upcoming pieces
-        
-        # if  mainPiece and piecePos:
-        #     self.piecePos = piecePos
-        #     self.mainPiece = mainPiece
-        # else:
-        #     self._spawn_piece()
-       
-        # self.storedPiece = storedPiece
-        # self.canStore = canStore
-        # self.reseted = False
-        # self.score = 0
     
     def reset(self, grid = None, bag = [], piecePos = None,
                     mainPiece = None, storedPiece = None, canStore = False):
@@ -56,11 +37,9 @@ class Board():
 
     def _create_grid(self):
         "Creates a grid of sized based off of gridSizeX and gridSizeY variables"
+
         # We add an extra row to manage pieces out of the players sight
         grid = [[None for col in range(self.gridSizeX)] for row in range(self.gridSizeY)]
-        # for y in range(self.gridSizeY):
-        #     for x in range(self.gridSizeX):
-        #         grid[y][x] = GridCell()
         return grid
 
     def __str__(self):
@@ -111,6 +90,7 @@ class Board():
         self.reseted = True
     
     def _spawn_height(self, height = np.array([4,18])):
+        "Tries to spawn piece at different heights. It it can't sets game over flag"
         spawn_pos = np.copy(height)
         if not self._can_spawn_piece(spawn_pos):
             spawn_pos[1] += 1
@@ -205,14 +185,17 @@ class Board():
 
         self._spawn_piece()
         self._check_line_clears()
-        
-        
+
     def drop_piece(self):
         "Drops the piece in a straight direction to the lowest position it can"
         canDrop = True
         down = np.array([0,-1])
+        lastPos = None
         while canDrop:
+            lastPos = self.piecePos
             canDrop = self.move_piece(down)
+        return lastPos
+
     def _is_in_bounds(self, pos, ):
         "Checks to see if the coordinate is within the tetris board bounds"
         x, y = pos
@@ -238,6 +221,7 @@ class Board():
         return True
 
     def _clear_line(self, line):
+        "Clears the line passed and drops the pieces above"
         if line < 0 or line > self.gridSizeY:
             print("line out of bounds")
             return
@@ -253,8 +237,9 @@ class Board():
 
 
     def _check_line_clears(self):
-        # linesToClear = []
-        consecutiveLineClears = 0
+        "Checks to see if there is lines cleared"
+
+        lineClears = 0
 
         for y in range(self.gridSizeY-1, -1, -1): #loop from top to bottom
             lineClear = True
@@ -265,33 +250,12 @@ class Board():
                     break
                 
             if lineClear:
-                # linesToClear.append(y)
-                consecutiveLineClears += 1
-                # if consecutiveLineClears == 4:
-                #     print("TETRIS!")
+                lineClears += 1
                 self._clear_line(y)
-        self.score += consecutiveLineClears
-            # self.score = len(linesToClear)*2
-        # linesToClear.reverse()
+        self.score += lineClears
 
-        # Drop lines above lines cleared in inverse order
-        # Some lines will drop more than once depending on the lines cleared
-        # if len(linesToClear) > 0:
-        #     for i in range(len(linesToClear)):
-        #         # for lineToDrop in range(linesToClear[i] + 1 - i, self.gridSizeY):
-        #         for lineToDrop in range(linesToClear[i] , self.gridSizeY):
-        #             print(lineToDrop)
-        #             for x in range(self.gridSizeX):
-        #                 cell = self.grid[lineToDrop][x]     
-        #                 if cell.isOccupied:
-            
-        #                     self.grid[lineToDrop-1][x].block = cell.block
-        #                     self.grid[lineToDrop-1][x].isOccupied = cell.isOccupied
-        #                     cell.block = None
-        #                     cell.isOccupied = False
-
-    # Returns a matrix containing the colors of the cells
     def grid_colors(self):
+        "Returns a matrix containing the colors of the cells"
         gridColors = [[None for col in range(self.gridSizeX)] for row in range(self.gridSizeY)]
         for y in range(self.gridSizeY-4): # don't show info on placed pieces out of grid
             for x in range(0, self.gridSizeX):
@@ -306,12 +270,3 @@ class Board():
                 gridColors[y][x] = self.mainPiece.color
         gridColors.reverse()
         return gridColors
-
-# class GridCell:
-#     def __init__(self):
-#         # self.location = vector(x,y)
-#         self.isOccupied = False
-#         self.block = None
-
-#     def __str__(self):
-#         return str(1 if self.isOccupied else 0)

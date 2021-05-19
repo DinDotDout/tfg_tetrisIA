@@ -7,10 +7,11 @@ import random
 from .logs import CustomTensorBoard
 from tqdm import tqdm
 import os
+import copy
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 from neural_net import heuristic_calc as h_c
-from tetris_game import tetris as tn
+from tetris_game import tetris as tetris
 from tetris_game.tetrisStructure import board as b
 
 agent = None
@@ -53,29 +54,27 @@ def train():
 
         if render_every and episode % render_every == 0:
             render = True # init pygame window
+            tetris.init()
         else:
             render = False
 
         # Game
         while not done and (not max_steps or steps < max_steps):
-            if(steps == 10000):
-                print("Llevo 10000")
-            if(steps == 100000):
-                print("Llevo 10000")
+                
 
             next_states, env = h_c.get_next_states(env)
             best_action = agent.best_action(next_states)
 
-            reward, done = h_c.play(env, best_action[0], best_action[1])
+            reward, done, _ = h_c.play(env, best_action[0], best_action[1])
             if render:
-                tn.draw(env)
+                tetris.draw(env)
                 sleep(0.3)
 
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
             current_state = next_states[best_action]
             steps += 1
         if render:
-            tn.end()
+            tetris.end()
             
         scores.append(env.score)
 
@@ -93,6 +92,7 @@ def train():
                     max_score=max_score)
                     
         agent.save()
+    agent.save()
 
 def test_model(agent):
 
@@ -105,10 +105,10 @@ def test_model(agent):
         
         next_states, env = h_c.get_next_states(env) # analizar todos los siguientes estados posibles del tetris de la switch
         best_action = agent.best_action(next_states)
-        reward, done = h_c.play(env, best_action[0], best_action[1]) # enviar secuencia de comandos a la swtich
+        reward, done, _ = h_c.play(env, best_action[0], best_action[1]) # enviar secuencia de comandos a la swtich
         # if reward > 11:
         
-        tn.draw(env)
+        tetris.draw(env)
         # print()
         sleep(0.1)
         # enviar secuencia de comandos a la switch
@@ -127,14 +127,15 @@ def load_net():
         print("No neural net data stored")
 
 def get_net_output(env):
-    current_state = h_c.get_board_props(env, 0)
     next_states, env = h_c.get_next_states(env) # analizar todos los siguientes estados posibles del tetris de la switch
     best_action = agent.best_action(next_states)
 
-    # reward, done = h_c.play(env, best_action[0], best_action[1]) # enviar secuencia de comandos a la swtich
+    piece = copy.deepcopy(env.mainPiece)
+
+    _, _, piecePos = h_c.play(env, best_action[0], best_action[1]) # enviar secuencia de comandos a la swtich
+    
     # tn.draw(env)
     # print("action: ", end = "")
     # print(best_action[0], end = ", ")
     # print(best_action[1])
-    return best_action[0], best_action[1]
-    # print()
+    return best_action[0], best_action[1], piecePos, piece
