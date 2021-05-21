@@ -203,7 +203,10 @@ def game_menu():
     pygame.display.quit()
     pygame.quit()
 
+
+win = None
 def init():
+    global win
     pygame.init()
     win = pygame.display.set_mode((s_width, s_height))
     pygame.display.set_caption('Tetris')

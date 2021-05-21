@@ -100,14 +100,8 @@ class DQNAgent:
         '''Returns the best state for a given collection of states'''
         max_value = None
         best_action = None
-
         if random.random() <= self.epsilon:
-            # print("random")
-            # print(list(states))
             return random.choice(list(states.keys()))
-            print()
-            return random.choice(list(states.keys()))
-
         else:
             # print(list(states))
             for action, state in states.items():
@@ -118,9 +112,7 @@ class DQNAgent:
                     max_value = value
                     best_action = action
                     best_state = state
-                # print("best state")
-                # print(best_action, end = ": ")
-                # print(best_state)
+
         return best_action
 
     def save(self):
@@ -149,6 +141,7 @@ class DQNAgent:
                     new_q = reward
                 x.append(state)
                 y.append(new_q)
+
             # Fit the model to the given values
             self.model.fit(np.array(x), np.array(y), batch_size=batch_size, epochs=epochs, verbose=0)
 

@@ -1,4 +1,6 @@
 Heuristica - https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/ 
+            https://github.com/michiel-cox/Tetris-DQN/blob/66ee640aaa2068f3db4798ddf51f1518c3779cc6/gym_tetris/board.py#L351
+            https://imake.ninja/el-tetris-an-improvement-on-pierre-dellacheries-algorithm/
 
 TetrisIa - http://cs231n.stanford.edu/reports/2016/pdfs/121_Report.pdf
 er

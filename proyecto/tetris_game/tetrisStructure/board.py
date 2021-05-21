@@ -13,7 +13,7 @@ class Board():
         self.reset()
     
     def reset(self, grid = None, bag = [], piecePos = None,
-                    mainPiece = None, storedPiece = None, canStore = False):
+                    mainPiece = None, storedPiece = None, canStore = False, score = 0):
         self.gameOver = False
 
         if grid:
@@ -32,7 +32,7 @@ class Board():
         self.storedPiece = storedPiece
         self.canStore = canStore
         self.reseted = False
-        self.score = 0
+        self.score = score
 
 
     def _create_grid(self):
@@ -179,7 +179,6 @@ class Board():
 
             if y >= self.killHeight:
                 self.gameOver = True
-                return
             
             self.grid[y][x] = tile.color
 
@@ -240,7 +239,6 @@ class Board():
         "Checks to see if there is lines cleared"
 
         lineClears = 0
-
         for y in range(self.gridSizeY-1, -1, -1): #loop from top to bottom
             lineClear = True
             for x in range(self.gridSizeX):

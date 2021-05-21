@@ -21,15 +21,15 @@ def train():
     global agent
 
     env = b.Board()
-    episodes = 10000
+    episodes = 2000
     max_steps = None
-    epsilon_stop_episode = 9500
+    epsilon_stop_episode = 1500
     mem_size = 20000
     discount = 0.95
     batch_size = 512
     epochs = 1
-    render_every = 1000
-    log_every = 1000
+    render_every = 100
+    log_every = 100
     replay_start_size = 2000
     train_every = 1
     n_neurons = [32, 32]
@@ -60,15 +60,14 @@ def train():
 
         # Game
         while not done and (not max_steps or steps < max_steps):
-                
-
+            board = copy.deepcopy(env)
             next_states, env = h_c.get_next_states(env)
             best_action = agent.best_action(next_states)
-
             reward, done, _ = h_c.play(env, best_action[0], best_action[1])
+
             if render:
                 tetris.draw(env)
-                sleep(0.3)
+                # sleep(0.3)
 
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
             current_state = next_states[best_action]
@@ -95,25 +94,22 @@ def train():
     agent.save()
 
 def test_model(agent):
-
     env = b.Board()    
     current_state = h_c.get_board_props(env, 0)
     done = False
 
+    tetris.init()
     # Game
     while not done :
         
-        next_states, env = h_c.get_next_states(env) # analizar todos los siguientes estados posibles del tetris de la switch
-        best_action = agent.best_action(next_states)
-        reward, done, _ = h_c.play(env, best_action[0], best_action[1]) # enviar secuencia de comandos a la swtich
-        # if reward > 11:
+        next_states, env  = h_c.get_next_states(env)
         
+        best_action = agent.best_action(next_states)
+        reward, done, _ = h_c.play(env, best_action[0], best_action[1])
         tetris.draw(env)
-        # print()
         sleep(0.1)
-        # enviar secuencia de comandos a la switch
-        current_state = next_states[best_action] # Estado en el que se supone nos deberemos encontrar tras realizar los moviemientos  
-
+        current_state =  next_states[best_action] # Estado en el que se supone nos deberemos encontrar tras realizar los moviemientos  
+    tetris.end()
 def test():
     load_net()
     test_model(agent)
