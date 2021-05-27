@@ -6,69 +6,6 @@ import copy
 from tetris_game.tetrisStructure.piece import OPiece, SPiece, ZPiece, IPiece
 
 
-def _number_of_holes(board):
-    "Number of holes in the board within game range (empty square with at least one block above it)"
-    holes = 0
-    for x in range(board.gridSizeX):
-        n = 0
-        for y in range(board.killHeight):
-            if not board.grid[y][x]:
-                n += 1
-            if board.grid[y+1][x]:
-                holes += n
-                n = 0
-    return holes
-
-
-
-def _bumpiness(board):
-    "Sum of the differences of heights between pair of columns"
-    totalBumpiness = 0
-    maxBumpiness = 0
-    lastHeight = 0
-
-    for x in range(board.gridSizeX):
-        height = 0
-        bumpiness = 0
-        for y in range(board.killHeight, -1, -1):
-            if board.grid[y][x]:
-                height = y+1 # 0 height will be counted as 1
-                break
-        if x > 0 and x < board.gridSizeX: # We won't calculate 0 and the first column height
-            bumpiness = abs(height-lastHeight)
-            totalBumpiness += bumpiness
-        lastHeight = height
-        maxBumpiness = max(maxBumpiness, bumpiness)
-    return totalBumpiness, maxBumpiness
-
-def _height(board):
-    '''Sum and maximum height of the board'''
-    sum_height = 0
-    max_height = 0
-    min_height = board.killHeight
-
-    for x in range(board.gridSizeX):
-        height = 0
-        for y in range(board.killHeight, -1, -1):
-            if board.grid[y][x]:
-                height = y+1 # 0 row will be counted as height 1
-                break
-        sum_height += height
-
-        if height > max_height:
-            max_height = height
-        elif height < min_height:
-            min_height = height
-    return sum_height, max_height, min_height
-
-def get_board_props(board, initialScore = 0):
-    '''Get properties of the board'''
-    newScore = board.score - initialScore
-    holes = _number_of_holes(board)
-    total_bumpiness, max_bumpiness = _bumpiness(board)
-    sum_height, max_height, min_height = _height(board)
-    return [newScore, holes, total_bumpiness, sum_height]
-
 def get_next_states(board):
     '''Get all possible next states'''
     states = {}
@@ -92,7 +29,9 @@ def get_next_states(board):
 
     if board.canStore:
         board.swap_piece()
-        props = get_board_props(board, initialScore)
+        landingHeight = board.piecePos[1]
+
+        props = get_board_props(board)
         states[(6, 0)] = props
         grid = [x[:] for x in initialBoard.grid] # reset board game
         bag = [x for x in initialBoard.bag] # reset board bag
@@ -105,13 +44,20 @@ def get_next_states(board):
     for rotation in range(rotations):
         # For all positions
         for displacement in displacements:
-            isValid = board.move_piece(displacement*movement) 
+            for move in displacement:
+                isValid,_ = board.move_piece(movement)
+                if not isValid:
+                    break
             if isValid:
-                # Drop piece to bottom
-                board.drop_piece()
+
+                # tile positions
+                tiles = [x.position[1] for x in board.mainPiece.tiles]
+
+                # Drop piece to bottom and get pos height, and lines cleared
+                landingHeight, lines = board.drop_piece()
 
                 # Calculate heuristic and add it to dictionary as a valid route
-                props = get_board_props(board, initialScore)
+                props = get_board_props(board, landingHeight[0], tiles, lines)
                 states[(displacement, rotation)] = props
 
             grid = [x[:] for x in initialBoard.grid] # reset board game
@@ -122,15 +68,15 @@ def get_next_states(board):
 
         board.rotate_piece(True, True)
         gamePiece = copy.deepcopy(board.mainPiece) # replace gamePiece with new rotation
-
     return states, initialBoard
     
     # return states, initialBoard
 
 def play(board, displacement, rotation):
     '''Makes a play given a position and a rotation, returning the reward and if the game is over'''
-    initialScore = board.score
+    # initialScore = board.score
     lastPos = board.piecePos
+    score = 1
     if displacement == 6:
         board.swap_piece()
     else:
@@ -140,146 +86,220 @@ def play(board, displacement, rotation):
         # Move piece to column
         board.move_piece(displacement)
         
-        # Drop piece
-        lastPos = board.drop_piece()
 
-    score = 1 + ((board.score - initialScore)**2)*board.gridSizeX
+        # Drop piece
+        lastPos, lines = board.drop_piece()
+        # scores = {
+        #     0: 0,
+        #     1: 40,
+        #     2: 100,
+        #     3: 300,
+        #     4: 1200
+        # }
+        score += (len(lines)**2)*board.gridSizeX
     if board.gameOver:
         score -= 5
     return score, board.gameOver, lastPos
 
-def get_state_size():
-    '''Size of the state'''
-    return 4
+def _number_of_holes(board):
+    "Number of holes in the board within game range (empty square with at least one block above it)"
+    holes = 0
+    for x in range(board.gridSizeX):
+        n = 0
+        for y in range(board.killHeight):
+            if not board.grid[y][x]:
+                n += 1
+            if board.grid[y+1][x]:
+                holes += n
+                n = 0
+    return holes
 
-def get_info(self, rows_cleared):
-    """Returns the state of the board using statistics.
-        0: Rows cleared
-        1: Bumpiness
-        2: Holes
-        3: Landing height
-        4: Row transitions
-        5: Column transitions
-        6: Cumulative wells
-        7: Eroded piece cells
-        8: Aggregate height
-    :rtype: Integer array
-    """
-    if self.piece_last is not None:
-        last_piece_coords = self.piece_last.get_shape_coords()
-        eroded_piece_cells = len(rows_cleared) * sum(y in rows_cleared for x, y in last_piece_coords)
-        landing_height = 0 if self.piece_last is None else 1 + self.rows - max(y for x, y in last_piece_coords)
-    else:
-        eroded_piece_cells = 0
-        landing_height = 0
 
-    return [
-        len(rows_cleared),
-        self.get_bumpiness(),
-        self.get_hole_count(),
-        landing_height,
-        self.get_row_transitions(),
-        self.get_column_transitions(),
-        self.get_cumulative_wells(),
-        eroded_piece_cells,
-        self.get_aggregate_height(),
-    ]
 
-def get_cleared_rows(self):
-    """Returns the the amount of rows cleared."""
-    return list(filter(lambda y: self.is_row(y), range(self.rows)))
+def _bumpiness(board):
+    "Sum of the differences of heights between pair of columns"
+    totalBumpiness = 0
+    lastHeight = 0
 
-def get_row_transitions(self):
-    """Returns the number of horizontal cell transitions."""
+    for x in range(board.gridSizeX):
+        height = 0
+        bumpiness = 0
+        for y in range(board.killHeight, -1, -1):
+            if board.grid[y][x]:
+                height = y+1 # 0 height will be counted as 1
+                break
+        if x > 0 and x < board.gridSizeX: # We won't calculate 0 and the first column height
+            bumpiness = abs(height-lastHeight)
+            totalBumpiness += bumpiness
+        lastHeight = height
+    return totalBumpiness
+
+def _total_height(board):
+    '''Sum and maximum height of the board'''
+    sum_height = 0
+    max_height = 0
+    min_height = board.killHeight
+
+    for x in range(board.gridSizeX):
+        height = 0
+        for y in range(board.killHeight, -1, -1):
+            if board.grid[y][x]:
+                height = y+1 # 0 row will be counted as height 1
+                break
+        sum_height += height
+
+    return sum_height
+
+def _col_roughness(board):
+    # print("Col roughness")
+    '''Returns the number of vertical cell transitions.'''
     total = 0
-    for y in range(self.rows):
-        row_count = 0
-        last_empty = False
-        for x in range(self.columns):
-            empty = self.pieces_table[y][x] == 0
-            if last_empty != empty:
-                row_count += 1
-                last_empty = empty
-
-        if last_empty:
-            row_count += 1
-
-        if last_empty and row_count == 2:
-            continue
-
-        total += row_count
-    return total
-
-def get_column_transitions(self):
-    """Returns the number of vertical cell transitions."""
-    total = 0
-    for x in range(self.columns):
+    for x in range(board.gridSizeX):
         column_count = 0
         last_empty = False
-        for y in reversed(range(self.rows)):
-            empty = self.pieces_table[y][x] == 0
+        for y in reversed(range(board.killHeight)):
+            empty = board.grid[y][x] == None
             if last_empty and not empty:
                 column_count += 2
+                # print("x: ", end ="")
+                # print(x)
+                # print("y: ", end ="")
+                # print(y)
+                # print()
             last_empty = empty
 
         if last_empty and column_count == 1:
             continue
 
         total += column_count
+    # print(total)
     return total
 
-def get_bumpiness(self):
-    """Returns the total of the difference between the height of each column."""
-    bumpiness = 0
-    last_height = -1
-    for x in range(self.columns):
-        current_height = 0
-        for y in range(self.rows):
-            if self.pieces_table[y][x] != 0:
-                current_height = self.rows - y
-                break
-        if last_height != -1:
-            bumpiness += abs(last_height - current_height)
-        last_height = current_height
-    return bumpiness
+def _row_roughness(board):
+    # print("Row roughness")
+    '''Returns the number of horizontal cell transitions.'''
+    total = 0
+    for y in range(board.killHeight):
+        row_count = 0
+        last_empty = False
+        
+        for x in range(board.gridSizeX):
+            empty = board.grid[y][x] == None
+            if last_empty != empty:
+                row_count += 1
+                last_empty = empty
+        if last_empty:
+            row_count += 1
 
-def get_cumulative_wells(self):
+        if last_empty and row_count == 2: # One block at the beginning and one at the end 
+            continue
+
+        total += row_count
+    # print(total)
+    return total
+
+def get_board_props2(board, initialScore = 0):
+    '''Get properties of the board'''
+    newScore = board.score - initialScore
+    holes = _number_of_holes(board)
+    total_bumpiness, max_bumpiness = _bumpiness(board)
+    sum_height, max_height, min_height = _total_height(board)
+    return [newScore, holes, total_bumpiness, sum_height]
+
+def get_board_props(board, landingHeight = 0, tiles = None, lines = []):
+    '''Get board properties
+        0: Rows cleared
+        1: Holes
+        2: Bumpiness
+
+        3: Landing height
+        4: Row transitions
+        5: Column transitions
+        6: Cumulative wells
+        7: Eroded piece cells
+
+        8: Aggregate height
+    :rtype: Integer array'''
+    
+
+    pieceHeight = 0
+    erodedPieceCells = 0
+    if tiles:
+        tiles = copy.deepcopy(tiles)
+        highestTile = max(tiles)
+        lowestTile = min(tiles)
+        meanTileHeight = (abs(highestTile) + abs(lowestTile))
+        pieceHeight= (meanTileHeight + landingHeight + 1) # add one to baseline
+
+        for tile in tiles:
+            for line in lines:
+                # print("tile")
+                # print(tile)
+                tileY = tile
+                _, lineY = line
+                if tileY + landingHeight == lineY:
+                    erodedPieceCells +=1
+        erodedPieceCells *= len(lines)
+
+    return [
+    len(lines),
+    _number_of_holes(board),
+    _bumpiness(board),
+    pieceHeight,
+    _row_roughness(board),
+    _col_roughness(board),
+    _cumulative_wells(board),
+    erodedPieceCells,
+    _total_height(board)
+    ]
+
+
+def _cumulative_wells(board):
     """Returns the sum of all wells."""
-    wells = [0 for i in range(self.columns)]
-    for y, row in enumerate(self.pieces_table):
-        left_empty = True
+    wells = [0 for i in range(board.gridSizeX)]
+    depth = [0 for i in range(board.gridSizeX)]
+
+    for y, row in enumerate(board.grid):
+        left_block = True
         for x, code in enumerate(row):
-            if code == 0:
-                well = False
-                right_empty = self.columns > x + 1 >= 0 and self.pieces_table[y][x + 1] == 0
-                if left_empty or right_empty:
-                    well = True
-                wells[x] = 0 if well else wells[x] + 1
-                left_empty = True
+            if code == None: # We may have a well
+                left_block = x <= 0 or left_block
+                right_block = x + 1 >= board.gridSizeX or board.grid[y][x + 1] != None
+                if left_block and right_block:
+                    depth[x] += 1
+                    wells[x] += depth[x]
+                else:
+                    depth[x] = 0
+                left_block = False
             else:
-                left_empty = False
+                depth[x] = 0
+                left_block = True
     return sum(wells)
 
-def get_aggregate_height(self):
-    """Returns the sum of the heights of each column."""
-    aggregate_height = 0
-    for x in range(self.columns):
-        for y in range(self.rows):
-            if self.pieces_table[y][x] != 0:
-                aggregate_height += self.rows - y
-                break
-    return aggregate_height
+def get_state_size():
+    '''Size of the state'''
+    return 9
 
-def get_hole_count(self):
-    """returns the number of empty cells covered by a full cell."""
-    hole_count = 0
-    for x in range(self.columns):
-        below = False
-        for y in range(self.rows):
-            empty = self.pieces_table[y][x] == 0
-            if not below and not empty:
-                below = True
-            elif below and empty:
-                hole_count += 1
-    return hole_count
+# def _cumulative_wells(board):
+#     """Returns the sum of all wells."""
+#     wells = [0 for i in range(board.gridSizeX)]
+#     depth = [0 for i in range(board.gridSizeX)]
 
+#     for x in range(board.gridSizeX):
+#         left_block = True
+#         for y in range(board.killHeight):
+#             cell = board.grid[y][x]
+#             if cell == None: # We may have a well
+#                 left_block = x <= 0 or board.grid[y][x - 1] != None
+#                 right_block = x + 1 >= board.gridSizeX or board.grid[y][x + 1] != None
+#                 if left_block and right_block:
+#                     depth[x] += 1
+#                     wells[x] += depth[x]
+#                 else:
+#                     depth[x] = 0
+#                 left_block = False
+#             else:
+#                 depth[x] = 0
+#                 left_block = True
+#             print()
+#     return sum(wells)

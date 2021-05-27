@@ -21,9 +21,9 @@ def train():
     global agent
 
     env = b.Board()
-    episodes = 2000
-    max_steps = None
-    epsilon_stop_episode = 1500
+    episodes = 5000
+    max_steps = 10000
+    epsilon_stop_episode = 4500
     mem_size = 20000
     discount = 0.95
     batch_size = 512
@@ -32,7 +32,7 @@ def train():
     log_every = 100
     replay_start_size = 2000
     train_every = 1
-    n_neurons = [32, 32]
+    n_neurons = [64, 64]
     render_delay = None
     activations = ['relu', 'relu', 'linear']
 
@@ -60,14 +60,24 @@ def train():
 
         # Game
         while not done and (not max_steps or steps < max_steps):
-            board = copy.deepcopy(env)
+            piece = 0
+            if render:
+                piece = copy.deepcopy(env.mainPiece)
+
             next_states, env = h_c.get_next_states(env)
             best_action = agent.best_action(next_states)
             reward, done, _ = h_c.play(env, best_action[0], best_action[1])
 
             if render:
+                if best_action[0] <= -5:
+                    print(best_action)
+                    print(type(piece))
+                    # print(env.mainPiece)
+                    sleep(3)
+
                 tetris.draw(env)
-                # sleep(0.3)
+                sleep(0.8)
+
 
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
             current_state = next_states[best_action]
@@ -95,7 +105,7 @@ def train():
 
 def test_model(agent):
     env = b.Board()    
-    current_state = h_c.get_board_props(env, 0)
+    current_state = h_c.get_board_props(env)
     done = False
 
     tetris.init()

@@ -150,7 +150,7 @@ class Board():
             offsetVal1 = offset[oldRotation]
             offsetVal2 = offset[newRotation]
             endOffset = offsetVal1 - offsetVal2
-            if (self.move_piece(endOffset, True)):
+            if (self.move_piece(endOffset, True)[0]):
                 return True
         return False
     
@@ -163,13 +163,13 @@ class Board():
             if not self._is_in_bounds(newGlobalTilePos) or not self._is_cell_empty(newGlobalTilePos):
                 canMove = False
                 break
-
+        linesCleared = []
         if not canMove:
             if movement[0] == 0 and movement[1] == -1 and not isOffseting: # Lock piece if can't move down
-                self._lock_piece()
-            return False 
+                linesCleared = self._lock_piece()
+            return False, linesCleared
         self.piecePos += movement
-        return True
+        return True, linesCleared
 
     def _lock_piece(self):
         "Locks the piece in place if it reaches the bottom or collides with another"       
@@ -183,17 +183,19 @@ class Board():
             self.grid[y][x] = tile.color
 
         self._spawn_piece()
-        self._check_line_clears()
+        linesCleared = self._check_line_clears()
+        return linesCleared
 
     def drop_piece(self):
         "Drops the piece in a straight direction to the lowest position it can"
         canDrop = True
         down = np.array([0,-1])
         lastPos = None
+        lines = []
         while canDrop:
             lastPos = self.piecePos
-            canDrop = self.move_piece(down)
-        return lastPos
+            canDrop, lines = self.move_piece(down)
+        return lastPos, lines
 
     def _is_in_bounds(self, pos, ):
         "Checks to see if the coordinate is within the tetris board bounds"
@@ -239,6 +241,7 @@ class Board():
         "Checks to see if there is lines cleared"
 
         lineClears = 0
+        linesCleared = []
         for y in range(self.gridSizeY-1, -1, -1): #loop from top to bottom
             lineClear = True
             for x in range(self.gridSizeX):
@@ -250,7 +253,9 @@ class Board():
             if lineClear:
                 lineClears += 1
                 self._clear_line(y)
+                linesCleared.append([x, y])
         self.score += lineClears
+        return linesCleared
 
     def grid_colors(self):
         "Returns a matrix containing the colors of the cells"
