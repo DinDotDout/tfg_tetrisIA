@@ -11,6 +11,7 @@ from . import fileVideoStream as fvs
 from . import switchController as ctrler
 from . import image_processing as img_process
 from neural_net import heuristic_calc as hc, run_net as net
+
 from tetris_game.tetrisStructure import board
 
 
@@ -254,7 +255,7 @@ def main():
     cap = fvs.FileVideoStream(args.cap, width = width, height = height).start()
     print('Frame buffer ready')
 
-    print("Loading neual net data")
+    print("Loading nerual net data")
     net.load_net()
 
     # Name of the window we will use

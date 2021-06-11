@@ -14,33 +14,33 @@ T = [[148.36, 0.0, 100.12], [163.2, 0.0, 125.76]]
 GREY = [[73.96, 74.92, 76.04], [90.4, 91.6, 92.36]]
 NoMatch = [[255.0,255.0,255.0]]
 BLACK = [[10.0, 10.0, 10.0]]
-MAIN = [[165, 245, 27]]
-shapes = [BLACK, I, J, L, O, S, T, Z, GREY, MAIN, NoMatch]
+# MAIN = [[165, 245, 27]]
+shapes = [BLACK, I, J, L, O, S, T, Z, GREY, NoMatch]
 
-shapes_str = ["e", "I", "J", "L", "O", "S", "T", "Z", "gr", "m","No"]
+shapes_str = ["e", "I", "J", "L", "O", "S", "T", "Z", "gr","No"]
 EMPTY = 0
 
 frame = None
-gameBoard = board.Board()
+gameBoard = None
 canMove = True
 
 # GAME DETECTION
 # ------------------------------------------------
 # Draw game detection points and create matrixes with game info
 def game_processing():
-    check_game_grid()
-    check_out_of_grid()
-    check_next_pieces()
-    check_stored_piece()
-    update_board_info()
+    _check_game_grid()
+    _check_out_of_grid()
+    _check_next_pieces()
+    _check_stored_piece()
+    _update_board_info()
 
-def pixelBGR2HSV(img, x, y):
+def _pixelBGR2HSV(img, x, y):
     bgr_pixel = np.uint8([[img[y, x]]])
     hsv_pixel = cv2.cvtColor(bgr_pixel, cv2.COLOR_BGR2HSV)
     return hsv_pixel
 
 # Returns de "tam" size matrix from a centerpoint
-def centerpoint_matrixBGR(x, y, tam):
+def _centerpoint_matrixBGR(x, y, tam):
     global frame
     first = math.trunc(tam/2)
     x_start = x-first
@@ -53,9 +53,9 @@ def centerpoint_matrixBGR(x, y, tam):
     return [b, g, r]
 
 # Calculates mean in a matrix
-def centerpoint_mean(x, y):
+def _centerpoint_mean(x, y):
     tam = 5 # size of sample, must be odd
-    bgr = centerpoint_matrixBGR(x, y, tam)
+    bgr = _centerpoint_matrixBGR(x, y, tam)
 
     mean_b = np.sum(bgr[0])/(tam*tam) # total elements = tam*tam
     mean_g = np.sum(bgr[1])/(tam*tam)
@@ -63,7 +63,7 @@ def centerpoint_mean(x, y):
     return [mean_b, mean_g, mean_r]
 
 # Max element in matrix
-def max(l):
+def _max(l):
     max = 0
     for i in l:
         for j in i:
@@ -72,7 +72,7 @@ def max(l):
     return max
 
 # Min element in matrix
-def min(l):
+def _min(l):
     min = 256 # color limit + 1
     for i in l:
         for j in i:
@@ -83,7 +83,7 @@ def min(l):
 # Calculates distance from highest and lowest elements in a matrix
 def centerpoint_dist(x, y):
     tam = 5
-    bgr = centerpoint_matrixBGR(x, y, tam)
+    bgr = _centerpoint_matrixBGR(x, y, tam)
 
     dist_b = max(bgr[0]) - min(bgr[0])
 
@@ -96,8 +96,8 @@ def centerpoint_dist(x, y):
 # Calculates standard deviation for each colour
 def centerpoint_sd(x, y):
     tam = 5
-    bgr = centerpoint_matrixBGR(x, y, tam)
-    mean = centerpoint_mean(x, y)
+    bgr = _centerpoint_matrixBGR(x, y, tam)
+    mean = _centerpoint_mean(x, y)
 
     # BLUE
     dif = 0
@@ -125,7 +125,7 @@ def centerpoint_sd(x, y):
 
 # Finds match between cell mean and all possible piece colours within a lower and upper limit
 def piece_type(x, y):
-    bgr_mean = centerpoint_mean(x, y)
+    bgr_mean = _centerpoint_mean(x, y)
     # Check for matching mean colors
     shape = 0
     found = False
@@ -159,7 +159,7 @@ def piece_type(x, y):
 
 # Returns block colour found if a match is found, else it will not update the cell information
 # It also shows what was detected on screen
-def check_block(pixel_x, pixel_y, real_block, info_block):
+def _check_block(pixel_x, pixel_y, real_block, info_block):
     global frame
     shape, isMain = piece_type(pixel_x, pixel_y)
     if shape != EMPTY: # BLock is not empty
@@ -181,7 +181,7 @@ grid_y_size = 20
 grid_x_size = 10
 game_matrix = [[0 for col in range(grid_x_size)] for row in range(grid_y_size)]
 info_matrix = [[0 for col in range(grid_x_size)] for row in range(grid_y_size)]
-def check_game_grid():
+def _check_game_grid():
     global shapes
     global EMPTY
     pixel_x = 496
@@ -190,14 +190,14 @@ def check_game_grid():
     pixel_x_aux = pixel_x
     for y in range(grid_y_size):
         for x in range(grid_x_size):
-            game_matrix[y][x], info_matrix[y][x] = check_block(pixel_x, pixel_y, game_matrix[y][x], info_matrix[y][x])
+            game_matrix[y][x], info_matrix[y][x] = _check_block(pixel_x, pixel_y, game_matrix[y][x], info_matrix[y][x])
             pixel_x = pixel_x + box_spacing
         pixel_x = pixel_x_aux
         pixel_y = pixel_y + box_spacing
 
 # Returns block colour found if a match is found, else it will not update the cell information
 # It also shows what was detected on screen
-def check_outside_block(pixel_x, pixel_y, real_block, info_block):
+def _check_outside_block(pixel_x, pixel_y, real_block, info_block):
     global frame
     shape, isMain = piece_type(pixel_x, pixel_y)
     if isMain: # BLock is main
@@ -212,27 +212,26 @@ def check_outside_block(pixel_x, pixel_y, real_block, info_block):
 
 game_out_matrix = [0 for col in range(grid_x_size)]
 info_out_matrix = [0 for col in range(grid_x_size)]
-def check_out_of_grid():
+def _check_out_of_grid():
     global shapes
-    global EMPTY
     pixel_x = 496
     pixel_y = 24
     box_spacing = 32
     pixel_x_aux = pixel_x
 
     for x in range(grid_x_size):
-        game_out_matrix[x], info_out_matrix[x] = check_outside_block(pixel_x, pixel_y, game_out_matrix[x], info_out_matrix[x])
+        game_out_matrix[x], info_out_matrix[x] = _check_outside_block(pixel_x, pixel_y, game_out_matrix[x], info_out_matrix[x])
         pixel_x = pixel_x + box_spacing
 
 # Given a position and how far appart blocks are it gets the shape of a piece
-def check_piece(pixel_x, pixel_y, space, piece, piece_info):
+def _check_piece(pixel_x, pixel_y, space, piece, piece_info):
     # piece position
     pixel_x_aux = pixel_x
 
     # Game grid info
     for y in range(len(piece)):
         for x in range(len(piece[0])):
-            piece[y][x], piece_info[y][x] = check_block(pixel_x, pixel_y, piece[y][x], piece_info[y][x])
+            piece[y][x], piece_info[y][x] = _check_block(pixel_x, pixel_y, piece[y][x], piece_info[y][x])
             pixel_x = pixel_x + space
         pixel_x = pixel_x_aux
         pixel_y = pixel_y + space
@@ -243,7 +242,7 @@ n_box_y = 2
 n_pieces = 6
 next_pieces = [[[0 for col in range(n_box_x)] for row in range(n_box_y)] for col in range(n_pieces)]
 next_pieces_info = [[[0 for col in range(n_box_x)] for row in range(n_box_y)] for col in range(n_pieces)]
-def check_next_pieces():
+def _check_next_pieces():
     # NEXT PICE
     # piece position
     pixel_x = 824
@@ -252,7 +251,7 @@ def check_next_pieces():
     # space between blocks
     pixel_space = 17
 
-    check_piece(pixel_x, pixel_y, pixel_space, next_pieces[0], next_pieces_info[0])
+    _check_piece(pixel_x, pixel_y, pixel_space, next_pieces[0], next_pieces_info[0])
 
     # NEXT 5 PIECES
     # first piece position
@@ -266,20 +265,20 @@ def check_next_pieces():
     pixel_space = 15
 
     for i in range(1, n_pieces):
-        check_piece(pixel_x, pixel_y, pixel_space, next_pieces[i], next_pieces_info[i])
+        _check_piece(pixel_x, pixel_y, pixel_space, next_pieces[i], next_pieces_info[i])
         pixel_y = pixel_y + next_piece
 
 # Check information related to the stored piece
 stored_piece = [[0 for col in range(n_box_x)] for row in range(n_box_y)]
 stored_piece_info = [[0 for col in range(n_box_x)] for row in range(n_box_y)]
-def check_stored_piece():
+def _check_stored_piece():
     # Saved PICE
     # piece position
     pixel_x = 406
     pixel_y = 92
 
     piece_space = 17
-    check_piece(pixel_x, pixel_y, piece_space, stored_piece, stored_piece_info)
+    _check_piece(pixel_x, pixel_y, piece_space, stored_piece, stored_piece_info)
     # print('\n'.join([''.join(['{:4}'.format(item) for item in row]) 
     # for row in stored_piece_info]))
     # print("________")
@@ -297,12 +296,12 @@ def check_stored_piece():
 #     alturas = 0    
 #     for x,y in pieceGlobalCoords:
 
-def img_to_tetris_piece(startX, startY):
+def _img_to_tetris_piece(startX, startY):
     piece = None
     totalGridYSize = grid_y_size-1
 
     if startY == -1: # get piece type from out of border
-        piece = gameBoard.get_piece_type(info_out_matrix[startX]-1)
+        piece = board.get_piece_type(info_out_matrix[startX]-1)
         # piece pos switch canviara
         piecePosSwitch= {
             tetrisPiece.SPiece: np.array([startX, totalGridYSize-(startY+1)]),
@@ -316,7 +315,7 @@ def img_to_tetris_piece(startX, startY):
 
         piecePos = piecePosSwitch[type(piece)]
     else: # get piece type from inside grid
-        piece = gameBoard.get_piece_type(info_matrix[startY][startX]-1)
+        piece = board.get_piece_type(info_matrix[startY][startX]-1)
 
         piecePosSwitch = {
             tetrisPiece.SPiece: np.array([startX, totalGridYSize-(startY+1)]),
@@ -332,7 +331,7 @@ def img_to_tetris_piece(startX, startY):
 
     return piece, piecePos
 
-def img_to_grid():
+def _img_to_grid():
     # "I", "J", "L", "O", "S", "T", "Z"
     pieceColor = {
         "gr": [90.4, 91.6, 92.36],
@@ -357,7 +356,7 @@ def img_to_grid():
 
     return gameGrid[::-1].tolist()
 
-def img_to_stored():
+def _img_to_stored():
     startY = 0
     startX = 0
     canStore = True # if empty can store
@@ -370,15 +369,15 @@ def img_to_stored():
 
     pieceType = None
     if stored_piece_info[startY][startX] != len(shapes)-3: # there is a stored piece, not grey ergo can store
-        # print(shapes_str[stored_piece_info[startY][startX]])
-        pieceType = gameBoard.get_piece_type(stored_piece_info[startY][startX]-1)
+        pieceType = board.get_piece_type(stored_piece_info[startY][startX]-1)
     else:
         canStore = False
     return pieceType, canStore
 
-def update_board_info():
+def _update_board_info():
     "Checks the info detected and creates a board object with it"
-    global canMove
+    global canMove, gameBoard
+    
     pieceDetected = False
     startX = 0
     startY = -1
@@ -400,19 +399,15 @@ def update_board_info():
                 break
     if pieceDetected:
         if canMove:
-            piece, piecePos = img_to_tetris_piece(startX, startY)
+            piece, piecePos = _img_to_tetris_piece(startX, startY)
             print(type(piece))
-            # print()
-            # print("position: " , end = "")
-            # print(startY, end = ", ")
-            # print(startX)
-            # print("movedTo: ", end = "")
-            # print(piecePos)
-            gameGrid = img_to_grid()
-            storedPiece, canStore = img_to_stored()
 
-            gameBoard.reset(grid = gameGrid, bag = [], piecePos = piecePos,
+            gameGrid = _img_to_grid()
+            storedPiece, canStore = _img_to_stored()
+            gameBoard = board.Board(grid = gameGrid, bag = None, piecePos = piecePos,
                         mainPiece = piece, storedPiece = storedPiece, canStore = canStore)
+            # gameBoard.reset(grid = gameGrid, bag = [], piecePos = piecePos,
+            #             mainPiece = piece, storedPiece = storedPiece, canStore = canStore)
             # print(gameBoard)
             canMove = False
         # print("")
@@ -433,7 +428,7 @@ def selection_screen_detection():
     first_box_x = 300
     first_box_y = 600
     
-    pixel_color = pixelBGR2HSV(frame, first_box_x, first_box_y)
+    pixel_color = _pixelBGR2HSV(frame, first_box_x, first_box_y)
     # Draw detection point
     cv2.circle(frame,(first_box_x,first_box_y), 5, (0,0,255), -1)
     if not cv2.inRange(pixel_color, min_blue_hsv, max_blue_hsv):

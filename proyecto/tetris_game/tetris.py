@@ -94,7 +94,7 @@ def draw_next_shapes(surface, board):
     sx += 1.5*block_size
     sy += 3*block_size
     for i in range(6):
-        piece = board.get_piece_type(board.bag[i])
+        piece = b.get_piece_type(board.bag[i])
         pieceTiles = piece.tiles
         for tile in pieceTiles:
             x, y = tile.position
@@ -135,7 +135,6 @@ def max_score():
 def game_loop(win):
     last_score = max_score()
     board = b.Board()
-
     change_piece = False
     save_piece = False
     already_saved = False
@@ -188,19 +187,19 @@ def input_controller(event, board):
         if event.key == pygame.K_DOWN:  # Move down
             board.move_piece(DOWN)
         if event.key == pygame.K_UP:  # Drop piece
-            # score = board.score
-            # tiles = [x.position[1] for x in board.mainPiece.tiles]
+            score = board.score
+            tiles = [x.position[1] for x in board.mainPiece.tiles]
             height, lines = board.drop_piece()
-            # h_c.get_board_props(board, height[1], tiles, score, lines)
+            print(h_c.get_board_props(board, height[1], tiles, lines))
 
         if event.key == pygame.K_d:  # Rotate right
             board.rotate_piece(True, True)
         if event.key == pygame.K_a:  # Rotate left
             board.rotate_piece(False, True)
         if event.key == pygame.K_SPACE:  # Save piece
-            # tiles = [x.position[1] for x in board.mainPiece.tiles]
+            tiles = [x.position[1] for x in board.mainPiece.tiles]
             board.swap_piece()
-            # h_c.get_board_props(board, board.piecePos[1], None, board.score, lines = [])
+            print(h_c.get_board_props(board, board.piecePos[1], None, lines = None))
             
 def game_menu():
     pygame.init()

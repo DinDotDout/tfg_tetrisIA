@@ -3,17 +3,33 @@ import random as rnd
 from . import tile as tc
 from . import piece as pc
 
+
+def get_piece_type(n):
+    pieces = [
+        pc.IPiece(),
+        pc.JPiece(),
+        pc.LPiece(),
+        pc.OPiece(),
+        pc.SPiece(),
+        pc.TPiece(),
+        pc.ZPiece()
+    ]
+    return pieces[n]
+
 class Board():
     gridSizeY = 24
     gridSizeX = 10
     killHeight = 21
 
-    def __init__(self, grid = None, bag = [], piecePos = None,
-                    mainPiece = None, storedPiece = None, canStore = False):
-        self.reset()
+    def __init__(self, grid = None, bag = None, piecePos = None,
+                    mainPiece = None, storedPiece = None, canStore = True, score = 0):
+
+        self.reset(grid = grid, bag = bag, piecePos = piecePos,
+                    mainPiece = mainPiece, storedPiece = storedPiece, canStore = canStore, score = score)
     
-    def reset(self, grid = None, bag = [], piecePos = None,
-                    mainPiece = None, storedPiece = None, canStore = False, score = 0):
+    def reset(self, grid = None, bag = None, piecePos = None,
+                    mainPiece = None, storedPiece = None, canStore = True, score = 0):
+
         self.gameOver = False
 
         if grid:
@@ -21,7 +37,10 @@ class Board():
         else:
             self.grid = self._create_grid()
 
-        self.bag = bag # list off upcoming pieces
+        if bag == None:
+            self.bag = []
+        else:
+            self.bag = bag # list off upcoming pieces
 
         if mainPiece and piecePos is not None:
             self.piecePos = piecePos
@@ -63,18 +82,6 @@ class Board():
                     out[y] = replacement
         out.reverse()
         return '\n'.join(out)
-    
-    def get_piece_type(self, n):
-        pieces = [
-            pc.IPiece(),
-            pc.JPiece(),
-            pc.LPiece(),
-            pc.OPiece(),
-            pc.SPiece(),
-            pc.TPiece(),
-            pc.ZPiece()
-        ]
-        return pieces[n]
 
     def _spawn_piece(self):
         "Refills bag if necessary and sets next piece in bag as main piece"
@@ -83,7 +90,7 @@ class Board():
         if len(self.bag) < 7:  # check to see if list is empty
             self._fill_bag()
 
-        self.mainPiece = self.get_piece_type(self.bag.pop(0)) # get current piece
+        self.mainPiece = get_piece_type(self.bag.pop(0)) # get current piece
         self.piecePos = self._spawn_height()    
 
         self.canStore = True
@@ -156,18 +163,20 @@ class Board():
     
     def move_piece(self, movement, isOffseting = False):
         "Checks if all tiles can be moved to the position and does so"
-        canMove = True
+        linesCleared = []
         for tile in self.mainPiece.tiles:
             globalTilePos = self.piecePos + tile.position # center position + tile displacement
             newGlobalTilePos = globalTilePos + movement # add movement
             if not self._is_in_bounds(newGlobalTilePos) or not self._is_cell_empty(newGlobalTilePos):
-                canMove = False
-                break
-        linesCleared = []
-        if not canMove:
-            if movement[0] == 0 and movement[1] == -1 and not isOffseting: # Lock piece if can't move down
-                linesCleared = self._lock_piece()
-            return False, linesCleared
+                if movement[0] == 0 and movement[1] == -1 and not isOffseting: # Lock piece if can't move down
+                    linesCleared = self._lock_piece()
+                return False, linesCleared
+                # break
+        
+        # if not canMove:
+        #     if movement[0] == 0 and movement[1] == -1 and not isOffseting: # Lock piece if can't move down
+        #         linesCleared = self._lock_piece()
+        #     return False, linesCleared
         self.piecePos += movement
         return True, linesCleared
 

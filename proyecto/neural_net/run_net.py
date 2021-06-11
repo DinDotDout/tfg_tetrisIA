@@ -4,11 +4,12 @@ from neural_net.dqn_agent import DQNAgent
 from datetime import datetime
 from statistics import mean, median
 import random
-from .logs import CustomTensorBoard
+# from .logs import CustomTensorBoard
 from tqdm import tqdm
 import os
 import copy
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 
 from neural_net import heuristic_calc as h_c
 from tetris_game import tetris as tetris
@@ -21,15 +22,15 @@ def train():
     global agent
 
     env = b.Board()
-    episodes = 5000
+    episodes = 100000
     max_steps = 10000
-    epsilon_stop_episode = 4500
+    epsilon_stop_episode = 95000
     mem_size = 20000
     discount = 0.95
     batch_size = 512
     epochs = 1
-    render_every = 100
-    log_every = 100
+    render_every = 300
+    log_every = 300
     replay_start_size = 2000
     train_every = 1
     n_neurons = [64, 64]
@@ -41,8 +42,8 @@ def train():
                      epsilon_stop_episode=epsilon_stop_episode, mem_size=mem_size,
                      discount=discount, replay_start_size=replay_start_size)
 
-    log_dir = f'neural_net/logs/tetris-nn={str(n_neurons)}-mem={mem_size}-bs={batch_size}-e={epochs}-{datetime.now().strftime("%Y%m%d-%H%M%S")}'
-    log = CustomTensorBoard(log_dir=log_dir)
+    # log_dir = f'neural_net/logs/tetris-nn={str(n_neurons)}-mem={mem_size}-bs={batch_size}-e={epochs}-{datetime.now().strftime("%Y%m%d-%H%M%S")}'
+    # log = CustomTensorBoard(log_dir=log_dir)
 
     scores = []
 
@@ -67,16 +68,9 @@ def train():
             next_states, env = h_c.get_next_states(env)
             best_action = agent.best_action(next_states)
             reward, done, _ = h_c.play(env, best_action[0], best_action[1])
-
             if render:
-                if best_action[0] <= -5:
-                    print(best_action)
-                    print(type(piece))
-                    # print(env.mainPiece)
-                    sleep(3)
-
                 tetris.draw(env)
-                sleep(0.8)
+                sleep(0.2)
 
 
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
@@ -91,14 +85,14 @@ def train():
         if episode % train_every == 0:
             agent.train(batch_size=batch_size, epochs=epochs)
 
-        # Logs
-        if log_every and episode and episode % log_every == 0:
-            avg_score = mean(scores[-log_every:])
-            min_score = min(scores[-log_every:])
-            max_score = max(scores[-log_every:])
+        # # Logs
+        # if log_every and episode and episode % log_every == 0:
+        #     avg_score = mean(scores[-log_every:])
+        #     min_score = min(scores[-log_every:])
+        #     max_score = max(scores[-log_every:])
 
-            log.log(episode, avg_score=avg_score, min_score=min_score,
-                    max_score=max_score)
+        #     log.log(episode, avg_score=avg_score, min_score=min_score,
+        #             max_score=max_score)
                     
         agent.save()
     agent.save()

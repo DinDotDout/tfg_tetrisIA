@@ -4,73 +4,97 @@ from time import sleep
 import copy
 
 from tetris_game.tetrisStructure.piece import OPiece, SPiece, ZPiece, IPiece
-
-
+    
 def get_next_states(board):
     '''Get all possible next states'''
     states = {}
-    mainPiece = board.mainPiece
-    
-    displacements = list(range(-5, 6))
-    movement = np.array([1,0])
+
+    displacementsL = list(reversed(range(-5, 0)))
+    displacementsR = list(range(0, 6))
 
     rotations = 4
-    pieceType = type(mainPiece)
-    if pieceType is OPiece: # O piece is in the same position even if we roate
+    if type(board.mainPiece) is OPiece: # O piece is in the same position even if we rotate
         rotations = 1
-    # elif pieceType is SPiece or pieceType is ZPiece or pieceType is IPiece: # Rotations 3 and 4 are similar to 1 and 2
-    #     rotations = 2
-    
+    elif type(board.mainPiece) is SPiece or type(board.mainPiece) is ZPiece:
+        rotations = 2
+
     initialBoard = copy.deepcopy(board) # Save initial board state
-    copyBoard = copy.deepcopy(board)
-    initialScore = initialBoard.score
+    gamePiece = copy.deepcopy(board.mainPiece) # We will use this piece to preserve rotation
 
-    gamePiece = copy.deepcopy(mainPiece) # We will use this piece to preserve rotation
-
-    if board.canStore:
+    if board.canStore:  # Add store move to dictionary
         board.swap_piece()
         landingHeight = board.piecePos[1]
-
         props = get_board_props(board)
         states[(6, 0)] = props
+
         grid = [x[:] for x in initialBoard.grid] # reset board game
         bag = [x for x in initialBoard.bag] # reset board bag
+        
         board.reset(grid = grid, bag = bag, piecePos = copy.deepcopy(initialBoard.piecePos),
-            mainPiece = copy.deepcopy(gamePiece), storedPiece = initialBoard.storedPiece,
-            canStore = initialBoard.canStore, score= initialScore)
-    lineClear = False
+            mainPiece = copy.deepcopy(gamePiece), storedPiece = copy.deepcopy(initialBoard.storedPiece),
+            canStore = initialBoard.canStore, score= initialBoard.score)
 
-    # For all rotations
-    for rotation in range(rotations):
-        # For all positions
-        for displacement in displacements:
-            for move in displacement:
-                isValid,_ = board.move_piece(movement)
-                if not isValid:
-                    break
-            if isValid:
+    for rotation in range(rotations): # For all rotations
 
-                # tile positions
-                tiles = [x.position[1] for x in board.mainPiece.tiles]
+        testMovements(displacementsL, rotation, board, initialBoard, gamePiece, states) # test left movents
+        
+        testMovements(displacementsR, rotation, board, initialBoard, gamePiece, states) # test right movents
 
-                # Drop piece to bottom and get pos height, and lines cleared
-                landingHeight, lines = board.drop_piece()
+        board.rotate_piece(True, True) # rotates piece for next iteration
+        gamePiece = copy.deepcopy(board.mainPiece) # replace gamePiece with new rotation
 
-                # Calculate heuristic and add it to dictionary as a valid route
-                props = get_board_props(board, landingHeight[0], tiles, lines)
-                states[(displacement, rotation)] = props
+    # for rotation in range(rotations): # For all rotations
 
+    #     board.rotate_piece(False, True) # rotates piece for next iteration
+
+    #     testMovements(displacementsL, -rotation, board, initialBoard, gamePiece, states) # test left movents
+        
+    #     testMovements(displacementsR, -rotation, board, initialBoard, gamePiece, states) # test right movents
+
+    #     gamePiece = copy.deepcopy(board.mainPiece) # replace gamePiece with new rotation
+
+    return states, initialBoard
+
+def testMovements(displacements, rotation, board, initialBoard, gamePiece, states):
+    for displacement in displacements: # try all displacement
+        isValid = True # No movement is also valid
+        if displacement > 0: # move right
+            isValid, _ = board.move_piece(np.array([1,0]))
+        elif displacement < 0: # move left
+            isValid, _ = board.move_piece(np.array([-1,0]))
+
+        # store current position
+        piecePos = copy.deepcopy(board.piecePos)
+        if isValid:
+            
+
+            # Drop piece to bottom and get pos height, and lines cleared
+            landingHeight, lines = board.drop_piece()
+            # tile local positions
+            tiles = [i.position[1] for i in board.mainPiece.tiles]
+
+            # Calculate heuristic and add it to dictionary as a valid route
+            props = get_board_props(board, landingHeight[0], tiles, lines)
+ 
+            states[(displacement, rotation)] = props
+   
+            # Reset board but keep piece horizontal displacement
             grid = [x[:] for x in initialBoard.grid] # reset board game
             bag = [x for x in initialBoard.bag] # reset board bag
-            board.reset(grid = grid, bag = bag, piecePos = copy.deepcopy(initialBoard.piecePos),
-                mainPiece = copy.deepcopy(gamePiece), storedPiece = initialBoard.storedPiece, 
-                canStore = initialBoard.canStore, score= initialScore)
+            board.reset(grid = grid, bag = bag, piecePos = piecePos,
+                mainPiece = copy.deepcopy(gamePiece), storedPiece = copy.deepcopy(initialBoard.storedPiece), 
+                canStore = initialBoard.canStore, score= initialBoard.score)
 
-        board.rotate_piece(True, True)
-        gamePiece = copy.deepcopy(board.mainPiece) # replace gamePiece with new rotation
-    return states, initialBoard
-    
-    # return states, initialBoard
+        else:
+            # cannot keep moving in direction
+            break
+        
+    # Reset board and position at the end
+    grid = [x[:] for x in initialBoard.grid] # reset board game
+    bag = [x for x in initialBoard.bag] # reset board bag
+    board.reset(grid = grid, bag = bag, piecePos = copy.deepcopy(initialBoard.piecePos),
+        mainPiece = copy.deepcopy(gamePiece), storedPiece = copy.deepcopy(initialBoard.storedPiece), 
+        canStore = initialBoard.canStore, score= initialBoard.score)
 
 def play(board, displacement, rotation):
     '''Makes a play given a position and a rotation, returning the reward and if the game is over'''
@@ -86,20 +110,69 @@ def play(board, displacement, rotation):
         # Move piece to column
         board.move_piece(displacement)
         
-
         # Drop piece
         lastPos, lines = board.drop_piece()
-        # scores = {
-        #     0: 0,
-        #     1: 40,
-        #     2: 100,
-        #     3: 300,
-        #     4: 1200
-        # }
-        score += (len(lines)**2)*board.gridSizeX
+        scores = {
+            0: 0,
+            1: 40,
+            2: 100,
+            3: 300,
+            4: 1200
+        }
+
+        score += scores[len(lines)]
     if board.gameOver:
         score -= 5
     return score, board.gameOver, lastPos
+
+def get_board_props(board, landingHeight = 0, tiles = None, lines = None):
+    '''Get board properties
+        0: Rows cleared
+        1: Holes
+        2: Bumpiness
+
+        3: Landing height
+        4: Row transitions
+        5: Column transitions
+        6: Cumulative wells
+        7: Eroded piece cells
+
+        8: Aggregate height
+    :rtype: Integer array'''
+    
+    if not lines:
+        lines = []
+
+    pieceHeight = 0
+    erodedPieceCells = 0
+    if tiles:
+        tiles = copy.deepcopy(tiles)
+        highestTile = max(tiles)
+        lowestTile = min(tiles)
+        trueLandingHeight = landingHeight + lowestTile # Landing height from bottom piece
+        highestHeight = landingHeight + highestTile # Landing height for top piece
+        meanHeight = (highestHeight - trueLandingHeight)/2 # Total piece height divided by 2
+        pieceHeight= (meanHeight + trueLandingHeight + 1) # Calculate height from middle of the piece (bottom row counts as 1)
+
+        for tile in tiles:
+            for line in lines:
+                tileY = tile
+                _, lineY = line
+                if tileY + landingHeight == lineY:
+                    erodedPieceCells +=1
+        erodedPieceCells *= len(lines)
+
+    return [
+    len(lines),
+    _number_of_holes(board),
+    _bumpiness(board),
+    pieceHeight,
+    _row_roughness(board), # check
+    _col_roughness(board), # check
+    _cumulative_wells(board),
+    erodedPieceCells,
+    _total_height(board)
+    ]
 
 def _number_of_holes(board):
     "Number of holes in the board within game range (empty square with at least one block above it)"
@@ -161,11 +234,6 @@ def _col_roughness(board):
             empty = board.grid[y][x] == None
             if last_empty and not empty:
                 column_count += 2
-                # print("x: ", end ="")
-                # print(x)
-                # print("y: ", end ="")
-                # print(y)
-                # print()
             last_empty = empty
 
         if last_empty and column_count == 1:
@@ -198,61 +266,15 @@ def _row_roughness(board):
     # print(total)
     return total
 
-def get_board_props2(board, initialScore = 0):
+def get_board_props2(board, landingHeight = 0, tiles = None, lines = None):
     '''Get properties of the board'''
-    newScore = board.score - initialScore
+    if not lines:
+        lines = []
+    newScore = len(lines)
     holes = _number_of_holes(board)
-    total_bumpiness, max_bumpiness = _bumpiness(board)
-    sum_height, max_height, min_height = _total_height(board)
+    total_bumpiness = _bumpiness(board)
+    sum_height = _total_height(board)
     return [newScore, holes, total_bumpiness, sum_height]
-
-def get_board_props(board, landingHeight = 0, tiles = None, lines = []):
-    '''Get board properties
-        0: Rows cleared
-        1: Holes
-        2: Bumpiness
-
-        3: Landing height
-        4: Row transitions
-        5: Column transitions
-        6: Cumulative wells
-        7: Eroded piece cells
-
-        8: Aggregate height
-    :rtype: Integer array'''
-    
-
-    pieceHeight = 0
-    erodedPieceCells = 0
-    if tiles:
-        tiles = copy.deepcopy(tiles)
-        highestTile = max(tiles)
-        lowestTile = min(tiles)
-        meanTileHeight = (abs(highestTile) + abs(lowestTile))
-        pieceHeight= (meanTileHeight + landingHeight + 1) # add one to baseline
-
-        for tile in tiles:
-            for line in lines:
-                # print("tile")
-                # print(tile)
-                tileY = tile
-                _, lineY = line
-                if tileY + landingHeight == lineY:
-                    erodedPieceCells +=1
-        erodedPieceCells *= len(lines)
-
-    return [
-    len(lines),
-    _number_of_holes(board),
-    _bumpiness(board),
-    pieceHeight,
-    _row_roughness(board),
-    _col_roughness(board),
-    _cumulative_wells(board),
-    erodedPieceCells,
-    _total_height(board)
-    ]
-
 
 def _cumulative_wells(board):
     """Returns the sum of all wells."""
