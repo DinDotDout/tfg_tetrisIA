@@ -22,9 +22,9 @@ def train():
     global agent
 
     env = b.Board()
-    episodes = 100000
+    episodes = 2000
     max_steps = 10000
-    epsilon_stop_episode = 95000
+    epsilon_stop_episode = 1500
     mem_size = 20000
     discount = 0.95
     batch_size = 512

@@ -30,8 +30,8 @@ canMove = True
 def game_processing():
     _check_game_grid()
     _check_out_of_grid()
-    _check_next_pieces()
     _check_stored_piece()
+    _check_next_pieces()
     _update_board_info()
 
 def _pixelBGR2HSV(img, x, y):
@@ -302,7 +302,7 @@ def _img_to_tetris_piece(startX, startY):
 
     if startY == -1: # get piece type from out of border
         piece = board.get_piece_type(info_out_matrix[startX]-1)
-        # piece pos switch canviara
+        # piece pos switch cambiara
         piecePosSwitch= {
             tetrisPiece.SPiece: np.array([startX, totalGridYSize-(startY+1)]),
             tetrisPiece.ZPiece: np.array([startX-1, totalGridYSize-(startY+1)]),
@@ -317,14 +317,16 @@ def _img_to_tetris_piece(startX, startY):
     else: # get piece type from inside grid
         piece = board.get_piece_type(info_matrix[startY][startX]-1)
 
+        # invert y position to fit Board
+        y = totalGridYSize-startY
         piecePosSwitch = {
-            tetrisPiece.SPiece: np.array([startX, totalGridYSize-(startY+1)]),
-            tetrisPiece.ZPiece: np.array([startX+1, totalGridYSize-(startY+1)]),
-            tetrisPiece.IPiece: np.array([startX+1, totalGridYSize-(startY)]), 
-            tetrisPiece.OPiece: np.array([startX, totalGridYSize-(startY+1)]),
-            tetrisPiece.LPiece: np.array([startX-1, totalGridYSize-(startY+1)]),
-            tetrisPiece.JPiece: np.array([startX+1, totalGridYSize-(startY+1)]),
-            tetrisPiece.TPiece: np.array([startX, totalGridYSize-(startY+1)])
+            tetrisPiece.SPiece: np.array([startX, y-1]),
+            tetrisPiece.ZPiece: np.array([startX + 1, y-1]),
+            tetrisPiece.IPiece: np.array([startX + 1, y]), 
+            tetrisPiece.OPiece: np.array([startX, y-1]),
+            tetrisPiece.LPiece: np.array([startX - 1, y-1]),
+            tetrisPiece.JPiece: np.array([startX + 1, y-1]),
+            tetrisPiece.TPiece: np.array([startX, y-1])
         }
         # print(shapes_str[info_matrix[startY][startX]])
         piecePos = piecePosSwitch[type(piece)]

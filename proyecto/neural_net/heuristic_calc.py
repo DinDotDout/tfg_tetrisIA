@@ -3,7 +3,7 @@ import numpy as np
 from time import sleep
 import copy
 
-from tetris_game.tetrisStructure.piece import OPiece, SPiece, ZPiece, IPiece
+import tetris_game.tetrisStructure.piece as piece
     
 def get_next_states(board):
     '''Get all possible next states'''
@@ -13,9 +13,9 @@ def get_next_states(board):
     displacementsR = list(range(0, 6))
 
     rotations = 4
-    if type(board.mainPiece) is OPiece: # O piece is in the same position even if we rotate
+    if type(board.mainPiece) is piece.OPiece: # O piece is in the same position even if we rotate
         rotations = 1
-    elif type(board.mainPiece) is SPiece or type(board.mainPiece) is ZPiece:
+    elif type(board.mainPiece) is piece.SPiece or type(board.mainPiece) is piece.ZPiece:
         rotations = 2
 
     initialBoard = copy.deepcopy(board) # Save initial board state
@@ -162,6 +162,23 @@ def get_board_props(board, landingHeight = 0, tiles = None, lines = None):
                     erodedPieceCells +=1
         erodedPieceCells *= len(lines)
 
+
+    pieces = {
+            piece.IPiece():0,
+            piece.JPiece():1,
+            piece.LPiece():2,
+            piece.OPiece():3,
+            piece.SPiece():4,
+            piece.TPiece():5,
+            piece.ZPiece():6
+    }
+
+    storedPiece = None
+    if board.canStore:
+        storedPiece = type(board.storedPiece)
+    else:
+        storedPiece = 8
+
     return [
     len(lines),
     _number_of_holes(board),
@@ -171,7 +188,8 @@ def get_board_props(board, landingHeight = 0, tiles = None, lines = None):
     _col_roughness(board), # check
     _cumulative_wells(board),
     erodedPieceCells,
-    _total_height(board)
+    _total_height(board),
+    pieces.get(type(board.storedPiece), 7)
     ]
 
 def _number_of_holes(board):
@@ -186,8 +204,6 @@ def _number_of_holes(board):
                 holes += n
                 n = 0
     return holes
-
-
 
 def _bumpiness(board):
     "Sum of the differences of heights between pair of columns"
@@ -300,7 +316,7 @@ def _cumulative_wells(board):
 
 def get_state_size():
     '''Size of the state'''
-    return 9
+    return 10
 
 # def _cumulative_wells(board):
 #     """Returns the sum of all wells."""

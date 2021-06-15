@@ -16,6 +16,8 @@ def get_piece_type(n):
     ]
     return pieces[n]
 
+
+
 class Board():
     gridSizeY = 24
     gridSizeX = 10

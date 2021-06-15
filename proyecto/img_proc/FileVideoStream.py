@@ -86,9 +86,7 @@ class FileVideoStream:
 		return self.more() or not self.stopped
 
 	def has_frame(self):
-    		# return True if there are still frames in the queue. If stream is not stopped, try to wait a moment
-
-
+    	# return True if there are still frames in the queue. If stream is not stopped, try to wait a moment
 		return self.Q.qsize() > 0
 
 	def more(self):
