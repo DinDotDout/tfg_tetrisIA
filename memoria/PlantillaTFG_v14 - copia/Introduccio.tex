@@ -1,0 +1,23 @@
+%!TeX root=MemoriaTFG.tex
+
+\chapter{Introduction}
+\section{Artificial intelligence in videogames}
+
+AI has been present in videogames since the very beginning.
+Its purpose has always been to improve the players experience and the methods that have been used to implement such behaviours are vast, ranging from finite state machines and increasingly more complex enemy movement patterns tied to the game difficulty/level, to combining different advanced methods like pathfinding and decision trees. Other techniques related to machine learning such as reinforcement learning can also currently be found in some games. All these methods are mostly used for \ac{NPC}s and the information they perceive from the environment can be given in two different ways, via sensors, which provide a limited vision of the game world, or via the game’s own stored information e.g., the player’s exact location.
+% (https://en.wikipedia.org/wiki/Artificial_intelligence_in_video_games)
+
+Due to an increasing interest in artificial intelligence in recent years, people have started to try and beat their favourite games with it. When taking this approach, we must first consider how the agent* is going to perceive the game, having the same two options we talked about before. This time we usually encounter a major inconvenience, we do not have direct access to the game information due to us not being the game developers, although thanks to some \ac{API}(such as OpenAI Gym) we can access the game and thus base our agent’s information on it. Unfortunately, those APIs mostly feature older games, which limits us to the ones provided by it. Hence comes the need for image processing tools to extract data, though this may not necessarily be done by us, as will be shown later.
+Once we have discussed about how data can be collected, we can introduce the next step, agent building. Due to videogames, many different methods have arisen, and with the increasing difficulty of the games beaten has also come an increase in agent intricacy, leading to the drop of simpler techniques in favour of reinforcement learning, which ended up performing much better in highly complex environments.
+Due to the increasingly more difficult games being beaten, has also come a need for more intricate agents, leading to the drop of simpler techniques in favour of reinforcement learning (many times paired with those old techniques in order to provide the agent with basic behavioural guidance). This has ended up providing much better results than previously achieved in highly complex environments and discovering new strategies in the own game. Even exploits in the system have sometimes been found, like in the case of an OpenAi project, where in a hide and seek game, the agents managed to abuse the physics engine in various ways.
+% ( https://openai.com/blog/emergent-tool-use/ 
+
+\section{Objectives}
+
+The overall goal of the project and how it can be achieved has already been discussed but what will be called a success has not yet been defined.
+Building an AI capable of playing Tetris has already been done many times before with great success, though the challenge trying to be taken has a few major and minor hindrances.
+First of all, as a minor inconvenience, the Tetris version we are building our AI on features de \ac{SRS}, which is a modern rotation system with some unconventional situational rotations. No implementation that can be used has been found so an entire game replicating Tetris 99 must be built from scratch to train our model.
+Secondly, there is not a standardized way to access the console’s controller port from a PC, so a reliable workaround must be built and adapted. This is probably the biggest setback.
+Lastly, and as a result of having to intercommunicate both devices, some extra delay, that we hope will not heavily interfere, will occur when bringing everything together.
+Taking this into account, we expect our agent to work swiftly and, if we manage to pass the neural net’s output accurately to the console, be able to perform well when under low gravity settings.
+

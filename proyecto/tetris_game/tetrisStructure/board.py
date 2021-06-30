@@ -121,6 +121,15 @@ class Board():
             6
         ]
 
+        # pieceIndex = [
+        #     3,
+        #     3,
+        #     3,
+        #     3,
+        #     3,
+        #     3,
+        #     3
+        # ]
         rnd.shuffle(pieceIndex)  # shuffle list
         self.bag.extend(pieceIndex)  # add new pieces
 
@@ -197,12 +206,15 @@ class Board():
         linesCleared = self._check_line_clears()
         return linesCleared
 
-    def drop_piece(self):
+    def drop_piece(self, isExploration = False):
         "Drops the piece in a straight direction to the lowest position it can"
         canDrop = True
         down = np.array([0,-1])
         lastPos = None
         lines = []
+        if isExploration:
+            for tile in self.mainPiece.tiles:
+                tile.color = (255, 255, 255)
         while canDrop:
             lastPos = self.piecePos
             canDrop, lines = self.move_piece(down)

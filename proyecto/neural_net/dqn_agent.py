@@ -90,7 +90,7 @@ class DQNAgent:
     def act(self, state):
         '''Returns the expected score of a certain state'''
         state = np.reshape(state, [1, self.state_size])
-        if random.random() <= self.epsilon:
+        if random.random() < self.epsilon:
             return self.random_value()
         else:
             return self.predict_value(state)
@@ -100,8 +100,8 @@ class DQNAgent:
         '''Returns the best state for a given collection of states'''
         max_value = None
         best_action = None
-        if random.random() <= self.epsilon:
-            return random.choice(list(states.keys()))
+        if random.random() < self.epsilon:
+            return random.choice(list(states.keys())), True
         else:
             # print(list(states))
             for action, state in states.items():
@@ -110,10 +110,15 @@ class DQNAgent:
                 value = self.predict_value(np.reshape(state, [1, self.state_size]))
                 if not max_value or value > max_value:
                     max_value = value
+
                     best_action = action
                     best_state = state
-
-        return best_action
+                # print("action:", end = "")
+                # print(action, end = ", state: ")
+                # print(state)
+                # print("value: ", end ="")
+                # print(max_value)
+            return best_action, False
 
     def save(self):
         self.model.save('neural_net/models/tetris_model.h5')

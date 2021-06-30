@@ -67,7 +67,7 @@ def dqn():
                 print("best state")
                 print(best_state)
                 print()
-                sleep(0.8)
+                sleep(3)
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
             current_state = next_states[best_action]
             steps += 1
@@ -116,6 +116,7 @@ def test_model(model):
         reward, done = env.play(best_action[0], best_action[1], render=render,
                                 render_delay=render_delay) # enviar secuencia de comandos a la stich
         print("best state")
+        
         print()
         sleep(0.8)
         # agent.add_to_memory(current_state, next_states[best_action], reward, done)

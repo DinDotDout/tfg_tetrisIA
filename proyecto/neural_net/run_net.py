@@ -24,16 +24,16 @@ def train():
     env = b.Board()
     episodes = 2000
     max_steps = 10000
-    epsilon_stop_episode = 1500
+    epsilon_stop_episode = 2000
     mem_size = 20000
     discount = 0.95
     batch_size = 512
     epochs = 1
-    render_every = 300
-    log_every = 300
+    render_every = 50
+    log_every = 50
     replay_start_size = 2000
     train_every = 1
-    n_neurons = [64, 64]
+    n_neurons = [32, 32]
     render_delay = None
     activations = ['relu', 'relu', 'linear']
 
@@ -66,8 +66,8 @@ def train():
                 piece = copy.deepcopy(env.mainPiece)
 
             next_states, env = h_c.get_next_states(env)
-            best_action = agent.best_action(next_states)
-            reward, done, _ = h_c.play(env, best_action[0], best_action[1])
+            best_action, isExploration = agent.best_action(next_states)
+            reward, done, _ = h_c.play(env, best_action[0], best_action[1], isExploration)
             if render:
                 tetris.draw(env)
                 sleep(0.2)
@@ -99,7 +99,7 @@ def train():
 
 def test_model(agent):
     env = b.Board()    
-    current_state = h_c.get_board_props(env)
+    # current_state = h_c.get_board_props(env)
     done = False
 
     tetris.init()
@@ -107,13 +107,17 @@ def test_model(agent):
     while not done :
         
         next_states, env  = h_c.get_next_states(env)
-        
-        best_action = agent.best_action(next_states)
-        reward, done, _ = h_c.play(env, best_action[0], best_action[1])
+        best_action, isExploration = agent.best_action(next_states)
+        reward, done, _ = h_c.play(env, best_action[0], best_action[1], isExploration)
         tetris.draw(env)
-        sleep(0.1)
-        current_state =  next_states[best_action] # Estado en el que se supone nos deberemos encontrar tras realizar los moviemientos  
+        print(best_action, end = ": ")
+        print(next_states[best_action])
+        print()
+        sleep(0.4)
+        # input()
+        # current_state =  next_states[best_action] # Estado en el que se supone nos deberemos encontrar tras realizar los moviemientos  
     tetris.end()
+
 def test():
     load_net()
     test_model(agent)

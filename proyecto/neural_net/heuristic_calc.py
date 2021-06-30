@@ -15,24 +15,25 @@ def get_next_states(board):
     rotations = 4
     if type(board.mainPiece) is piece.OPiece: # O piece is in the same position even if we rotate
         rotations = 1
-    elif type(board.mainPiece) is piece.SPiece or type(board.mainPiece) is piece.ZPiece:
+    elif type(board.mainPiece) is piece.IPiece:
+    # or type(board.mainPiece) is piece.ZPiece:
         rotations = 2
 
     initialBoard = copy.deepcopy(board) # Save initial board state
     gamePiece = copy.deepcopy(board.mainPiece) # We will use this piece to preserve rotation
 
-    if board.canStore:  # Add store move to dictionary
-        board.swap_piece()
-        landingHeight = board.piecePos[1]
-        props = get_board_props(board)
-        states[(6, 0)] = props
+    # if board.canStore:  # Add store move to dictionary
+    #     board.swap_piece()
+    #     landingHeight = board.piecePos[1]
+    #     props = get_board_props(board)
+    #     states[(6, 0)] = props
 
-        grid = [x[:] for x in initialBoard.grid] # reset board game
-        bag = [x for x in initialBoard.bag] # reset board bag
+    #     grid = [x[:] for x in initialBoard.grid] # reset board game
+    #     bag = [x for x in initialBoard.bag] # reset board bag
         
-        board.reset(grid = grid, bag = bag, piecePos = copy.deepcopy(initialBoard.piecePos),
-            mainPiece = copy.deepcopy(gamePiece), storedPiece = copy.deepcopy(initialBoard.storedPiece),
-            canStore = initialBoard.canStore, score= initialBoard.score)
+    #     board.reset(grid = grid, bag = bag, piecePos = copy.deepcopy(initialBoard.piecePos),
+    #         mainPiece = copy.deepcopy(gamePiece), storedPiece = copy.deepcopy(initialBoard.storedPiece),
+    #         canStore = initialBoard.canStore, score= initialBoard.score)
 
     for rotation in range(rotations): # For all rotations
 
@@ -77,7 +78,12 @@ def testMovements(displacements, rotation, board, initialBoard, gamePiece, state
             props = get_board_props(board, landingHeight[0], tiles, lines)
  
             states[(displacement, rotation)] = props
-   
+            # print("displacement: ", end = "")
+            # print(displacement, end = ", rotation")
+            # print(rotation, end = ": ")
+            # print(props)
+            # print(board)
+            # print("__________")
             # Reset board but keep piece horizontal displacement
             grid = [x[:] for x in initialBoard.grid] # reset board game
             bag = [x for x in initialBoard.bag] # reset board bag
@@ -96,44 +102,51 @@ def testMovements(displacements, rotation, board, initialBoard, gamePiece, state
         mainPiece = copy.deepcopy(gamePiece), storedPiece = copy.deepcopy(initialBoard.storedPiece), 
         canStore = initialBoard.canStore, score= initialBoard.score)
 
-def play(board, displacement, rotation):
+def play(board, displacement, rotation, isExploration = False):
     '''Makes a play given a position and a rotation, returning the reward and if the game is over'''
     # initialScore = board.score
     lastPos = board.piecePos
     score = 1
-    if displacement == 6:
-        board.swap_piece()
-    else:
-        displacement = displacement*np.array([1, 0])
-        for i in range(rotation):
-            board.rotate_piece(True, True)
-        # Move piece to column
-        board.move_piece(displacement)
-        
-        # Drop piece
-        lastPos, lines = board.drop_piece()
-        scores = {
-            0: 0,
-            1: 40,
-            2: 100,
-            3: 300,
-            4: 1200
-        }
+    # if displacement == 6:
+    #     board.swap_piece()
+    # else:
+        # print(displacement)
+    displacement = displacement*np.array([1, 0])
+    for i in range(rotation):
+        board.rotate_piece(True, True)
+    # Move piece to column
+    board.move_piece(displacement)
+    
+    # Drop piece
+    lastPos, lines = board.drop_piece(isExploration)
 
-        score += scores[len(lines)]
+    scores = {
+        0: 0,
+        1: 40,
+        2: 1000,
+        3: 300,
+        4: 1200
+    }
+
+    score += scores[len(lines)]
+    score -= _max_height(board)*0.5
+
     if board.gameOver:
         score -= 5
+    # print(score)
     return score, board.gameOver, lastPos
 
-def get_board_props(board, landingHeight = 0, tiles = None, lines = None):
+def get_board_props2(board, landingHeight = 0, tiles = None, lines = None):
     '''Get board properties
         0: Rows cleared
         1: Holes
         2: Bumpiness
 
         3: Landing height
+
         4: Row transitions
         5: Column transitions
+
         6: Cumulative wells
         7: Eroded piece cells
 
@@ -226,8 +239,6 @@ def _bumpiness(board):
 def _total_height(board):
     '''Sum and maximum height of the board'''
     sum_height = 0
-    max_height = 0
-    min_height = board.killHeight
 
     for x in range(board.gridSizeX):
         height = 0
@@ -238,6 +249,21 @@ def _total_height(board):
         sum_height += height
 
     return sum_height
+
+def _max_height(board):
+    '''Sum and maximum height of the board'''
+    max_height = 0
+
+    for x in range(board.gridSizeX):
+        height = 0
+        for y in range(board.killHeight, -1, -1):
+            if board.grid[y][x]:
+                height = y+1 # 0 row will be counted as height 1
+                break
+        if height > max_height:
+            max_height = height
+
+    return max_height
 
 def _col_roughness(board):
     # print("Col roughness")
@@ -282,7 +308,7 @@ def _row_roughness(board):
     # print(total)
     return total
 
-def get_board_props2(board, landingHeight = 0, tiles = None, lines = None):
+def get_board_props(board, landingHeight = 0, tiles = None, lines = None):
     '''Get properties of the board'''
     if not lines:
         lines = []
@@ -316,7 +342,7 @@ def _cumulative_wells(board):
 
 def get_state_size():
     '''Size of the state'''
-    return 10
+    return 4
 
 # def _cumulative_wells(board):
 #     """Returns the sum of all wells."""
