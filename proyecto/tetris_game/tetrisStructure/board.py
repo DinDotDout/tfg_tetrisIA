@@ -63,6 +63,7 @@ class Board():
         grid = [[None for col in range(self.gridSizeX)] for row in range(self.gridSizeY)]
         return grid
 
+    # Method to print the grif if necessary
     def __str__(self):
         out = []
         NoneTo0 = [x[:] for x in self.grid]
@@ -84,6 +85,7 @@ class Board():
                     out[y] = replacement
         out.reverse()
         return '\n'.join(out)
+
 
     def _spawn_piece(self):
         "Refills bag if necessary and sets next piece in bag as main piece"
@@ -130,6 +132,7 @@ class Board():
         #     3,
         #     3
         # ]
+
         rnd.shuffle(pieceIndex)  # shuffle list
         self.bag.extend(pieceIndex)  # add new pieces
 
@@ -168,20 +171,19 @@ class Board():
             offsetVal1 = offset[oldRotation]
             offsetVal2 = offset[newRotation]
             endOffset = offsetVal1 - offsetVal2
-            if (self.move_piece(endOffset, True)[0]):
+            if (self.move_piece(endOffset, True)):
                 return True
         return False
     
     def move_piece(self, movement, isOffseting = False):
         "Checks if all tiles can be moved to the position and does so"
-        linesCleared = []
         for tile in self.mainPiece.tiles:
             globalTilePos = self.piecePos + tile.position # center position + tile displacement
             newGlobalTilePos = globalTilePos + movement # add movement
             if not self._is_in_bounds(newGlobalTilePos) or not self._is_cell_empty(newGlobalTilePos):
                 if movement[0] == 0 and movement[1] == -1 and not isOffseting: # Lock piece if can't move down
-                    linesCleared = self._lock_piece()
-                return False, linesCleared
+                    self._lock_piece()
+                return False
                 # break
         
         # if not canMove:
@@ -189,7 +191,7 @@ class Board():
         #         linesCleared = self._lock_piece()
         #     return False, linesCleared
         self.piecePos += movement
-        return True, linesCleared
+        return True
 
     def _lock_piece(self):
         "Locks the piece in place if it reaches the bottom or collides with another"       
@@ -203,24 +205,24 @@ class Board():
             self.grid[y][x] = tile.color
 
         self._spawn_piece()
-        linesCleared = self._check_line_clears()
-        return linesCleared
+        
+        # return linesCleared
 
     def drop_piece(self, isExploration = False):
         "Drops the piece in a straight direction to the lowest position it can"
         canDrop = True
         down = np.array([0,-1])
         lastPos = None
-        lines = []
+        
         if isExploration:
             for tile in self.mainPiece.tiles:
                 tile.color = (255, 255, 255)
         while canDrop:
             lastPos = self.piecePos
-            canDrop, lines = self.move_piece(down)
-        return lastPos, lines
+            canDrop = self.move_piece(down)
+        return lastPos
 
-    def _is_in_bounds(self, pos, ):
+    def _is_in_bounds(self, pos):
         "Checks to see if the coordinate is within the tetris board bounds"
         x, y = pos
         if x < 0 or x >= self.gridSizeX or y < 0:
@@ -253,11 +255,11 @@ class Board():
         for x in range(self.gridSizeX):
             self.grid[line][x] = None
         for lineToDrop in range(line+1, self.gridSizeY):
-                for x in range(self.gridSizeX):
-                    color = self.grid[lineToDrop][x]     
-                    if color:
-                        self.grid[lineToDrop-1][x] = color
-                        self.grid[lineToDrop][x]  = None
+            for x in range(self.gridSizeX):
+                color = self.grid[lineToDrop][x]     
+                if color:
+                    self.grid[lineToDrop-1][x] = color
+                    self.grid[lineToDrop][x]  = None
 
 
     def _check_line_clears(self):

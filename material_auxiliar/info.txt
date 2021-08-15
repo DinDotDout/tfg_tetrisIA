@@ -1,6 +1,9 @@
 Heuristica - https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/ 
             https://github.com/michiel-cox/Tetris-DQN/blob/66ee640aaa2068f3db4798ddf51f1518c3779cc6/gym_tetris/board.py#L351
             https://imake.ninja/el-tetris-an-improvement-on-pierre-dellacheries-algorithm/
+            
+            https://medium.com/mlearning-ai/reinforcement-learning-on-tetris-707f75716c37 
+            https://github.com/zeroize318/tetris_ai
 
 Pierre Dellacherie’s Algorithm - https://www.colinfahey.com/tetris/tetris.html
 

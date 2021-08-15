@@ -15,8 +15,7 @@ def get_next_states(board):
     rotations = 4
     if type(board.mainPiece) is piece.OPiece: # O piece is in the same position even if we rotate
         rotations = 1
-    elif type(board.mainPiece) is piece.IPiece:
-    # or type(board.mainPiece) is piece.ZPiece:
+    elif type(board.mainPiece) is piece.SPiece or type(board.mainPiece) is piece.ZPiece or type(board.mainPiece) is piece.IPiece:
         rotations = 2
 
     initialBoard = copy.deepcopy(board) # Save initial board state
@@ -41,7 +40,7 @@ def get_next_states(board):
         
         testMovements(displacementsR, rotation, board, initialBoard, gamePiece, states) # test right movents
 
-        board.rotate_piece(True, True) # rotates piece for next iteration
+        board.rotate_piece(True, True) # rotates piece for the next iteration
         gamePiece = copy.deepcopy(board.mainPiece) # replace gamePiece with new rotation
 
     # for rotation in range(rotations): # For all rotations
@@ -60,22 +59,23 @@ def testMovements(displacements, rotation, board, initialBoard, gamePiece, state
     for displacement in displacements: # try all displacement
         isValid = True # No movement is also valid
         if displacement > 0: # move right
-            isValid, _ = board.move_piece(np.array([1,0]))
+            isValid = board.move_piece(np.array([1,0]))
         elif displacement < 0: # move left
-            isValid, _ = board.move_piece(np.array([-1,0]))
+            isValid = board.move_piece(np.array([-1,0]))
 
         # store current position
         piecePos = copy.deepcopy(board.piecePos)
-        if isValid:
-            
+        if isValid: 
+
+            # tile local positions
+            tiles = [i.position[1] for i in board.mainPiece.tiles] # check tile local position before piece changes (drop)
 
             # Drop piece to bottom and get pos height, and lines cleared
-            landingHeight, lines = board.drop_piece()
-            # tile local positions
-            tiles = [i.position[1] for i in board.mainPiece.tiles]
+            landingHeight = board.drop_piece()
+
 
             # Calculate heuristic and add it to dictionary as a valid route
-            props = get_board_props(board, landingHeight[0], tiles, lines)
+            props = get_board_props(board, landingHeight[0], tiles)
  
             states[(displacement, rotation)] = props
             # print("displacement: ", end = "")
@@ -118,25 +118,47 @@ def play(board, displacement, rotation, isExploration = False):
     board.move_piece(displacement)
     
     # Drop piece
-    lastPos, lines = board.drop_piece(isExploration)
+    lastPos = board.drop_piece(isExploration)
+    lines = board._check_line_clears()
 
     scores = {
         0: 0,
-        1: 40,
-        2: 1000,
-        3: 300,
-        4: 1200
+        1: 1,
+        2: 40,
+        3: 160,
+        4: 320
     }
 
     score += scores[len(lines)]
-    score -= _max_height(board)*0.5
+    # score -= _max_height(board)*0.5
 
     if board.gameOver:
-        score -= 5
+        score = -5
     # print(score)
     return score, board.gameOver, lastPos
 
-def get_board_props2(board, landingHeight = 0, tiles = None, lines = None):
+def get_board_props(board):
+
+    pass
+    
+def get_hole_depth(board):
+    depth = [0] * board.gridSizeX
+    highest_brick = 0
+    for j in range(board.gridSizeX):
+        has_found_brick = False
+        for i in range(board.killHeight):
+            if not has_found_brick:
+                if board.grid[i][j] != None:
+                    has_found_brick = True
+                    highest_brick = i
+            elif board.grid[i][j] == None:
+                depth[j] = i - highest_brick
+                break
+    
+    return depth
+
+
+def get_board_props(board, landingHeight = 0, tiles = None):
     '''Get board properties
         0: Rows cleared
         1: Holes
@@ -151,13 +173,38 @@ def get_board_props2(board, landingHeight = 0, tiles = None, lines = None):
         7: Eroded piece cells
 
         8: Aggregate height
+        9: stored piece type
     :rtype: Integer array'''
     
-    if not lines:
-        lines = []
+    # if not lines:
+    #     lines = []
 
+    nHoles = _number_of_holes(board)
+    bumpiness = _bumpiness(board)
+    rowRoughness = _row_roughness(board) # check
+    colRoughness =_col_roughness(board) # check
+    cumulativeWells = _cumulative_wells(board)
+    totalHeight = _total_height(board)
+
+    # pieces = {
+    #     piece.IPiece():0,
+    #     piece.JPiece():1,
+    #     piece.LPiece():2,
+    #     piece.OPiece():3,
+    #     piece.SPiece():4,
+    #     piece.TPiece():5,
+    #     piece.ZPiece():6
+    # }
+    
+    # if board.canStore:
+    #     storedPiece = pieces.get(type(board.storedPiece), 7)
+    # else:
+    #     storedPiece = 8
+    
     pieceHeight = 0
     erodedPieceCells = 0
+    lines = board._check_line_clears()
+
     if tiles:
         tiles = copy.deepcopy(tiles)
         highestTile = max(tiles)
@@ -167,42 +214,26 @@ def get_board_props2(board, landingHeight = 0, tiles = None, lines = None):
         meanHeight = (highestHeight - trueLandingHeight)/2 # Total piece height divided by 2
         pieceHeight= (meanHeight + trueLandingHeight + 1) # Calculate height from middle of the piece (bottom row counts as 1)
 
-        for tile in tiles:
-            for line in lines:
-                tileY = tile
-                _, lineY = line
-                if tileY + landingHeight == lineY:
-                    erodedPieceCells +=1
-        erodedPieceCells *= len(lines)
-
-
-    pieces = {
-            piece.IPiece():0,
-            piece.JPiece():1,
-            piece.LPiece():2,
-            piece.OPiece():3,
-            piece.SPiece():4,
-            piece.TPiece():5,
-            piece.ZPiece():6
-    }
-
-    storedPiece = None
-    if board.canStore:
-        storedPiece = type(board.storedPiece)
-    else:
-        storedPiece = 8
+        if lines: # No need to calculate if there was not a line clear
+            for tile in tiles:
+                for line in lines:
+                    tileY = tile
+                    _, lineY = line
+                    if tileY + landingHeight == lineY:
+                        erodedPieceCells +=1
+            erodedPieceCells *= len(lines)
 
     return [
-    len(lines),
-    _number_of_holes(board),
-    _bumpiness(board),
-    pieceHeight,
-    _row_roughness(board), # check
-    _col_roughness(board), # check
-    _cumulative_wells(board),
-    erodedPieceCells,
-    _total_height(board),
-    pieces.get(type(board.storedPiece), 7)
+        # len(lines),
+        nHoles,
+        bumpiness,
+        pieceHeight,
+        # rowRoughness, # check
+        # colRoughness, # check
+        cumulativeWells,
+        erodedPieceCells,
+        totalHeight,
+        # storedPiece
     ]
 
 def _number_of_holes(board):
@@ -308,14 +339,15 @@ def _row_roughness(board):
     # print(total)
     return total
 
-def get_board_props(board, landingHeight = 0, tiles = None, lines = None):
+def get_board_props2(board, landingHeight = 0, tiles = None):
     '''Get properties of the board'''
-    if not lines:
-        lines = []
-    newScore = len(lines)
+
     holes = _number_of_holes(board)
     total_bumpiness = _bumpiness(board)
     sum_height = _total_height(board)
+    lines = board._check_line_clears()
+    newScore = len(lines)
+
     return [newScore, holes, total_bumpiness, sum_height]
 
 def _cumulative_wells(board):
@@ -342,7 +374,9 @@ def _cumulative_wells(board):
 
 def get_state_size():
     '''Size of the state'''
-    return 4
+    return 6
+    # return 9
+
 
 # def _cumulative_wells(board):
 #     """Returns the sum of all wells."""

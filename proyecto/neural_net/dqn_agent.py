@@ -1,5 +1,8 @@
-from keras.models import Sequential, save_model, load_model
+from tensorflow import keras
+from keras.models import Sequential
 from keras.layers import Dense
+from tensorflow.keras import layers
+
 from collections import deque
 import numpy as np
 import random
@@ -33,7 +36,7 @@ class DQNAgent:
     def __init__(self, state_size, model = None, mem_size=10000, discount=0.95,
                  epsilon=1, epsilon_min=0, epsilon_stop_episode=500,
                  n_neurons=[32,32], activations=['relu', 'relu', 'linear'],
-                 loss='mse', optimizer='adam', replay_start_size=None):
+                 loss='mse', optimizer='adam', replay_start_size=None, metrics = "mean_squared_error"):
 
  
         assert len(activations) == len(n_neurons) + 1
@@ -48,6 +51,7 @@ class DQNAgent:
         self.activations = activations
         self.loss = loss
         self.optimizer = optimizer
+        self.metrics = metrics
         if not replay_start_size:
             replay_start_size = mem_size / 2
         self.replay_start_size = replay_start_size
@@ -57,7 +61,7 @@ class DQNAgent:
         self.model = self._build_model()
 
 
-    def _build_model(self):
+    def _build_model2(self):
         '''Builds a Keras deep neural network model'''
         model = Sequential()
         model.add(Dense(self.n_neurons[0], input_dim=self.state_size, activation=self.activations[0]))
@@ -67,10 +71,47 @@ class DQNAgent:
 
         model.add(Dense(1, activation=self.activations[-1]))
 
-        model.compile(loss=self.loss, optimizer=self.optimizer)
+        model.compile(loss=self.loss, optimizer=self.optimizer, metrics=self.metrics)
         
         return model
 
+    def _build_model(self):
+        shape_main_grid = (1, 20, 10, 1)
+        shape_hold_next = (1, 1 * 2 + 1 + 6 * 7)
+        
+        '''Builds a Keras deep neural network model'''
+        main_grid_input = keras.Input(shape=shape_main_grid[1:], name="main_grid_input")
+        a = layers.Conv2D(
+            64, 6, activation="relu", input_shape=shape_main_grid[1:]
+        )(main_grid_input)
+        a1 = layers.MaxPool2D(pool_size=(15, 5), strides=(1, 1))(a)
+        a1 = layers.Flatten()(a1)
+        a2 = layers.AvgPool2D(pool_size=(15, 5))(a)
+        a2 = layers.Flatten()(a2)
+
+        b = layers.Conv2D(
+            256, 4, activation="relu", input_shape=shape_main_grid[1:]
+        )(main_grid_input)
+        b1 = layers.MaxPool2D(pool_size=(17, 7), strides=(1, 1))(b)
+        b1 = layers.Flatten()(b1)
+        b2 = layers.AvgPool2D(pool_size=(17, 7))(b)
+        b2 = layers.Flatten()(b2)
+
+        hold_next_input = keras.Input(shape=shape_hold_next[1:], name="hold_next_input")
+
+        x = layers.concatenate([a1, a2, b1, b2, hold_next_input])
+        x = layers.Dense(128, activation="relu")(x)
+        x = layers.Dense(64, activation="relu")(x)
+        critic_output = layers.Dense(1)(x)  # activation=None -> 'linear'
+
+        model_new = keras.Model(
+            inputs=[main_grid_input, hold_next_input],
+            outputs=critic_output
+        )
+
+        model_new.summary()
+
+        return model_new
 
     def add_to_memory(self, current_state, next_state, reward, done):
         '''Adds a play to the replay memory buffer'''
@@ -97,7 +138,7 @@ class DQNAgent:
 
 
     def best_action(self, states):
-        '''Returns the best state for a given collection of states'''
+        '''Returns the best action for a given collection of states'''
         max_value = None
         best_action = None
         if random.random() < self.epsilon:
@@ -110,14 +151,9 @@ class DQNAgent:
                 value = self.predict_value(np.reshape(state, [1, self.state_size]))
                 if not max_value or value > max_value:
                     max_value = value
-
                     best_action = action
                     best_state = state
-                # print("action:", end = "")
-                # print(action, end = ", state: ")
-                # print(state)
-                # print("value: ", end ="")
-                # print(max_value)
+     
             return best_action, False
 
     def save(self):
@@ -129,7 +165,7 @@ class DQNAgent:
         if n >= self.replay_start_size and n >= batch_size:
 
             batch = random.sample(self.memory, batch_size)
-
+            
             # Get the expected score for the next states, in batch (better performance)
             next_states = np.array([x[1] for x in batch])
             next_qs = [x[0] for x in self.model.predict(next_states)]

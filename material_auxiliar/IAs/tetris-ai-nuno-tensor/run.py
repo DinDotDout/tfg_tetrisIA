@@ -13,16 +13,16 @@ from time import sleep
 # Run dqn with Tetris
 def dqn():
     env = Tetris()
-    episodes = 2000
-    max_steps = None
-    epsilon_stop_episode = 1500
+    episodes = 10000
+    max_steps = 1000
+    epsilon_stop_episode = 9500
     mem_size = 20000
     discount = 0.95
     batch_size = 512
     epochs = 1
     render_every = 50
     log_every = 50
-    replay_start_size = 2000
+    replay_start_size = 10000
     train_every = 1
     n_neurons = [32, 32]
     render_delay = None
@@ -55,8 +55,8 @@ def dqn():
             
             best_action = None
             for action, state in next_states.items():
-                print(action, end = ": ")
-                print(state)
+                # print(action, end = ": ")
+                # print(state)
                 if state == best_state:
                     best_action = action
                     break
@@ -64,9 +64,9 @@ def dqn():
             reward, done = env.play(best_action[0], best_action[1], render=render,
                                     render_delay=render_delay)
             if render:
-                print("best state")
-                print(best_state)
-                print()
+                # print("best state")
+                # print(best_state)
+                # print()
                 sleep(3)
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
             current_state = next_states[best_action]
@@ -107,8 +107,8 @@ def test_model(model):
         
         best_action = None
         for action, state in next_states.items():
-            print(action, end = ": ")
-            print(state)
+            # print(action, end = ": ")
+            # print(state)
             if state == best_state:
                 best_action = action
                 break

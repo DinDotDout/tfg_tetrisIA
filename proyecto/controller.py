@@ -24,6 +24,7 @@ class Controller():
 
     def reset(self):
         pygame.init()
+        
         self.UP_KEY, self.DOWN_KEY, self.START_KEY, self.BACK_KEY = False, False, False, False
         self.DISPLAY_W, self.DISPLAY_H = 720, 480
         self.display = pygame.Surface((self.DISPLAY_W,self.DISPLAY_H))
@@ -33,6 +34,7 @@ class Controller():
         # self.font_name = pygame.font.get_default_font()
         self.BLACK, self.WHITE = (0, 0, 0), (255, 255, 255)
         self.curr_menu = Menu(self)
+
 
     def kill(self):
         pygame.display.quit()

@@ -170,7 +170,8 @@ def game_loop(win):
             if event.type == pygame.QUIT:
                 run = False
             input_controller(event, board)
-           
+        
+        _ = board._check_line_clears()
         draw_window(win, board.grid_colors(), board.score, last_score)
         draw_next_shapes(win, board)
         draw_stored_piece(win, board.storedPiece)
@@ -190,7 +191,7 @@ def input_controller(event, board):
             score = board.score
             tiles = [x.position[1] for x in board.mainPiece.tiles]
             height, lines = board.drop_piece()
-            print(h_c.get_board_props(board, height[1], tiles, lines))
+            # print(h_c.get_board_props(board, height[1], tiles, lines))
 
         if event.key == pygame.K_d:  # Rotate right
             board.rotate_piece(True, True)
@@ -199,7 +200,7 @@ def input_controller(event, board):
         if event.key == pygame.K_SPACE:  # Save piece
             tiles = [x.position[1] for x in board.mainPiece.tiles]
             board.swap_piece()
-            print(h_c.get_board_props(board, board.piecePos[1], None, lines = None))
+            # print(h_c.get_board_props(board, board.piecePos[1], None, lines = None))
             
 def game_menu():
     pygame.init()

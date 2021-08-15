@@ -22,9 +22,9 @@ def train():
     global agent
 
     env = b.Board()
-    episodes = 2000
-    max_steps = 10000
-    epsilon_stop_episode = 2000
+    episodes = 10000
+    max_steps = 800
+    epsilon_stop_episode = 9500
     mem_size = 20000
     discount = 0.95
     batch_size = 512
@@ -32,12 +32,12 @@ def train():
     render_every = 50
     log_every = 50
     replay_start_size = 2000
-    train_every = 1
+    train_every = 20
     n_neurons = [32, 32]
     render_delay = None
     activations = ['relu', 'relu', 'linear']
 
-    agent = DQNAgent(state_size = h_c.get_state_size(),
+    agent = DQNAgent(state_size = h_c.get_state_size(), loss = "huber_loss",
                      n_neurons=n_neurons, activations=activations,
                      epsilon_stop_episode=epsilon_stop_episode, mem_size=mem_size,
                      discount=discount, replay_start_size=replay_start_size)
@@ -53,29 +53,38 @@ def train():
         done = False
         steps = 0
 
-        if render_every and episode % render_every == 0:
+        if episode % render_every == 0:
             render = True # init pygame window
+            renderLast = False
+            tetris.init()
+        elif episode >= episodes-1:
+            render = True
+            renderLast = True # init pygame window
             tetris.init()
         else:
             render = False
+            renderLast = False
 
         # Game
         while not done and (not max_steps or steps < max_steps):
-            piece = 0
-            if render:
-                piece = copy.deepcopy(env.mainPiece)
+            # piece = 0
+            # if render:
+            #     piece = copy.deepcopy(env.mainPiece)
 
             next_states, env = h_c.get_next_states(env)
             best_action, isExploration = agent.best_action(next_states)
             reward, done, _ = h_c.play(env, best_action[0], best_action[1], isExploration)
             if render:
                 tetris.draw(env)
-                sleep(0.2)
+                if renderLast:
+                    sleep(0.3)
 
 
             agent.add_to_memory(current_state, next_states[best_action], reward, done)
             current_state = next_states[best_action]
             steps += 1
+            if steps == 500:
+                print(steps)
         if render:
             tetris.end()
             
@@ -95,7 +104,7 @@ def train():
         #             max_score=max_score)
                     
         agent.save()
-    agent.save()
+    # agent.save()
 
 def test_model(agent):
     env = b.Board()    
@@ -110,9 +119,11 @@ def test_model(agent):
         best_action, isExploration = agent.best_action(next_states)
         reward, done, _ = h_c.play(env, best_action[0], best_action[1], isExploration)
         tetris.draw(env)
-        print(best_action, end = ": ")
-        print(next_states[best_action])
-        print()
+        # agent.add_to_memory(current_state, next_states[best_action], reward, done)
+
+        # print(best_action, end = ": ")
+        # print(next_states[best_action])
+        # print()
         sleep(0.4)
         # input()
         # current_state =  next_states[best_action] # Estado en el que se supone nos deberemos encontrar tras realizar los moviemientos  
