@@ -378,7 +378,6 @@ def force_sync():
     # Wait for serial data and read the last byte sent
     wait_for_data()
     byte_in = read_byte_latest()
-
     # Begin sync...
     inSync = False
     if byte_in == RESP_SYNC_START:
@@ -402,6 +401,7 @@ def sync():
         inSync = force_sync()
         if inSync:
             inSync = send_packet()
+        
     return inSync
 
 def close():

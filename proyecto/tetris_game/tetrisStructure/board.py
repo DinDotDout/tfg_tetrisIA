@@ -2,21 +2,7 @@ import numpy as np
 import random as rnd
 from . import tile as tc
 from . import piece as pc
-
-
-def get_piece_type(n):
-    pieces = [
-        pc.IPiece(),
-        pc.JPiece(),
-        pc.LPiece(),
-        pc.OPiece(),
-        pc.SPiece(),
-        pc.TPiece(),
-        pc.ZPiece()
-    ]
-    return pieces[n]
-
-
+import random
 
 class Board():
     gridSizeY = 24
@@ -31,7 +17,6 @@ class Board():
     
     def reset(self, grid = None, bag = None, piecePos = None,
                     mainPiece = None, storedPiece = None, canStore = True, score = 0):
-
         self.gameOver = False
 
         if grid:
@@ -52,7 +37,6 @@ class Board():
        
         self.storedPiece = storedPiece
         self.canStore = canStore
-        self.reseted = False
         self.score = score
 
 
@@ -81,7 +65,7 @@ class Board():
             for tiles in self.mainPiece.tiles:
                 x, y = tiles.position+self.piecePos
                 if y < 20:
-                    replacement = out[y][:x] + '1' + out[y][x+1:]
+                    replacement = out[y][:x] + '2' + out[y][x+1:]
                     out[y] = replacement
         out.reverse()
         return '\n'.join(out)
@@ -94,11 +78,10 @@ class Board():
         if len(self.bag) < 7:  # check to see if list is empty
             self._fill_bag()
 
-        self.mainPiece = get_piece_type(self.bag.pop(0)) # get current piece
+        self.mainPiece = pc.get_piece_type(self.bag.pop(0)) # get current piece
         self.piecePos = self._spawn_height()    
 
         self.canStore = True
-        self.reseted = True
     
     def _spawn_height(self, height = np.array([4,18])):
         "Tries to spawn piece at different heights. It it can't sets game over flag"
@@ -150,10 +133,9 @@ class Board():
             self.mainPiece = aux
             self.canStore = False
             self.piecePos = self._spawn_height()
-            self.reseted = True
             
 
-    def rotate_piece(self, clockwise, shouldOffset):
+    def rotate_piece(self, clockwise, shouldOffset = True):
         "Rotates piece by 90º"
         oldRotation = self.mainPiece.rotationIndex
         self.mainPiece.rotate(clockwise)
@@ -164,6 +146,7 @@ class Board():
             movePossible = self._offset_piece(oldRotation, newRotation)
         if not movePossible:
             self.mainPiece.rotate(not clockwise)
+        return movePossible
         
     def _offset_piece(self,oldRotation, newRotation):
         "Checks if the piece can be offsetted following the rules of the SRS"
@@ -267,7 +250,7 @@ class Board():
 
         lineClears = 0
         linesCleared = []
-        for y in range(self.gridSizeY-1, -1, -1): #loop from top to bottom
+        for y in reversed(range(self.gridSizeY-1)): #loop from top to bottom
             lineClear = True
             for x in range(self.gridSizeX):
                 if not self.grid[y][x]:

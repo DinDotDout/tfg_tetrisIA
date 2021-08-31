@@ -10,7 +10,7 @@ import cv2
 from . import fileVideoStream as fvs
 from . import switchController as ctrler
 from . import image_processing as img_process
-from neural_net import heuristic_calc as hc, run_net as net
+from neural_net import heuristic_calc as hc, run as net
 
 from tetris_game.tetrisStructure import board
 
@@ -139,18 +139,21 @@ expectedPos = None
 piece = None
 def run_net(frame):
     global moves, clean, expectedPos, piece
-
-    if img_process.canMove and not moves:
+    # timer = 0.2
+    if img_process.gameBoard and not moves:
+    
         displacement, rotation, expectedPos, piece = net.get_net_output(img_process.gameBoard)
         # print(type(piece))
         moves = queue_moves(displacement, rotation)
+        # start_time_counter()
         # moves.extend()
         # print(moves)
+
 
     if piece:
         draw_expected_pos(expectedPos, piece, frame)
 
-    timer = 0.04
+    timer = 0.1
     # timer = 0.5
     if check_wait_timer(timer):
         if clean:
@@ -209,7 +212,7 @@ def queue_moves(displacement, rotation):
     
     # Rotate piece
     for i in range(rotation):
-        moves.append(a_button)
+        moves.append(b_button)
 
     return moves
 
@@ -255,8 +258,8 @@ def main():
     cap = fvs.FileVideoStream(args.cap, width = width, height = height).start()
     print('Frame buffer ready')
 
-    print("Loading nerual net data")
-    net.load_net()
+    print("Loading neural net data")
+    net.load_model()
 
     # Name of the window we will use
     winname = 'Nintendo Switch'
@@ -328,6 +331,6 @@ def main():
     cap.stop()
     cv2.destroyAllWindows()
     ctrler.close
-
+    
 # if __name__ == "__main__":
 #     main()

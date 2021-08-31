@@ -1,4 +1,5 @@
 from controller import Controller
+import sys
 
 c = Controller()
 while c.running:
@@ -8,4 +9,5 @@ while c.running:
         c.stateList[c.state]()
     c.reset()
 c.kill()
-exit()
+sys.exit()
+

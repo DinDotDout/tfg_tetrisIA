@@ -16,8 +16,8 @@ from gui import Gui
 import time
 import multiprocessing
 import psutil
-from tqdm import tqdm
-
+import sys
+np.set_printoptions(threshold=sys.maxsize)
 # size dependent
 shape_main_grid = (1, GAME_BOARD_HEIGHT, GAME_BOARD_WIDTH, 1)
 if STATE_INPUT == 'short':
@@ -35,6 +35,8 @@ rand = random.Random()
 
 penalty = -500
 reward_coef = [1.0, 0.5, 0.4, 0.3]
+
+cpu_count = min(psutil.cpu_count(logical=False), CPU_MAX)
 
 
 # reward_coef = [1.0, 1.0, 1.0, 1.0]
@@ -92,8 +94,10 @@ def load_model(filepath=None):
     return model_loaded
 
 
-def test(model, max_games=100, mode='piece', is_gui_on=True):
-    max_steps_per_episode = 2000
+def test(model, max_games=10, mode='piece', is_gui_on=True):
+    # max_steps_per_episode = 2000
+    max_steps_per_episode = None
+
     seed = None
     gui = Gui() if is_gui_on else None
     # env = GameMini(seed=seed, height=0)
@@ -102,19 +106,23 @@ def test(model, max_games=100, mode='piece', is_gui_on=True):
     episode_count = 0
     total_score = 0
 
-    pause_time = 0.01
+    pause_time = 0.03
+    totalSteps = 0
 
     while True and episode_count < max_games:
+        steps = 0
+        done = False
         env.reset()
-        for step in range(max_steps_per_episode):
+        while not done and (not max_steps_per_episode or steps < max_steps_per_episode):
+        # for step in range(max_steps_per_episode):
             states, add_scores, dones, _, _, moves = env.get_all_possible_states_conv2d()
             rewards = get_reward(add_scores, dones)
+
             q = rewards + model(states)
+            
             best = tf.argmax(q).numpy()[0]
-
+            
             if mode == 'step':
-                # print(states[1][best])
-
                 best_moves = moves[best]
                 for i in range(len(best_moves) - 1):
                     move = best_moves[i]
@@ -125,18 +133,23 @@ def test(model, max_games=100, mode='piece', is_gui_on=True):
                 env.render()
                 time.sleep(pause_time)
 
+
             else:
                 env.step(chosen=best)
-                env.render()
+                # env.render()
                 time.sleep(pause_time)
 
-            if env.is_done() or step == max_steps_per_episode - 1:
-                episode_count += 1
-                total_score += env.current_state.score
-                print('episode #{}:   score:{}'.format(episode_count, env.current_state.score))
-                break
+            steps += 1
+            done = env.gameOver
+            # if done or steps == max_steps_per_episode - 1:
+        totalSteps += steps
+        episode_count += 1
+        total_score += env.current_state.score
+        print('episode #{}:   score:{}   plays:{}'.format(episode_count, env.current_state.score, steps))
+        
 
     print('average score = {:7.2f}'.format(total_score / max_games))
+    print('average number of plays = {:7.2f}'.format(totalSteps / max_games))
 
 
 def get_data_from_playing_cnn2d(model_filename, target_size=8000, max_steps_per_episode=2000, proc_num=0,
@@ -150,14 +163,13 @@ def get_data_from_playing_cnn2d(model_filename, target_size=8000, max_steps_per_
     global epsilon
     if proc_num == 0:
         epsilon = 0
-
     data = list()
     env = Game()
     episode_max = 1000
     total_score = 0
     avg_score = 0
     t_spins = 0
-    
+
     for episode in range(episode_max):
         # env.reset(rand.randint(0, 10))
         env.reset()
@@ -174,19 +186,27 @@ def get_data_from_playing_cnn2d(model_filename, target_size=8000, max_steps_per_
 
             pool_size = Tetromino.pool_size()
 
-            # get the best first before modifying the last next
+            # get the best first before modifying the last next (add penalty to done games)
             q = rewards + model(possible_states, training=False).numpy()
+
+            # Force rewards to -500
             for j in range(len(dones)):
                 if dones[j]:
                     q[j] = rewards[j]
-            best = tf.argmax(q).numpy()[0] + 0
+            best = tf.argmax(q).numpy()[0]
             
-
+            # if there is a hold and it was not already held
             # if hold was empty, then we don't know what's next; if hold was not empty, then we know what's next!
+
+            # got a held piece and its old
             if is_include_hold and not is_new_hold:
+                # we swapped a piece
+                # we swapped pieces so we delete it from the last
+                # Empty last 7 everywhere except last
                 possible_states[1][:-1, -pool_size:] = 0
-                
             else:
+                # if no hold or new hold
+                # Empty last 7 everywhere
                 possible_states[1][:, -pool_size:] = 0
 
             # Let the net chose or explore
@@ -201,7 +221,7 @@ def get_data_from_playing_cnn2d(model_filename, target_size=8000, max_steps_per_
                 # q_normal = q_normal / np.sum(q_normal)
                 # chosen = np.random.choice(q_normal.shape[0], p=q_normal)
 
-                # uniform probability
+                # uniform probability from all games
                 chosen = random.randint(0, len(dones) - 1)
 
             # current gamestate, next chosen gamestate, scores, done?
@@ -240,6 +260,7 @@ def train(model, outer_start=0, outer_max=100):
     buffer_new_size = 20000
     buffer_outer_max = 1
     history = None
+    print('Found {} physical CPUs'.format(cpu_count))
 
     for outer in range(outer_start + 1, outer_start + 1 + outer_max):
         print('======== outer = {} ========'.format(outer))
@@ -285,6 +306,7 @@ def train(model, outer_start=0, outer_max=100):
             target = target * gamma
 
             history = model.fit((s1, s2), target, batch_size=batch_training, epochs=epoch_training, verbose=1)
+
             print('      loss = {:8.3f}   mse = {:8.3f}'.format(history.history['loss'][-1],
                                                                 history.history['mean_squared_error'][-1]))
 
@@ -354,8 +376,9 @@ def append_record(text, filename=None):
 
 
 def collect_samples_multiprocess_queue(model_filename, outer=0, target_size=10000):
+    global cpu_count
     timeout = 800
-    cpu_count = min(psutil.cpu_count(logical=False), CPU_MAX)
+    
     # cpu_count = min(multiprocessing.cpu_count(), CPU_MAX)
     jobs = list()
     q = multiprocessing.Queue()

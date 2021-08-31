@@ -4,8 +4,9 @@ import sys
 import numpy as np
 
 
+import tetris_game.tetrisStructure.piece as p
 from .tetrisStructure import board as b
-from neural_net import heuristic_calc as h_c
+# from neural_net import heuristic_calc as h_c
 
 
 # GLOBALS VARS
@@ -94,7 +95,7 @@ def draw_next_shapes(surface, board):
     sx += 1.5*block_size
     sy += 3*block_size
     for i in range(6):
-        piece = b.get_piece_type(board.bag[i])
+        piece = p.get_piece_type(board.bag[i])
         pieceTiles = piece.tiles
         for tile in pieceTiles:
             x, y = tile.position
@@ -157,10 +158,10 @@ def game_loop(win):
             if level_time > 0.12:
                 level_time -= 0.005
 
-        # Reset drop timer if we just changed a piece
-        if board.reseted:
-            fall_time = 0
-            board.reseted = False
+        # # Reset drop timer if we just changed a piece
+        # if board.reseted:
+        #     fall_time = 0
+        #     board.reseted = False
 
         if fall_time/1000 > fall_speed:
             fall_time = 0
@@ -190,8 +191,8 @@ def input_controller(event, board):
         if event.key == pygame.K_UP:  # Drop piece
             score = board.score
             tiles = [x.position[1] for x in board.mainPiece.tiles]
-            height, lines = board.drop_piece()
-            # print(h_c.get_board_props(board, height[1], tiles, lines))
+            board.drop_piece()
+
 
         if event.key == pygame.K_d:  # Rotate right
             board.rotate_piece(True, True)
@@ -200,7 +201,6 @@ def input_controller(event, board):
         if event.key == pygame.K_SPACE:  # Save piece
             tiles = [x.position[1] for x in board.mainPiece.tiles]
             board.swap_piece()
-            # print(h_c.get_board_props(board, board.piecePos[1], None, lines = None))
             
 def game_menu():
     pygame.init()

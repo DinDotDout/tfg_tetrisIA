@@ -801,11 +801,10 @@ class Game:
         buffer = []
         for i in range(len(gamestate.grid)):
             for j in range(len(gamestate.grid[i])):
-                buffer.append([gamestate.grid[i][j]])
+                buffer.append([gamestate.grid[i][j] > 0])
 
         buffer = np.reshape(np.array(buffer), [1, GAME_BOARD_HEIGHT, GAME_BOARD_WIDTH, 1])
-        buffer = (buffer > 0)
-
+        # buffer = (buffer > 0)
         return buffer
 
     # @staticmethod
@@ -819,7 +818,6 @@ class Game:
         # part1: heights + hold_depth. len -> 20
         if STATE_INPUT == 'short':
             buffer1 = [sum(gamestate.get_heights())] + [sum(gamestate.get_hole_depth())]
-            
         else:
             buffer1 = gamestate.get_heights() + gamestate.get_hole_depth()
 

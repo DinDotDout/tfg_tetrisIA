@@ -1,7 +1,7 @@
 import pygame
 from menu import *
 import tetris_game.tetris as tetris
-import neural_net.run_net as nn
+import neural_net.run as nn
 from img_proc import main as img_proc
 import os
 
