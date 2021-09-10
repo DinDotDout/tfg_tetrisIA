@@ -14,7 +14,7 @@ GAME_TYPE = 'regular'
 
 #   2.  folder name to store dataset and model. './anything_you_like/'
 # FOLDER_NAME = './tetris_extra/'
-FOLDER_NAME = './IAs/tetris_regularTest/'
+FOLDER_NAME = './IAs/tetris_AI/'
 
 #   3.  if > 0, then model {FOLDER_NAME}/whole_model/outer_{OUT_START} will be loaded to continue training or watch it play
 #       if 0, then create a brand new model.

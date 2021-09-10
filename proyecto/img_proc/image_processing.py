@@ -25,6 +25,7 @@ EMPTY = 0
 frame = None
 gameBoard = None
 canMove = True
+newBoard = False
 
 # GAME DETECTION
 # ------------------------------------------------
@@ -153,7 +154,7 @@ def piece_type(x, y):
         isMain = True # main piece
     # if no match found
     if found == False:
-        # if the mean colour is very dark, the element is still considered an empty block
+        # if the mean colour is very dark, the element is still considered an empty block/avoid detecting fake grey blocks
         th_mean = 80
         if bgr_mean[0] < th_mean and bgr_mean[1] < th_mean and bgr_mean[2] < th_mean:
             shape = 0
@@ -352,6 +353,10 @@ def _img_to_tetris_piece(startX, startY):
         piece = tetrisPiece.get_piece_type(info_out_matrix[startX]-1)
     else:
         piece = tetrisPiece.get_piece_type(info_matrix[startY][startX]-1)
+
+    if type(piece) != tetrisPiece.IPiece: # all pieces center block is down by one row
+        yPos -= 1
+
     piecePos = np.array([xPos, yPos])
 
     return piece, piecePos
@@ -375,7 +380,8 @@ def _img_to_grid():
         for j in range(len(info_matrix[0])):
             if game_matrix[i][j] != 2 and info_matrix[i][j] != 0:
                 gameGrid[i][j] = pieceColor[shapes_str[info_matrix[i][j]]]
-    gameGrid = np.vstack([topRows, gameGrid])
+
+    gameGrid = np.concatenate((topRows, gameGrid))
     
     # print('\n'.join([''.join(['{:4}'.format(item) for item in row]) 
     #     for row in gameGrid.tolist()]))
@@ -453,7 +459,7 @@ def _img_to_upcoming_pieces():
 
 def _update_board_info():
     "Checks the info detected and creates a board object with it"
-    global canMove, gameBoard
+    global canMove, gameBoard, newBoard
     
     pieceDetected = False
     startX = 0
@@ -465,7 +471,7 @@ def _update_board_info():
             startX = i
             break
     if not pieceDetected:
-        for i in range(2):
+        for i in range(4):
             for j in range(grid_x_size):
                 if game_matrix[i][j] == 2:
                     pieceDetected = True
@@ -477,17 +483,18 @@ def _update_board_info():
 
     if pieceDetected:
         # if canMove:
-        piece, piecePos = _img_to_tetris_piece(startX, startY)
-        gameGrid = _img_to_grid()
-        storedPiece, canStore = _img_to_stored()
-        bag = _img_to_upcoming_pieces()
-        gameBoard = board.Board(grid = gameGrid, bag = bag, piecePos = piecePos,
-                    mainPiece = piece, storedPiece = storedPiece, canStore = canStore)
-        # gameBoard.reset(grid = gameGrid, bag = [], piecePos = piecePos,
-        #             mainPiece = piece, storedPiece = storedPiece, canStore = canStore)
-        # print(gameBoard)
-        # canMove = False
-            
+            piece, piecePos = _img_to_tetris_piece(startX, startY)
+            gameGrid = _img_to_grid()
+            storedPiece, canStore = _img_to_stored()
+            bag = _img_to_upcoming_pieces()
+            gameBoard = board.Board(grid = gameGrid, bag = bag, piecePos = piecePos,
+                        mainPiece = piece, storedPiece = storedPiece, canStore = canStore)
+
+def check_board():
+    gameGrid = _img_to_grid()
+    return board.Board(grid = gameGrid)
+    
+
 
 # SELECTION SCREEN DETECTION
 # ______________________________________________________________________________

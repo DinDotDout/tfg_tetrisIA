@@ -28,7 +28,6 @@ nPieces = 7
 shape_main_grid = (1, b.Board.killHeight-1, b.Board.gridSizeX, 1)
 shape_hold_next = (1, 1 * 2 + 1 + 6 * nPieces)
 
-split_hold_next = 1 * 2 + 1
 
 
 gamma = 0.95
@@ -111,7 +110,7 @@ def test(model, max_games=1, mode='piece', is_gui_on=True):
     episode_count = 0
     total_score = 0
 
-    pause_time = 1.0
+    pause_time = 0.10
     tetris.init()
     totalSteps = 0
 

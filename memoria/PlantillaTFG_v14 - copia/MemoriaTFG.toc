@@ -4,60 +4,36 @@
 \contentsline {chapter}{Acrònims}{v}{chapter*.2}%
 \contentsline {chapter}{Project summary}{vii}{chapter*.3}%
 \contentsline {chapter}{\chapternumberline {1}Introduction}{1}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Artificial intelligence in videogames}{1}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Objectives}{2}{section.1.2}%
-\contentsline {chapter}{\chapternumberline {2}Tetris 99 and system build}{3}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Inici del Treball Final de Grau}{3}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Selecció del tema de Treball Final de Grau}{3}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Preparació de la proposta i contracte docent}{4}{section.2.3}%
-\contentsline {section}{\numberline {2.4}Desenvolupament del Treball Final de Grau}{4}{section.2.4}%
-\contentsline {section}{\numberline {2.5}Dipòsit de la memòria}{4}{section.2.5}%
-\contentsline {section}{\numberline {2.6}Preparació de la presentació}{5}{section.2.6}%
-\contentsline {chapter}{\chapternumberline {3}La proposta de treball de final de grau}{7}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Principis bàsics}{7}{section.3.1}%
-\contentsline {section}{\numberline {3.2}La proposta de tema}{8}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Estructura de la proposta de Treball Final de Grau}{10}{section.3.3}%
-\contentsline {chapter}{\chapternumberline {4}La memòria del treball de final de grau}{11}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Principis bàsics}{11}{section.4.1}%
-\contentsline {section}{\numberline {4.2}Bones pràctiques}{12}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Focalització}{12}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Elaboració de l'esbós}{13}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}Redacció}{14}{subsection.4.2.3}%
-\contentsline {section}{\numberline {4.3}Estructura del Treball Final de Grau}{15}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Portada}{15}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {4.3.2}Taula de continguts o Sumari}{15}{subsection.4.3.2}%
-\contentsline {subsection}{\numberline {4.3.3}Llista de figures}{15}{subsection.4.3.3}%
-\contentsline {subsection}{\numberline {4.3.4}Llista de taules}{16}{subsection.4.3.4}%
-\contentsline {subsection}{\numberline {4.3.5}Llista d'acrònims}{16}{subsection.4.3.5}%
-\contentsline {subsection}{\numberline {4.3.6}Resum}{16}{subsection.4.3.6}%
-\contentsline {subsection}{\numberline {4.3.7}Agraïments}{16}{subsection.4.3.7}%
-\contentsline {subsection}{\numberline {4.3.8}Introducció}{17}{subsection.4.3.8}%
-\contentsline {subsection}{\numberline {4.3.9}Desenvolupament}{18}{subsection.4.3.9}%
-\contentsline {subsection}{\numberline {4.3.10}Resultats i discussió}{18}{subsection.4.3.10}%
-\contentsline {subsection}{\numberline {4.3.11}Conclusions}{19}{subsection.4.3.11}%
-\contentsline {subsection}{\numberline {4.3.12}Apèndixs}{19}{subsection.4.3.12}%
-\contentsline {subsection}{\numberline {4.3.13}Referències bibliogràfiques}{19}{subsection.4.3.13}%
-\contentsline {chapter}{\chapternumberline {5}La presentació del Treball Final de Grau}{21}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Principis bàsics}{21}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Bones pràctiques}{22}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Les transparències}{22}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.2.2}L'exposició i la defensa}{23}{subsection.5.2.2}%
-\contentsline {section}{\numberline {5.3}Estructura de la presentació del Treball Final de Grau}{24}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Portada}{24}{subsection.5.3.1}%
-\contentsline {subsection}{\numberline {5.3.2}Índex}{24}{subsection.5.3.2}%
-\contentsline {subsection}{\numberline {5.3.3}Desenvolupament}{24}{subsection.5.3.3}%
-\contentsline {subsection}{\numberline {5.3.4}Resultats}{24}{subsection.5.3.4}%
-\contentsline {subsection}{\numberline {5.3.5}Conclusions}{25}{subsection.5.3.5}%
-\contentsline {chapter}{\chapternumberline {6}Conclusions}{27}{chapter.6}%
-\contentsline {appendix}{\chapternumberline {A}Format final}{29}{appendix.A}%
-\contentsline {section}{\numberline {A.1}Paper i impressió}{29}{section.A.1}%
-\contentsline {subsection}{\numberline {A.1.1}Paper}{29}{subsection.A.1.1}%
-\contentsline {subsection}{\numberline {A.1.2}Impressió a dues cares}{29}{subsection.A.1.2}%
-\contentsline {section}{\numberline {A.2}Enquadernació}{29}{section.A.2}%
-\contentsline {section}{\numberline {A.3}La plantilla de \LaTeX }{29}{section.A.3}%
-\contentsline {section}{\numberline {A.4}Fórmules, figures i taules}{30}{section.A.4}%
-\contentsline {subsection}{\numberline {A.4.1}Fórmules}{30}{subsection.A.4.1}%
-\contentsline {subsection}{\numberline {A.4.2}Figures}{30}{subsection.A.4.2}%
-\contentsline {subsection}{\numberline {A.4.3}Taules}{31}{subsection.A.4.3}%
-\contentsline {section}{\numberline {A.5}Bibliografia}{32}{section.A.5}%
-\contentsline {section}{\numberline {A.6}Acrònims}{32}{section.A.6}%
+\contentsline {section}{\numberline {1.1}Artificial intelligence in video games}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Objectives and setbacks}{2}{section.1.2}%
+\contentsline {section}{\numberline {1.3}Task division}{2}{section.1.3}%
+\contentsline {chapter}{\chapternumberline {2}Tetris 99 and system built}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Tetris version}{3}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Game basics}{4}{section.2.2}%
+\contentsline {section}{\numberline {2.3}UI and specifics}{5}{section.2.3}%
+\contentsline {section}{\numberline {2.4}SRS (Standard rotation system)}{7}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Our system}{8}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}Tile}{8}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}Piece}{8}{subsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.5.3}Board}{9}{subsection.2.5.3}%
+\contentsline {subsection}{\numberline {2.5.4}Tetris game}{9}{subsection.2.5.4}%
+\contentsline {chapter}{\chapternumberline {3}Switch-PC interface}{11}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Approaches and final solution}{11}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Arduino tools}{11}{section.3.2}%
+\contentsline {chapter}{\chapternumberline {4}Information capture}{13}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Detection}{13}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Game grid}{14}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Out of the grid}{14}{subsection.4.1.2}%
+\contentsline {subsection}{\numberline {4.1.3}Check stored piece}{14}{subsection.4.1.3}%
+\contentsline {subsection}{\numberline {4.1.4}Check upcoming pieces}{15}{subsection.4.1.4}%
+\contentsline {section}{\numberline {4.2}How noise affects detection}{15}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Information adaptation for the neural net}{16}{section.4.3}%
+\contentsline {chapter}{\chapternumberline {5}Deep learning module}{17}{chapter.5}%
+\contentsline {chapter}{\chapternumberline {6}Decision making}{19}{chapter.6}%
+\contentsline {chapter}{\chapternumberline {7}Results}{21}{chapter.7}%
+\contentsline {chapter}{\chapternumberline {8}Conclusion}{23}{chapter.8}%
+\contentsline {appendix}{\chapternumberline {A}Apendix}{25}{appendix.A}%
+\contentsline {section}{\numberline {.1}Opencv}{25}{section.Alph0.1}%
+\contentsline {section}{\numberline {.2}Tensorflow}{25}{section.Alph0.2}%
+\contentsline {section}{\numberline {.3}Arduino}{25}{section.Alph0.3}%
+\contentsline {section}{\numberline {.4}USB to TTl}{25}{section.Alph0.4}%

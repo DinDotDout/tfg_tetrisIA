@@ -209,7 +209,7 @@ def game_menu():
     game_loop(win)
     pygame.display.quit()
     pygame.quit()
-
+ 
 
 win = None
 def init():
@@ -219,35 +219,20 @@ def init():
     pygame.display.set_caption('Tetris')
 
 def draw(board):
+    end = False
     draw_window(win, board.grid_colors(), board.score, 0)
     draw_next_shapes(win, board)
     draw_stored_piece(win, board.storedPiece)
+    for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    end = True
+                    pass
+
     pygame.display.update()
+    return end
+
 
 def end():
     pygame.display.quit()
     pygame.quit()
-
-
-# def main():
-#     # We get the 2 arguments and process them for its use
-#     parser = ap.ArgumentParser('Tetris Neural')
-#     parser.add_argument(type=int, default= 0,
-#                         help="Select mode (0 - play, 1 - train, 2 - autoplay)", dest = 'mode') # 0 play, 1 train, 2 autoplay
-#     args = parser.parse_args()
-
-#     # Only first baudrate seems to be able to sync
-#     mode = args.mode
-
-#     switch = [
-#         game_menu,
-#         tetris_training,
-#         tetris_autoplay
-#     ]
-#     win = pygame.display.set_mode((s_width, s_height))
-#     pygame.display.set_caption('Tetris')
-#     switch[mode](win)
-
-# if __name__ == "__main__":
-#     main()
 

@@ -2,7 +2,6 @@ import numpy as np
 import random as rnd
 from . import tile as tc
 from . import piece as pc
-import random
 
 class Board():
     gridSizeY = 24
@@ -10,14 +9,21 @@ class Board():
     killHeight = 21
 
     def __init__(self, grid = None, bag = None, piecePos = None,
-                    mainPiece = None, storedPiece = None, canStore = True, score = 0):
+                    mainPiece = None, storedPiece = None, canStore = True, score = 0, seed = None):
 
         self.reset(grid = grid, bag = bag, piecePos = piecePos,
-                    mainPiece = mainPiece, storedPiece = storedPiece, canStore = canStore, score = score)
+                    mainPiece = mainPiece, storedPiece = storedPiece, canStore = canStore, score = score, seed = None)
     
     def reset(self, grid = None, bag = None, piecePos = None,
-                    mainPiece = None, storedPiece = None, canStore = True, score = 0):
+                    mainPiece = None, storedPiece = None, canStore = True, score = 0, seed = None):
+        
         self.gameOver = False
+        if seed:
+            self.seed = seed
+        else:
+            self.seed = rnd.randint(0, round(9e9))
+        
+        self.rand = rnd.Random(seed)
 
         if grid:
             self.grid = grid
@@ -116,7 +122,7 @@ class Board():
         #     3
         # ]
 
-        rnd.shuffle(pieceIndex)  # shuffle list
+        self.rand.shuffle(pieceIndex)  # shuffle list
         self.bag.extend(pieceIndex)  # add new pieces
 
     def swap_piece(self):

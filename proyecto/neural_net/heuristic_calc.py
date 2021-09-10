@@ -40,7 +40,7 @@ def get_next_states(board):
         is_new_hold = not board.storedPiece
         move = [6,0] # This impossible move is percieved as a hold move later on
 
-        board.swap_piece() # Perdorm the hold moce
+        board.swap_piece() # Perform the hold moce
 
         # Store all info
         gridState, nextPiecesState, score = get_board_props(board)
@@ -123,26 +123,24 @@ def play(board, displacement, rotation, isExploration = False):
     '''Makes a play given a position and a rotation, returning  game is over'''
     rotatedPiece = None
     lastPos = board.piecePos
+    lines = []
     if displacement == 6:
         board.swap_piece()
-        # tetris.draw(board)
     else:
         displacement = displacement*np.array([1, 0])
         
         for i in range(rotation):
-            # tetris.draw(board)
             board.rotate_piece(False)
 
         # Move piece to column
         board.move_piece(displacement)
 
         rotatedPiece = copy.deepcopy(board.mainPiece)
-        # tetris.draw(board)
+        
         # Drops piece
         lastPos = board.drop_piece(isExploration)
         lines = board._check_line_clears()
-        # tetris.draw(board)
-    return lastPos, rotatedPiece
+    return lastPos, rotatedPiece, len(lines)
 
 def get_reward(add_scores, dones):
     '''Adds an according penalty to lost games'''

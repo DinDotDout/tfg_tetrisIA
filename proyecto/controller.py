@@ -4,6 +4,7 @@ import tetris_game.tetris as tetris
 import neural_net.run as nn
 from img_proc import main as img_proc
 import os
+import traceback
 
 x = 100
 y = 45
@@ -11,7 +12,7 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
 
 
 class Controller():
-    def __init__(self):        
+    def __init__(self):
         self.running, self.playing = True, False
         self.state = 0
         self.stateList = [

@@ -1,0 +1,1 @@
+outer =    1 | pre-training avg score =    0.000 | loss =   14.985 | mse = 7063.755 | dataset size =   20075 | new dataset size =   20075 | time elapsed:  667.9 sec | coef = [1.0, 0.5, 0.4, 0.3] | penalty =    -500 | gamma =  0.950

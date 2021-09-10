@@ -7,7 +7,8 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
-from game import Game
+# from gameUntouched import Game
+from game4bag import Game
 from tetromino import Tetromino
 import random
 import pickle
@@ -36,7 +37,7 @@ rand = random.Random()
 penalty = -500
 reward_coef = [1.0, 0.5, 0.4, 0.3]
 
-cpu_count = min(psutil.cpu_count(logical=False), CPU_MAX)
+# cpu_count = min(psutil.cpu_count(logical=False), CPU_MAX)
 
 
 # reward_coef = [1.0, 1.0, 1.0, 1.0]
@@ -106,7 +107,7 @@ def test(model, max_games=10, mode='piece', is_gui_on=True):
     episode_count = 0
     total_score = 0
 
-    pause_time = 0.03
+    pause_time = 0
     totalSteps = 0
 
     while True and episode_count < max_games:
@@ -140,7 +141,7 @@ def test(model, max_games=10, mode='piece', is_gui_on=True):
                 time.sleep(pause_time)
 
             steps += 1
-            done = env.gameOver
+            done = dones[best]
             # if done or steps == max_steps_per_episode - 1:
         totalSteps += steps
         episode_count += 1
@@ -193,7 +194,7 @@ def get_data_from_playing_cnn2d(model_filename, target_size=8000, max_steps_per_
             for j in range(len(dones)):
                 if dones[j]:
                     q[j] = rewards[j]
-            best = tf.argmax(q).numpy()[0]
+            best = tf.argmax(q).numpy()[0] + 0
             
             # if there is a hold and it was not already held
             # if hold was empty, then we don't know what's next; if hold was not empty, then we know what's next!
@@ -228,7 +229,7 @@ def get_data_from_playing_cnn2d(model_filename, target_size=8000, max_steps_per_
             episode_data.append(
                 (s, (possible_states[0][chosen], possible_states[1][chosen]), add_scores[chosen], dones[chosen]))
 
-            if add_scores[best] != int(add_scores[best]):
+            if add_scores[chosen] != int(add_scores[chosen]):
                 t_spins += 1
 
             env.step(chosen=chosen)
@@ -260,7 +261,7 @@ def train(model, outer_start=0, outer_max=100):
     buffer_new_size = 20000
     buffer_outer_max = 1
     history = None
-    print('Found {} physical CPUs'.format(cpu_count))
+    # print('Found {} physical CPUs'.format(cpu_count))
 
     for outer in range(outer_start + 1, outer_start + 1 + outer_max):
         print('======== outer = {} ========'.format(outer))
@@ -376,10 +377,10 @@ def append_record(text, filename=None):
 
 
 def collect_samples_multiprocess_queue(model_filename, outer=0, target_size=10000):
-    global cpu_count
+    # global cpu_count
     timeout = 800
     
-    # cpu_count = min(multiprocessing.cpu_count(), CPU_MAX)
+    cpu_count = min(multiprocessing.cpu_count(), CPU_MAX)
     jobs = list()
     q = multiprocessing.Queue()
     for i in range(cpu_count):

@@ -9,7 +9,6 @@ import time
 from common import *
 import copy
 
-
 INITIAL_EX_WIGHT = 1.0
 SPIN_SHIFT_FOR_NON_T = [(1, 0, 0), (-1, 0, 0),
                         (0, 1, 0), (0, -1, 0),
@@ -259,30 +258,35 @@ class Gamestate:
         return True
 
     def update_score(self, lines, is_t_spin, is_clear):
-        if is_t_spin:
-            if lines == 1:
-                score_lines = 2
-            elif lines == 2:
-                score_lines = 4
-            elif lines == 3:
-                score_lines = 5
-            else:
-                score_lines = 0
-            self.t_spins[lines] += 1
-        else:
-            score_lines = lines
+        # if is_t_spin:
+        #     if lines == 1:
+        #         score_lines = 2
+        #     elif lines == 2:
+        #         score_lines = 4
+        #     elif lines == 3:
+        #         score_lines = 5
+        #     else:
+        #         score_lines = 0
+        #     self.t_spins[lines] += 1
+        # else:
+        score_lines = lines
         # 1 10 30 60 100 
-        add_score = (score_lines + 1) * score_lines / 2 * 10
+        # add_score = (score_lines + 1) * score_lines / 2 * 10
+        if lines > 0:
+            add_score = 10
+        else:
+            add_score = 0
+
         # add_score = lines * 10
         # if is_clear:
         #     add_score += 60
 
-        if T_SPIN_MARK and is_t_spin:
-            self.score = int(self.score) + add_score + 0.1
-            add_score += 0.1
-        else:
-            self.score += add_score
-        self.lines += lines
+        # if T_SPIN_MARK and is_t_spin:
+        #     self.score = int(self.score) + add_score + 0.1
+        #     add_score += 0.1
+        # else:
+        #     self.score += add_score
+        # self.lines += lines
 
         if lines != 0: self.n_lines[lines - 1] += 1
         self.pieces += 1

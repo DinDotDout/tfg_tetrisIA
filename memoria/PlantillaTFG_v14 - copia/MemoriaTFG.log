@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.6.16)  29 JUN 2021 21:06
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6) (preloaded format=pdflatex 2021.6.16)  9 SEP 2021 22:39
 entering extended mode
 **./MemoriaTFG.tex
 (MemoriaTFG.tex
@@ -795,6 +795,37 @@ File: l3backend-pdftex.def 2021-05-07 L3 backend support: PDF output (pdfTeX)
 ))
 Package: l3keys2e 2021-06-01 LaTeX2e option processing using LaTeX3 keys
 ))
+(C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/caption\subcaption.sty
+Package: subcaption 2020/10/07 v1.3j Sub-captions (AR)
+
+(C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+
+(C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+\captionmargin=\dimen260
+\captionmargin@=\dimen261
+\captionwidth=\dimen262
+\caption@tempdima=\dimen263
+\caption@indent=\dimen264
+\caption@parindent=\dimen265
+\caption@hangindent=\dimen266
+Package caption Info: memoir document class detected.
+
+(C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption-memoir.
+sto
+File: caption-memoir.sto 2020/10/10 v2.1 Adaption of the caption package to the
+ memoir document class (AR)
+))
+\c@caption@flags=\count329
+\c@continuedfloat=\count330
+Package caption Info: changepage package is loaded.
+\caption@adjustwidth@hsize=\dimen267
+\caption@adjustwidth@linewidth=\dimen268
+)
+\c@subfigure=\count331
+\c@subtable=\count332
+)
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hyperref.sty
 Package: hyperref 2021-06-07 v7.00m Hypertext links for LaTeX
 
@@ -822,9 +853,9 @@ Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
 Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
 )
-\@linkdim=\dimen260
-\Hy@linkcounter=\count329
-\Hy@pagecounter=\count330
+\@linkdim=\dimen269
+\Hy@linkcounter=\count333
+\Hy@pagecounter=\count334
  (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.def
 File: pd1enc.def 2021-06-07 v7.00m Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
@@ -841,7 +872,7 @@ Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/generic/etexcmds\etexcmds.sty
 Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
 )
-\Hy@SavedSpaceFactor=\count331
+\Hy@SavedSpaceFactor=\count335
  (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.def
 File: puenc.def 2021-06-07 v7.00m Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
@@ -880,20 +911,20 @@ Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 86.
 ))
-\c@Hy@tempcnt=\count332
+\c@Hy@tempcnt=\count336
  (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
 \Urlmuskip=\muskip16
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 4804.
-\XeTeXLinkMargin=\dimen261
+\XeTeXLinkMargin=\dimen270
 
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 )
-\Fld@menulength=\count333
-\Field@Width=\dimen262
-\Fld@charsize=\dimen263
+\Fld@menulength=\count337
+\Field@Width=\dimen271
+\Fld@charsize=\dimen272
 Package hyperref Info: Hyper figures OFF on input line 6076.
 Package hyperref Info: Link nesting OFF on input line 6081.
 Package hyperref Info: Hyper index ON on input line 6084.
@@ -908,82 +939,85 @@ LaTeX Info: Redefining \pageref on input line 6150.
 Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
 package with kernel methods
 )
-\Hy@abspage=\count334
-\c@Item=\count335
-\c@Hfootnote=\count336
+\Hy@abspage=\count338
+\c@Item=\count339
+\c@Hfootnote=\count340
 ) (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/memoir\memhfixc.sty
 Package: memhfixc 2019/10/24 v1.18 nameref/hyperref package fixes for memoir cl
 ass
-\c@memhycontfloat=\count337
-\c@Hpagenote=\count338
+\c@memhycontfloat=\count341
+\c@Hpagenote=\count342
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hpdftex.def
 File: hpdftex.def 2021-06-07 v7.00m Hyperref driver for pdfTeX
-\Fld@listcount=\count339
-\c@bookmark@seq@number=\count340
+\Fld@listcount=\count343
+\c@bookmark@seq@number=\count344
 \Hy@SectionHShift=\skip256
 )
-(MemoriaTFG.aux (Acronims.aux) (Resum.aux) (Introduccio.aux) (Instruccions.aux)
-(Proposta.aux) (Memoria.aux) (Presentacio.aux) (Conclusions.aux) (Annexos.aux))
+(MemoriaTFG.aux (Acronims.aux) (Resum.aux) (Introduccio.aux)
+(Tetris99andSystem.aux) (Switch-PC_interface.aux) (Information_capture.aux)
+(Deep_learning_module.aux) (Decision_making.aux) (Results.aux) (Conclusion.aux)
+(Annexos.aux))
 \openout1 = `MemoriaTFG.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 164.
-LaTeX Font Info:    ... okay on input line 164.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 164.
-LaTeX Font Info:    ... okay on input line 164.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 164.
-LaTeX Font Info:    ... okay on input line 164.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 164.
-LaTeX Font Info:    ... okay on input line 164.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 164.
-LaTeX Font Info:    ... okay on input line 164.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 164.
-LaTeX Font Info:    ... okay on input line 164.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 164.
-LaTeX Font Info:    ... okay on input line 164.
-LaTeX Font Info:    Checking defaults for FML/futm/m/it on input line 164.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for FML/futm/m/it on input line 167.
 LaTeX Font Info:    Trying to load font information for FML+futm on input line 
-164.
+167.
+
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/fourier\fmlfutm.fd
 File: fmlfutm.fd 2004/10/30 Fontinst v1.926 font definitions for FML/futm.
 )
-LaTeX Font Info:    ... okay on input line 164.
-LaTeX Font Info:    Checking defaults for FMS/futm/m/n on input line 164.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for FMS/futm/m/n on input line 167.
 LaTeX Font Info:    Trying to load font information for FMS+futm on input line 
-164.
+167.
 
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/fourier\fmsfutm.fd
 File: fmsfutm.fd 2004/10/30 Fontinst v1.926 font definitions for FMS/futm.
 )
-LaTeX Font Info:    ... okay on input line 164.
-LaTeX Font Info:    Checking defaults for FMX/futm/m/n on input line 164.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for FMX/futm/m/n on input line 167.
 LaTeX Font Info:    Trying to load font information for FMX+futm on input line 
-164.
+167.
 
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/fourier\fmxfutm.fd
 File: fmxfutm.fd futm-extension
 )
-LaTeX Font Info:    ... okay on input line 164.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 164.
-LaTeX Font Info:    ... okay on input line 164.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 164.
-LaTeX Font Info:    ... okay on input line 164.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 167.
+LaTeX Font Info:    ... okay on input line 167.
 
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
 ii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count341
-\scratchdimen=\dimen264
+\scratchcounter=\count345
+\scratchdimen=\dimen273
 \scratchbox=\box64
-\nofMPsegments=\count342
-\nofMParguments=\count343
+\nofMPsegments=\count346
+\nofMParguments=\count347
 \everyMPshowfont=\toks38
-\MPscratchCnt=\count344
-\MPscratchDim=\dimen265
-\MPnumerator=\count345
-\makeMPintoPDFobject=\count346
+\MPscratchCnt=\count348
+\MPscratchDim=\dimen274
+\MPnumerator=\count349
+\makeMPintoPDFobject=\count350
 \everyMPtoPDFconversion=\toks39
 )
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
@@ -996,18 +1030,18 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 fg
 File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
 ))
-LaTeX Font Info:    Redeclaring math accent \widehat on input line 164.
-LaTeX Font Info:    Redeclaring math accent \widetilde on input line 164.
-LaTeX Info: Redefining \l on input line 164.
-LaTeX Info: Redefining \L on input line 164.
-LaTeX Info: Redefining \microtypecontext on input line 164.
+LaTeX Font Info:    Redeclaring math accent \widehat on input line 167.
+LaTeX Font Info:    Redeclaring math accent \widetilde on input line 167.
+LaTeX Info: Redefining \l on input line 167.
+LaTeX Info: Redefining \L on input line 167.
+LaTeX Info: Redefining \microtypecontext on input line 167.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
 Package microtype Info: Automatic font expansion enabled (level 2),
 (microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
 Package microtype Info: Using default expansion set `alltext-nott'.
-LaTeX Info: Redefining \showhyphens on input line 164.
+LaTeX Info: Redefining \showhyphens on input line 167.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: Adjustment of interword spacing enabled.
 Package microtype Info: Using default spacing set `alltext-nott'.
@@ -1026,7 +1060,7 @@ nslations-basic-dictionary')
 )
 
 Package translations Warning: file `translations-basic-dictionary-catalan.trsl'
- does not appear to be a dictionary on input line 164.
+ does not appear to be a dictionary on input line 167.
 
 
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/translations/dicts\tran
@@ -1035,7 +1069,7 @@ File: translations-basic-dictionary-spanish.trsl (spanish translation file `tra
 nslations-basic-dictionary')
 )
 Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `spanish'. on input line 164.
+or `spanish'. on input line 167.
 
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/translations/dicts\tran
 slations-basic-dictionary-english.trsl
@@ -1043,8 +1077,11 @@ File: translations-basic-dictionary-english.trsl (english translation file `tra
 nslations-basic-dictionary')
 )
 Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `english'. on input line 164.
-Package hyperref Info: Link coloring ON on input line 164.
+or `english'. on input line 167.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: hyperref package is loaded.
+Package caption Info: End \AtBeginDocument code.
+Package hyperref Info: Link coloring ON on input line 167.
 
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
@@ -1056,26 +1093,26 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 lestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count347
+\c@section@level=\count351
 )
 Redoing nameref's sectioning
 Redoing nameref's label
-LaTeX Info: Redefining \nameref on input line 164.
-LaTeX Info: Redefining \ref on input line 164.
-LaTeX Info: Redefining \pageref on input line 164.
-LaTeX Info: Redefining \nameref on input line 164.
+LaTeX Info: Redefining \nameref on input line 167.
+LaTeX Info: Redefining \ref on input line 167.
+LaTeX Info: Redefining \pageref on input line 167.
+LaTeX Info: Redefining \nameref on input line 167.
 (MemoriaTFG.out) (MemoriaTFG.out)
 \@outlinefile=\write4
 \openout4 = `MemoriaTFG.out'.
 
-<./537341_escudoUIB_horizontal.png, id=247, 665.48625pt x 213.79875pt>
+<./537341_escudoUIB_horizontal.png, id=151, 665.48625pt x 213.79875pt>
 File: ./537341_escudoUIB_horizontal.png Graphic file (type png)
 <use ./537341_escudoUIB_horizontal.png>
 Package pdftex.def Info: ./537341_escudoUIB_horizontal.png  used on input line 
-169.
+172.
 (pdftex.def)             Requested size: 185.97946pt x 59.75078pt.
 LaTeX Font Info:    Trying to load font information for T1+lmss on input line 1
-69.
+72.
 
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmss.fd
 File: t1lmss.fd 2009/10/30 v1.6 Font defs for Latin Modern
@@ -1085,24 +1122,24 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Trying to load font information for FML+futmi on input line
- 169.
+ 172.
 
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/fourier\fmlfutmi.fd
 File: fmlfutmi.fd 2004/10/30 Fontinst v1.926 font definitions for FML/futmi.
 )
 LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 10.07397pt on input line 169.
+(Font)              scaled to size 10.07397pt on input line 172.
 LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 7.63599pt on input line 169.
+(Font)              scaled to size 7.63599pt on input line 172.
 LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 5.51999pt on input line 169.
+(Font)              scaled to size 5.51999pt on input line 172.
 LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 10.07397pt on input line 169.
+(Font)              scaled to size 10.07397pt on input line 172.
 LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 7.63599pt on input line 169.
+(Font)              scaled to size 7.63599pt on input line 172.
 LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 5.51999pt on input line 169.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 169
+(Font)              scaled to size 5.51999pt on input line 172.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 172
 .
 
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
@@ -1111,7 +1148,7 @@ File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 169
+LaTeX Font Info:    Trying to load font information for U+msb on input line 172
 .
 
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
@@ -1127,7 +1164,7 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 
 ]
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <12> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 171.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 174.
  [3] [4
 
 ] [1
@@ -1140,40 +1177,7 @@ LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <12> not available
 [4]
 \openout2 = `Acronims.aux'.
 
- (Acronims.tex
-
-LaTeX Warning: Hyper reference `acro:AMC' on page v undefined on input line 22.
-
-
-
-LaTeX Warning: Hyper reference `acro:AMC' on page v undefined on input line 22.
-
-
-
-LaTeX Warning: Hyper reference `acro:MIMO' on page v undefined on input line 30
-.
-
-
-LaTeX Warning: Hyper reference `acro:MIMO' on page v undefined on input line 30
-.
-
-
-LaTeX Warning: Hyper reference `acro:OFDM' on page v undefined on input line 32
-.
-
-
-LaTeX Warning: Hyper reference `acro:OFDM' on page v undefined on input line 32
-.
-
-
-LaTeX Warning: Hyper reference `acro:OFDMA' on page v undefined on input line 3
-4.
-
-
-LaTeX Warning: Hyper reference `acro:OFDMA' on page v undefined on input line 3
-4.
-
-) [5
+ (Acronims.tex) [5
 
 
 ]
@@ -1198,62 +1202,20 @@ although it is yet undefined on input line 5.
 Package acronym Info: Label `acro:NPC' newly defined as it shall be overridden
 although it is yet undefined on input line 7.
 Package acronym Info: Label `acro:API' newly defined as it shall be overridden
-although it is yet undefined on input line 10.
+although it is yet undefined on input line 9.
 pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.14 
-      [1
+l.15 \section
+             {Objectives and setbacks} [1
 
 
 ]
 Package acronym Info: Label `acro:SRS' newly defined as it shall be overridden
-although it is yet undefined on input line 19.
-)pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
- been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.214 \include{Introduccio}
-                            [2]
-\openout2 = `Instruccions.aux'.
-
- (Instruccions.tex
-Package acronym Info: Label `acro:TFG' newly defined as it shall be overridden
-although it is yet undefined on input line 8.
-<Itinerari_TFG.pdf, id=414, 523.59616pt x 176.45926pt>
-File: Itinerari_TFG.pdf Graphic file (type pdf)
-<use Itinerari_TFG.pdf>
-Package pdftex.def Info: Itinerari_TFG.pdf  used on input line 11.
-(pdftex.def)             Requested size: 387.0pt x 130.42432pt.
-Package acronym Info: Label `acro:EPS' newly defined as it shall be overridden
-although it is yet undefined on input line 16.
-pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has 
-been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.17 
-      [3
-
-
-
-
- <./Itinerari_TFG.pdf>])pdfTeX warning (ext4): destination with the same identi
-fier (name{page.4}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.215 \include{Instruccions}
-                             [4] [5]
-\openout2 = `Proposta.aux'.
-
- (Proposta.tex [6
-
-
-
-
-]
+although it is yet undefined on input line 20.
 LaTeX Font Info:    Trying to load font information for TS1+futs on input line 
-10.
+32.
 
 (C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/fourier\ts1futs.fd
 File: ts1futs.fd 2003/09/14 Fontinst v1.801 font definitions for TS1/futs.
@@ -1267,215 +1229,303 @@ Package microtype Info: Loading generic protrusion settings for font family
 Package microtype Warning: I cannot find a spacing list for font
 (microtype)                `TS1/futs/m/n/10.95' (context: `nonfrench'). Switchi
 ng off
-(microtype)                spacing for this font on input line 10.
+(microtype)                spacing for this font on input line 32.
 
-[7] [8] [9]) [10]
-\openout2 = `Memoria.aux'.
+)pdfTeX warning (ext4): destination with the same identifier (name{page.2}) has
+ been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.217 \include{Introduccio}
+                            [2]
+\openout2 = `Tetris99andSystem.aux'.
 
- (Memoria.tex
+ (Tetris99andSystem.tex
 
-LaTeX Warning: Citation `Perelman01' on page 11 undefined on input line 7.
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 9.
+
+<imgs//image001.jpg, id=279, 100.12407pt x 182.93344pt>
+File: imgs//image001.jpg Graphic file (type jpg)
+<use imgs//image001.jpg>
+Package pdftex.def Info: imgs//image001.jpg  used on input line 11.
+(pdftex.def)             Requested size: 100.12381pt x 182.93298pt.
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 15.
+
+<imgs//image002.jpg, id=280, 128.73094pt x 175.40532pt>
+File: imgs//image002.jpg Graphic file (type jpg)
+<use imgs//image002.jpg>
+Package pdftex.def Info: imgs//image002.jpg  used on input line 17.
+(pdftex.def)             Requested size: 128.7306pt x 175.40488pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
 
 
-LaTeX Warning: Citation `Malvar08' on page 11 undefined on input line 7.
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 33.
 
-[11
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.3}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.46 
+      [3
+
+
+
+
+ <./imgs//image001.jpg>]pdfTeX warning (ext4): destination with the same identi
+fier (name{page.4}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.57 M
+      ore ways of obtaining points are soft drops (moving the piece down one...
+[4 <./imgs//image002.jpg>]
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 64.
+
+<imgs//image003.png, id=295, 247.67531pt x 139.27031pt>
+File: imgs//image003.png Graphic file (type png)
+<use imgs//image003.png>
+Package pdftex.def Info: imgs//image003.png  used on input line 66.
+(pdftex.def)             Requested size: 247.6747pt x 139.26996pt.
+[5 <./imgs//image003.png>] [6]
+<imgs//image004.png, id=312, 93.34875pt x 76.78688pt>
+File: imgs//image004.png Graphic file (type png)
+<use imgs//image004.png>
+Package pdftex.def Info: imgs//image004.png  used on input line 125.
+(pdftex.def)             Requested size: 92.87952pt x 76.40471pt.
+<imgs//image005.png, id=313, 88.83188pt x 72.27pt>
+File: imgs//image005.png Graphic file (type png)
+<use imgs//image005.png>
+Package pdftex.def Info: imgs//image005.png  used on input line 130.
+(pdftex.def)             Requested size: 92.87952pt x 75.56592pt.
+<imgs//image006.png, id=314, 104.64093pt x 76.78688pt>
+File: imgs//image006.png Graphic file (type png)
+<use imgs//image006.png>
+Package pdftex.def Info: imgs//image006.png  used on input line 139.
+(pdftex.def)             Requested size: 92.88129pt x 68.15732pt.
+<imgs//image007.png, id=315, 108.405pt x 79.04532pt>
+File: imgs//image007.png Graphic file (type png)
+<use imgs//image007.png>
+Package pdftex.def Info: imgs//image007.png  used on input line 144.
+(pdftex.def)             Requested size: 92.88129pt x 67.72916pt.
+<imgs//image008.png, id=316, 97.86563pt x 70.76437pt>
+File: imgs//image008.png Graphic file (type png)
+<use imgs//image008.png>
+Package pdftex.def Info: imgs//image008.png  used on input line 149.
+(pdftex.def)             Requested size: 92.88129pt x 67.16422pt.
+<imgs//image009.png, id=317, 95.6072pt x 69.25874pt>
+File: imgs//image009.png Graphic file (type png)
+<use imgs//image009.png>
+Package pdftex.def Info: imgs//image009.png  used on input line 158.
+(pdftex.def)             Requested size: 92.88129pt x 67.28761pt.
+<imgs//image010.png, id=318, 97.11281pt x 70.76437pt>
+File: imgs//image010.png Graphic file (type png)
+<use imgs//image010.png>
+Package pdftex.def Info: imgs//image010.png  used on input line 163.
+(pdftex.def)             Requested size: 92.88129pt x 67.6825pt.
+<imgs//image011.png, id=319, 104.64093pt x 76.03406pt>
+File: imgs//image011.png Graphic file (type png)
+<use imgs//image011.png>
+Package pdftex.def Info: imgs//image011.png  used on input line 168.
+(pdftex.def)             Requested size: 92.88129pt x 67.48909pt.
+<imgs//image012.png, id=320, 104.64093pt x 94.85437pt>
+File: imgs//image012.png Graphic file (type png)
+<use imgs//image012.png>
+Package pdftex.def Info: imgs//image012.png  used on input line 177.
+(pdftex.def)             Requested size: 92.87952pt x 84.19287pt.
+<imgs//image013.png, id=321, 100.12407pt x 91.09032pt>
+File: imgs//image013.png Graphic file (type png)
+<use imgs//image013.png>
+Package pdftex.def Info: imgs//image013.png  used on input line 182.
+(pdftex.def)             Requested size: 92.87952pt x 84.50461pt.
+<imgs//image014.jpg, id=322, 298.11375pt x 36.88782pt>
+File: imgs//image014.jpg Graphic file (type jpg)
+<use imgs//image014.jpg>
+Package pdftex.def Info: imgs//image014.jpg  used on input line 191.
+(pdftex.def)             Requested size: 298.11302pt x 36.88771pt.
+
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<imgs//image015.jpg, id=323, 108.405pt x 67.75313pt>
+File: imgs//image015.jpg Graphic file (type jpg)
+<use imgs//image015.jpg>
+Package pdftex.def Info: imgs//image015.jpg  used on input line 199.
+(pdftex.def)             Requested size: 102.16895pt x 63.8585pt.
+<imgs//image016.jpg, id=324, 108.405pt x 69.25874pt>
+File: imgs//image016.jpg Graphic file (type jpg)
+<use imgs//image016.jpg>
+Package pdftex.def Info: imgs//image016.jpg  used on input line 203.
+(pdftex.def)             Requested size: 102.16895pt x 65.27759pt.
+<imgs//image017.jpg, id=325, 108.405pt x 69.25874pt>
+File: imgs//image017.jpg Graphic file (type jpg)
+<use imgs//image017.jpg>
+Package pdftex.def Info: imgs//image017.jpg  used on input line 207.
+(pdftex.def)             Requested size: 102.16895pt x 65.27759pt.
+<imgs//image018.jpg, id=326, 298.11375pt x 70.01157pt>
+File: imgs//image018.jpg Graphic file (type jpg)
+<use imgs//image018.jpg>
+Package pdftex.def Info: imgs//image018.jpg  used on input line 214.
+(pdftex.def)             Requested size: 298.11302pt x 70.01138pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [7 <./imgs//image004.png> <./imgs//image005.png> <./imgs//image006.png> <./img
+s//image007.png> <./imgs//image008.png> <./imgs//image009.png> <./imgs//image01
+0.png> <./imgs//image011.png>] [8 <./imgs//image012.png> <./imgs//image013.png>
+ <./imgs//image014.jpg> <./imgs//image015.jpg> <./imgs//image016.jpg> <./imgs//
+image017.jpg>]) [9 <./imgs//image018.jpg>]
+\openout2 = `Switch-PC_interface.aux'.
+
+ (Switch-PC_interface.tex [10
 
 
 
 
 ]
+Package acronym Info: Label `acro:PC' newly defined as it shall be overridden
+although it is yet undefined on input line 4.
+ [11]
+<imgs//image024.jpg, id=374, 1505.625pt x 1505.625pt>
+File: imgs//image024.jpg Graphic file (type jpg)
+<use imgs//image024.jpg>
+Package pdftex.def Info: imgs//image024.jpg  used on input line 20.
+(pdftex.def)             Requested size: 154.79764pt x 154.79852pt.
+<imgs//image025.jpg, id=375, 343.2825pt x 343.2825pt>
+File: imgs//image025.jpg Graphic file (type jpg)
+<use imgs//image025.jpg>
+Package pdftex.def Info: imgs//image025.jpg  used on input line 26.
+(pdftex.def)             Requested size: 154.79764pt x 154.79521pt.
+) [12 <./imgs//image024.jpg> <./imgs//image025.jpg>]
+\openout2 = `Information_capture.aux'.
 
-LaTeX Warning: Citation `Malvar08' on page 12 undefined on input line 30.
-
-[12]
-Overfull \hbox (3.30142pt too wide) in paragraph at lines 42--44
-[]\T1/futs/m/n/10.95 (-20) A par-tir de la llista de temes i de la in-for-ma-ci
-ó disponible so-bre cadas-cun d'aquests,
- []
-
-[13] [14]
-
-LaTeX Warning: Citation `Valiente96' on page 15 undefined on input line 70.
-
-
-Overfull \hbox (10.06525pt too wide) in paragraph at lines 70--71
-\T1/futs/m/n/10.95 (-20) Tal com ens recorda el pro-fes-sor Va-liente [[]][], o
-r-gan-ismes in-ter-na-cionals d'estandardització
- []
-
-[15] [16]
-
-LaTeX Warning: Citation `Booth08' on page 17 undefined on input line 118.
-
-[17] [18]
-
-LaTeX Warning: Citation `Pierson97' on page 19 undefined on input line 154.
-
-[19]) [20]
-\openout2 = `Presentacio.aux'.
-
- (Presentacio.tex
-
-LaTeX Warning: Citation `Blair91' on page 21 undefined on input line 6.
-
-
-LaTeX Warning: Citation `Padgett08' on page 21 undefined on input line 6.
-
-
-LaTeX Warning: Citation `Blair91' on page 21 undefined on input line 8.
-
-
-LaTeX Warning: Citation `Padgett08' on page 21 undefined on input line 8.
-
-
-LaTeX Warning: Citation `Arcy88' on page 21 undefined on input line 8.
-
-
-LaTeX Warning: Citation `Rice04' on page 21 undefined on input line 8.
-
-[21
+ (Information_capture.tex
+File: imgs//image003.png Graphic file (type png)
+<use imgs//image003.png>
+Package pdftex.def Info: imgs//image003.png  used on input line 11.
+(pdftex.def)             Requested size: 247.6747pt x 139.26996pt.
+ [13
 
 
 
 
 ]
-
-LaTeX Warning: Citation `Padgett08' on page 22 undefined on input line 40.
-
-
-LaTeX Warning: Citation `Padgett08' on page 22 undefined on input line 40.
-
-[22] [23]) [24] [25]
-\openout2 = `Conclusions.aux'.
-
- (Conclusions.tex [26
+<imgs//image020.jpg, id=392, 186.6975pt x 105.39375pt>
+File: imgs//image020.jpg Graphic file (type jpg)
+<use imgs//image020.jpg>
+Package pdftex.def Info: imgs//image020.jpg  used on input line 36.
+(pdftex.def)             Requested size: 186.69704pt x 105.39348pt.
 
 
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+<imgs//image021.jpg, id=393, 191.9672pt x 108.405pt>
+File: imgs//image021.jpg Graphic file (type jpg)
+<use imgs//image021.jpg>
+Package pdftex.def Info: imgs//image021.jpg  used on input line 43.
+(pdftex.def)             Requested size: 191.96672pt x 108.40472pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[14]
+<imgs//image023.jpg, id=402, 1284.8pt x 720.6925pt>
+File: imgs//image023.jpg Graphic file (type jpg)
+<use imgs//image023.jpg>
+Package pdftex.def Info: imgs//image023.jpg  used on input line 62.
+(pdftex.def)             Requested size: 309.60118pt x 173.66254pt.
 
 
-]) [27]
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+[15 <./imgs//image020.jpg> <./imgs//image021.jpg>]) [16 <./imgs//image023.jpg>]
+\openout2 = `Deep_learning_module.aux'.
+
+(Deep_learning_module.tex) [17
+
+
+
+
+]
+\openout2 = `Decision_making.aux'.
+
+ (Decision_making.tex [18
+
+
+
+
+]) [19]
+\openout2 = `Results.aux'.
+
+ (Results.tex
+[20
+
+
+
+
+]) [21]
+\openout2 = `Conclusion.aux'.
+
+ (Conclusion.tex [22
+
+
+
+
+]) [23]
 \openout2 = `Annexos.aux'.
 
- (Annexos.tex [28
+ (Annexos.tex [24
 
+
+
+
+]) [25] [26
 
 
 
 ]
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 13.24796pt on input line 22.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 9.19998pt on input line 22.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 7.35999pt on input line 22.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 13.24796pt on input line 22.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 9.19998pt on input line 22.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 7.35999pt on input line 22.
- [29]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 3
-1.
-
-(C:\Users\joand\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmtt.fd
-File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
-)
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `lmtt' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-
-
-LaTeX Warning: Citation `Wil10' on page 30 undefined on input line 32.
-
-[30]
-<./LogoUIB.jpg, id=683, 224.84pt x 225.84375pt>
-File: ./LogoUIB.jpg Graphic file (type jpg)
-<use ./LogoUIB.jpg>
-Package pdftex.def Info: ./LogoUIB.jpg  used on input line 84.
-(pdftex.def)             Requested size: 77.39882pt x 77.74387pt.
- [31 <./LogoUIB.jpg>]
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 8.27998pt on input line 141.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 6.99199pt on input line 141.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 8.27998pt on input line 141.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 6.99199pt on input line 141.
-
-
-LaTeX Warning: Citation `Fea05' on page 32 undefined on input line 141.
-
-
-LaTeX Warning: Citation `Wri12' on page 32 undefined on input line 143.
-
-
-LaTeX Warning: Citation `Wil10' on page 32 undefined on input line 143.
-
-
-LaTeX Warning: Citation `bib1' on page 32 undefined on input line 155.
-
-
-LaTeX Warning: Citation `bib2' on page 32 undefined on input line 155.
-
-
-LaTeX Warning: Citation `bib3' on page 32 undefined on input line 155.
-
-Package acronym Info: Label `acro:IP' newly defined as it shall be overridden
-although it is yet undefined on input line 161.
-) [32]
-No file MemoriaTFG.bbl.
 \tf@toc=\write5
 \openout5 = `MemoriaTFG.toc'.
 
-(MemoriaTFG.aux (Acronims.aux) (Resum.aux) (Introduccio.aux) (Instruccions.aux)
-(Proposta.aux) (Memoria.aux) (Presentacio.aux) (Conclusions.aux) (Annexos.aux))
 
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
-
-Package rerunfilecheck Warning: File `MemoriaTFG.out' has changed.
-(rerunfilecheck)                Rerun to get outlines right
-(rerunfilecheck)                or use package `bookmark'.
-
-Package rerunfilecheck Info: Checksums for `MemoriaTFG.out':
-(rerunfilecheck)             Before: 5A6EEF2B21203D2376ECC4A4BF3E33B8;9939
-(rerunfilecheck)             After:  6EC77ED6D3AF94EE92BCA810AE97A913;9754.
+(MemoriaTFG.aux (Acronims.aux) (Resum.aux) (Introduccio.aux)
+(Tetris99andSystem.aux) (Switch-PC_interface.aux) (Information_capture.aux)
+(Deep_learning_module.aux) (Decision_making.aux) (Results.aux) (Conclusion.aux)
+(Annexos.aux))
+Package rerunfilecheck Info: File `MemoriaTFG.out' has not changed.
+(rerunfilecheck)             Checksum: E8B464EB95753B96C8AA4587223DC1D0;4932.
  ) 
 Here is how much of TeX's memory you used:
- 21965 strings out of 478864
- 395553 string characters out of 2848660
- 741521 words of memory out of 3000000
- 38890 multiletter control sequences out of 15000+600000
- 603934 words of font info for 454 fonts, out of 8000000 for 9000
+ 23177 strings out of 478864
+ 422699 string characters out of 2848660
+ 764383 words of memory out of 3000000
+ 40255 multiletter control sequences out of 15000+600000
+ 548552 words of font info for 319 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 87i,23n,94p,1307b,1034s stack positions out of 5000i,500n,10000p,200000b,80000s
-{C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}{C
-:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}<C:/Use
-rs/joand/AppData/Local/Programs/MiKTeX/fonts/type1/public/fourier/fourier-mex.p
-fb><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/type1/public/fourier/fou
-rier-mlit.pfb><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/type1/public/
-fourier/fourier-ms.pfb><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/lm/lmss10.pfb><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/type
-1/public/lm/lmss8.pfb><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/type1
-/public/lm/lmssbx10.pfb><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/public/lm/lmsso12.pfb><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/lm/lmtt10.pfb><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/ty
-pe1/public/lm/lmtt9.pfb><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/typ
-e1/public/amsfonts/symbols/msam10.pfb><C:/Users/joand/AppData/Local/Programs/Mi
-KTeX/fonts/type1/adobe/utopia/putb8a.pfb><C:/Users/joand/AppData/Local/Programs
-/MiKTeX/fonts/type1/adobe/utopia/putr8a.pfb><C:/Users/joand/AppData/Local/Progr
-ams/MiKTeX/fonts/type1/adobe/utopia/putr8a.pfb><C:/Users/joand/AppData/Local/Pr
-ograms/MiKTeX/fonts/type1/adobe/utopia/putri8a.pfb>
-Output written on MemoriaTFG.pdf (44 pages, 543114 bytes).
+ 87i,23n,94p,1099b,1007s stack positions out of 5000i,500n,10000p,200000b,80000s
+{C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}{C:
+/Users/joand/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}<C:/Use
+rs/joand/AppData/Local/Programs/MiKTeX/fonts/type1/public/fourier/fourier-ms.pf
+b><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmss10.pf
+b><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmssbx10.
+pfb><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsso12
+.pfb><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
+symbols/msam10.pfb><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/type1/ad
+obe/utopia/putb8a.pfb><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/type1
+/adobe/utopia/putr8a.pfb><C:/Users/joand/AppData/Local/Programs/MiKTeX/fonts/ty
+pe1/adobe/utopia/putr8a.pfb>
+Output written on MemoriaTFG.pdf (38 pages, 1133250 bytes).
 PDF statistics:
- 793 PDF objects out of 1000 (max. 8388607)
- 135 named destinations out of 1000 (max. 500000)
- 126456 words of extra memory for PDF output out of 128383 (max. 10000000)
+ 515 PDF objects out of 1000 (max. 8388607)
+ 100 named destinations out of 1000 (max. 500000)
+ 92577 words of extra memory for PDF output out of 106986 (max. 10000000)
 

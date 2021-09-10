@@ -222,6 +222,8 @@
 \autortrue
 \newif\iftutor
 \tutortrue
+\newif\ifsubtutor
+\subtutortrue
 
 \newcommand{\autorsi}{%
 	\ifautor
@@ -243,6 +245,18 @@
 }
 \newcommand{\tutorno}{%
 	\iftutor\else
+		\makebox[0pt][l]{\raisebox{0.15ex}{\hspace{0.1em}$\checkmark$}}%
+	\fi
+	$\square$%
+}
+\newcommand{\subtutorsi}{%
+	\ifsubtutor
+		\makebox[0pt][l]{\raisebox{0.15ex}{\hspace{0.1em}$\checkmark$}}%
+	\fi
+	$\square$%
+}
+\newcommand{\subtutorno}{%
+	\ifsubtutor\else
 		\makebox[0pt][l]{\raisebox{0.15ex}{\hspace{0.1em}$\checkmark$}}%
 	\fi
 	$\square$%
@@ -300,7 +314,7 @@
 		}% Fi de put
 		\put(33,-175){%
 			\makebox(0,0)[lb]{%
-					\large\sffamily\bfseries{Higher Polytechnic School}
+					\large\sffamily\bfseries{Escola Politècnica Superiorl}
 			}% Fi de makebox
 		}% Fi de put
 		\put(33,-200){%
@@ -344,12 +358,12 @@
 		}% Fi de put
 		\put(35,-127){%
 			\makebox(0,0)[lb]{%
-					\Large\sffamily\bfseries{Higher Polytechnic School}
+					\Large\sffamily\bfseries{Escola Politècnica Superior}
 			}% Fi de makebox
 		}% Fi de put
 		\put(35,-140){%
 			\makebox(0,0)[lb]{%
-					\Large\sffamily\bfseries{University of the Balearic islands}
+					\Large\sffamily\bfseries{Universitat de les Illes Balears}
 			}% Fi de makebox
 		}% Fi de put
 		\put(35,-151){%

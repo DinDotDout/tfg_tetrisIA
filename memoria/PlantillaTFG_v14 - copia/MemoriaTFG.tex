@@ -93,6 +93,8 @@
 % sigui un dels darrers en carregar-se, si voleu 
 % afegir nous paquets, feis-ho a continuació.
 %\usepackage{}
+\graphicspath{ {imgs/} }
+\usepackage{subcaption}
 
 % El paquet "hyperref" crea enllaços automàticament 
 % dins el document. Aquests enllaços permeten la 
@@ -131,13 +133,14 @@
 % La comanda \tutor mostra el nom del director
 % a la portada interior. Si hi ha més d'un tutor
 % caldrà fer un petit canvi. Demanau ajuda. 
-\tutor{José María Buades}
+\tutor{José María Buades Rubio \&
+Gabriel Moyá Alcover}
 
 % Indicau el curs acadèmic que correspongui.
 \date{Academic Year 2020-21}
 
 % Indicau les paraules claus del vostre treball.
-\paraulesclau{TFG, memòria, IA, AI, deep learning, deep q learning, tetris, \LaTeX}
+\paraulesclau{AI, deep learning, deep q learning, tetris}
 
 % Si l'autor no autoritza la publicació del treball
 % descomentau la línia següent
@@ -175,7 +178,7 @@
 %
 \cleartorecto \thispagestyle{empty}
 \begin{agraiments}
-Gràcies a tots els professors que m'han ajudat a arribar a aquesta fita dels meus estudis.
+Thanks to José María Buades, for suggesting such a nice idea of a final degree project and helping me throughout all the steps whenever i needed.
 \end{agraiments}
 
 % A continuació el Sumari
@@ -212,11 +215,13 @@ Gràcies a tots els professors que m'han ajudat a arribar a aquesta fita dels me
 % del document que ens interessi.
 
 \include{Introduccio}
-\include{Instruccions}
-\include{Proposta}
-\include{Memoria}
-\include{Presentacio}
-\include{Conclusions}
+\include{Tetris99andSystem}
+\include{Switch-PC_interface}
+\include{Information_capture}
+\include{Deep_learning_module}
+\include{Decision_making}
+\include{Results}
+\include{Conclusion}
 
 %%%%%%% Fi cos del treball %%%%%%%%%%%
 
@@ -239,6 +244,6 @@ Gràcies a tots els professors que m'han ajudat a arribar a aquesta fita dels me
 % La comanda següent defineix el fitxer que
 % conté les referències bibliogràfiques.
 % En aquest cas és el fitxer Bibliografia.bib
-\bibliography{Bibliografia} 
+%\bibliography{Bibliografia} 
 
 \end{document}

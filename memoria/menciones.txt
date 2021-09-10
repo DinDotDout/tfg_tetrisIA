@@ -1,3 +1,4 @@
+Video srs
 standard rotation system Unity (SRS) - LD4 Master 
 AI - Nuno faria tensor flow keras
 Plataforma - tetris - https://www.techwithtim.net/tutorials/game-development-with-python/tetris-pygame/tutorial-1/
@@ -5,3 +6,30 @@ menu - https://github.com/ChristianD37/YoutubeTutorials/tree/master/Menu%20Syste
 8 bit font
 
 imagenes srs https://four.lol/srs/j-kicks
+
+
+ARDUINO - https://betterprogramming.pub/creating-a-fake-nintendo-switch-controller-to-level-up-my-character-in-world-of-final-fantasy-b50adc269a1e
+
+
+Heuristica - https://codemyroad.wordpress.com/2013/04/14/tetris-ai-the-near-perfect-player/ 
+            https://github.com/michiel-cox/Tetris-DQN/blob/66ee640aaa2068f3db4798ddf51f1518c3779cc6/gym_tetris/board.py#L351
+            https://imake.ninja/el-tetris-an-improvement-on-pierre-dellacheries-algorithm/
+            
+            https://medium.com/mlearning-ai/reinforcement-learning-on-tetris-707f75716c37 
+            https://github.com/zeroize318/tetris_ai
+
+
+
+
+Pierre Dellacherie’s Algorithm - https://www.colinfahey.com/tetris/tetris.html
+
+TetrisIa - http://cs231n.stanford.edu/reports/2016/pdfs/121_Report.pdf
+er
+
+Reinforcement tetris -  https://github.com/asimon-1/machine-learning-tetris
+                        https://github.com/nuno-faria/tetris-ai
+                        https://github.com/charlesyz/Tetris-Ai/
+                        https://github.com/Code-Bullet/Tetris-AI-Javascript (Code Bullet)
+                        https://levelup.gitconnected.com/tetris-ai-in-python-bd194d6326ae
+
+https://towardsdatascience.com/beating-the-world-record-in-tetris-gb-with-genetics-algorithm-6c0b2f5ace9b
