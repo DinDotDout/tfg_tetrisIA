@@ -1,2 +1,0 @@
-outer =    1 | pre-training avg score =    1.613 | loss =   20.939 | mse = 9765.376 | dataset size =   20040 | new dataset size =   20040 | time elapsed:  644.0 sec | coef = [1.0, 0.5, 0.4, 0.3] | penalty =    -500 | gamma =  0.950
-outer =    1 | pre-training avg score =    0.000 | loss =   13.963 | mse = 6657.666 | dataset size =   20113 | new dataset size =   20113 | time elapsed:  741.7 sec | coef = [1.0, 0.5, 0.4, 0.3] | penalty =    -500 | gamma =  0.950

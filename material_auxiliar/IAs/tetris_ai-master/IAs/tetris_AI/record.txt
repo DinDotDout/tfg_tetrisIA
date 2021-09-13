@@ -1,5 +1,0 @@
-outer =    1 | pre-training avg score =    2.371 | loss =   19.381 | mse = 6693.960 | dataset size =   20037 | new dataset size =   20037 | time elapsed:  650.9 sec | coef = [1.0, 0.5, 0.4, 0.3] | penalty =    -500 | gamma =  0.950
-outer =    2 | pre-training avg score =   70.361 | loss =    6.779 | mse =  771.434 | dataset size =   20149 | new dataset size =   20149 | time elapsed:  754.1 sec | coef = [1.0, 0.5, 0.4, 0.3] | penalty =    -500 | gamma =  0.950
-outer =    1 | pre-training avg score =   60.603 | loss =   10.179 | mse = 4385.278 | dataset size =   20138 | new dataset size =   20138 | time elapsed:  497.2 sec | coef = [1.0, 0.5, 0.4, 0.3] | penalty =    -500 | gamma =  0.950
-outer =    2 | pre-training avg score =  285.149 | loss =    7.015 | mse = 2304.425 | dataset size =   20193 | new dataset size =   20193 | time elapsed:  522.7 sec | coef = [1.0, 0.5, 0.4, 0.3] | penalty =    -500 | gamma =  0.950
-outer =    1 | pre-training avg score =   31.786 | loss =   11.867 | mse = 5366.003 | dataset size =   20124 | new dataset size =   20124 | time elapsed:  421.5 sec | coef = [1.0, 0.5, 0.4, 0.3] | penalty =    -500 | gamma =  0.950

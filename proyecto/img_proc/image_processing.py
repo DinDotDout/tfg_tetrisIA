@@ -290,58 +290,6 @@ def _check_stored_piece():
     # for row in stored_piece_info]))
     # print("________")
 
-# def check_piece_coords(startX, startY):
-#     pieceGlobalCoords = [[startX, startY]]
-#     if startY == 0:
-#         for i in range(startX, grid_x_size):
-#             if game_out_matrix[i] == 2:
-#                 pieceGlobalCoords.append([i, startY])
-#     for i in range(0, 2):
-#             for j in range(grid_x_size):
-#                 if game_matrix[i][j] == 2:
-#                      pieceGlobalCoords.append([i+1, j])
-#     alturas = 0    
-#     for x,y in pieceGlobalCoords:
-
-# def _img_to_tetris_piece(startX, startY):
-#     '''Given a piece detection, it transforms it into our tetris simulation object'''
-#     piece = None
-#     totalGridYSize = grid_y_size-1 # 19
-
-
-#     if startY == -1: # get piece type from out of border
-#         piece = tetrisPiece.get_piece_type(info_out_matrix[startY][[startX]-1)
-#         # piece pos switch cambiara
-#         piecePosSwitch= {
-#             tetrisPiece.SPiece: np.array([startX, totalGridYSize-(startY+1)]),
-#             tetrisPiece.ZPiece: np.array([startX-1, totalGridYSize-(startY+1)]),
-#             tetrisPiece.IPiece: np.array([startX-1, totalGridYSize-(startY)]), 
-#             tetrisPiece.OPiece: np.array([startX, totalGridYSize-(startY+1)]),
-#             tetrisPiece.LPiece: np.array([startX+1, totalGridYSize-(startY+1)]),
-#             tetrisPiece.JPiece: np.array([startX-1, totalGridYSize-(startY+1)]),
-#             tetrisPiece.TPiece: np.array([startX, totalGridYSize-(startY+1)])
-#         }
-
-#         piecePos = piecePosSwitch[type(piece)]
-#     else: # get piece type from inside grid
-#         piece = tetrisPiece.get_piece_type(info_matrix[startY][startX]-1)
-
-#         # invert y position to fit Board
-#         y = totalGridYSize-startY
-#         piecePosSwitch = {
-#             tetrisPiece.SPiece: np.array([startX, y-1]),
-#             tetrisPiece.ZPiece: np.array([startX + 1, y-1]),
-#             tetrisPiece.IPiece: np.array([startX + 1, y]), 
-#             tetrisPiece.OPiece: np.array([startX, y-1]),
-#             tetrisPiece.LPiece: np.array([startX - 1, y-1]),
-#             tetrisPiece.JPiece: np.array([startX + 1, y-1]),
-#             tetrisPiece.TPiece: np.array([startX, y-1])
-#         }
-#         # print(shapes_str[info_matrix[startY][startX]])
-#         piecePos = piecePosSwitch[type(piece)]
-
-#     return piece, piecePos
-
 def _img_to_tetris_piece(startX, startY):
     '''Given a piece detection, it transforms it into our tetris simulation object'''
     piece = None
@@ -377,10 +325,10 @@ def _img_to_grid():
     topRows = [[None for col in range(grid_x_size)] for row in range(4)]
     gameGrid = [[None for col in range(grid_x_size)] for row in range(grid_y_size)]
     for i in range(len(info_matrix)):
+        greys = 0
         for j in range(len(info_matrix[0])):
             if game_matrix[i][j] != 2 and info_matrix[i][j] != 0:
                 gameGrid[i][j] = pieceColor[shapes_str[info_matrix[i][j]]]
-
     gameGrid = np.concatenate((topRows, gameGrid))
     
     # print('\n'.join([''.join(['{:4}'.format(item) for item in row]) 
@@ -489,32 +437,26 @@ def _update_board_info():
             bag = _img_to_upcoming_pieces()
             gameBoard = board.Board(grid = gameGrid, bag = bag, piecePos = piecePos,
                         mainPiece = piece, storedPiece = storedPiece, canStore = canStore)
-
-def check_board():
-    gameGrid = _img_to_grid()
-    return board.Board(grid = gameGrid)
     
+# # SELECTION SCREEN DETECTION
+# # ______________________________________________________________________________
+# def selection_screen_detection():
+#     # color range to detect the mode we want
+#     global frame
+#     max_blue_hue = 190/2
+#     min_blue_hue = 170/2
+#     max_saturation = max_value = 255
+#     max_blue_hsv = (max_blue_hue, max_saturation, max_value)
+#     min_blue_hsv = (min_blue_hue, max_saturation*0.6, max_value*0.7)
 
-
-# SELECTION SCREEN DETECTION
-# ______________________________________________________________________________
-def selection_screen_detection():
-    # color range to detect the mode we want
-    global frame
-    max_blue_hue = 190/2
-    min_blue_hue = 170/2
-    max_saturation = max_value = 255
-    max_blue_hsv = (max_blue_hue, max_saturation, max_value)
-    min_blue_hsv = (min_blue_hue, max_saturation*0.6, max_value*0.7)
-
-    # pixel we will check to see if we have the correct game mode
-    first_box_x = 300
-    first_box_y = 600
+#     # pixel we will check to see if we have the correct game mode
+#     first_box_x = 300
+#     first_box_y = 600
     
-    pixel_color = _pixelBGR2HSV(frame, first_box_x, first_box_y)
-    # Draw detection point
-    cv2.circle(frame,(first_box_x,first_box_y), 5, (0,0,255), -1)
-    if not cv2.inRange(pixel_color, min_blue_hsv, max_blue_hsv):
-        return False
-    else:
-        return True
+#     pixel_color = _pixelBGR2HSV(frame, first_box_x, first_box_y)
+#     # Draw detection point
+#     cv2.circle(frame,(first_box_x,first_box_y), 5, (0,0,255), -1)
+#     if not cv2.inRange(pixel_color, min_blue_hsv, max_blue_hsv):
+#         return False
+#     else:
+#         return True

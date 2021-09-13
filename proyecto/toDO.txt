@@ -1,5 +1,0 @@
-
-Only detect other parts of the screen if a piece is found and when moves are done?
-Revisar localizacion de la pieza detectada
-
-probar probabilidad deistribuida en partidas de tetris para algoritmo de zeroize
