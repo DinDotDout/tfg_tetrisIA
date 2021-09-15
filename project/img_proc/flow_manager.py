@@ -130,8 +130,7 @@ def flow_manager(frame):
             start_time_counter()
             clean = True
 
-            
-
+        
 # def _grid_deviations(grid1, grid2):
 #     deviations = 0
 #     for x, y in zip(grid1[:20], grid2[:20]):

@@ -132,7 +132,13 @@ def testing(max_games=1, mode='piece', is_gui_on=True):
     while True and episode_count < max_games:
         steps = 0
         done = False
+        
         env.reset()
+
+        _1liners = 0
+        _2liners = 0
+        _3liners = 0
+        _4liners = 0
         while not done and (not max_steps_per_episode or steps < max_steps_per_episode):
             possible_states, scores, dones, _, _, moves, env = h_c.get_next_states(env)
 
@@ -144,8 +150,21 @@ def testing(max_games=1, mode='piece', is_gui_on=True):
             best_moves = moves[chosen]
 
             # Perform selected move
-            h_c.play(env, best_moves[0], best_moves[1])
+            _, _, lines= h_c.play(env, best_moves[0], best_moves[1])
             endEvent = tetris.draw(env)
+
+            if lines == 1:
+                _1liners +=1 
+            elif lines == 2:
+                _2liners +=1 
+            elif lines == 3:
+                _3liners +=1 
+            elif lines == 4:
+                _4liners +=1 
+                
+            if steps % 50 == 0:
+                print('plays: {}  1lines: {}  2lines: {}  3lines: {}  4lines: {}'.format(steps, _1liners, _2liners, _3liners, _4liners))
+            
             steps += 1
             done = env.gameOver
 
@@ -155,7 +174,7 @@ def testing(max_games=1, mode='piece', is_gui_on=True):
         totalSteps += steps
         episode_count += 1
         total_score += env.current_state.score
-        print('episode #{}:   score:{}   plays:{}'.format(episode_count, env.current_state.score, steps))
+        print('episode #{}:   score: {}   plays: {}  1lines: {}  2lines: {}  3lines: {}  4lines: {}'.format(episode_count, env.current_state.score, steps, _1liners, _2liners, _3liners, _4liners))
         
     tetris.end()
 
@@ -188,7 +207,7 @@ def get_data_from_playing_cnn2d(model_filename, target_size=8000, max_steps_per_
                 possible_states, scores, dones, _, _, moves, env = h_c.get_next_states(env)
         for step in range(max_steps_per_episode):
             # current gamestate metrics and next pieces
-            current_state = h_c.get_board_props(env) # get it out of the loop so that we don't have to compute it each time?
+            current_state = h_c.get_board_props(env)
 
             # possible_states contains grid metrics and pieces
             possible_states, scores, dones, is_include_hold, is_new_hold, moves, env = h_c.get_next_states(env) 

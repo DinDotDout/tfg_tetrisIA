@@ -395,12 +395,12 @@ def sync():
     inSync = False
     # Try sending a packet
     inSync = send_packet()
-    if not inSync:
-        print("Forcing sync")
-        # Not in sync: force resync and send a packet
-        inSync = force_sync()
-        if inSync:
-            inSync = send_packet()
+    # if not inSync:
+    #     print("Forcing sync")
+    #     # Not in sync: force resync and send a packet
+    #     inSync = force_sync()
+    #     if inSync:
+    #         inSync = send_packet()
         
     return inSync
 
