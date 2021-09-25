@@ -12,7 +12,7 @@ def get_piece_type(n):
         TPiece(),
         JPiece(),
         LPiece(),
-        OPiece()
+        OPiece(),
     ]
     return pieces[n]
 

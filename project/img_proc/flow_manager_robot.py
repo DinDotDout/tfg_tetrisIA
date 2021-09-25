@@ -46,33 +46,25 @@ activate_net = 13 # Intro
 
 timeMark = 0 # Time mark to start counting
 
-def controller(k):
+
+def controller2(k):
     '''Sends according command to the controller for the switch to receive'''
     if k == left_pad:
-        ctrler.send_cmd(ctrler.DPAD_L)
+        ctrler.write_str("a#")
     elif k == up_pad:
-        ctrler.send_cmd(ctrler.DPAD_U)
+        ctrler.write_str("w#")
     elif k == down_pad:
-        ctrler.send_cmd(ctrler.DPAD_D)
+        ctrler.write_str("s#")
     elif k == right_pad:
-        ctrler.send_cmd(ctrler.DPAD_R)
+        ctrler.write_str("d#")
     elif k == a_button:
-        ctrler.send_cmd(ctrler.BTN_A)
+        ctrler.write_str("4#")
     elif k == b_button:
-        ctrler.send_cmd(ctrler.BTN_B)
+        ctrler.write_str("3#")
     elif k == l_button:
-        ctrler.send_cmd(ctrler.BTN_L)
+        ctrler.write_str("1#")
     elif k == pause_button:
-        ctrler.send_cmd(ctrler.BTN_PLUS)
-    elif k == up_stick:
-        ctrler.send_cmd(ctrler.LSTICK_U)
-    elif k == down_stick:
-        ctrler.send_cmd(ctrler.LSTICK_D)
-    elif k == left_stick:
-        ctrler.send_cmd(ctrler.LSTICK_L)
-    elif k == right_stick:
-        ctrler.send_cmd(ctrler.LSTICK_R)
-
+        ctrler.write_str("2#")
 
 def start_time_counter():
     '''Stpres a time mark as reference for a time counter'''
@@ -90,72 +82,55 @@ def check_wait_timer(waitTime):
         return True
 
 
-moves = []
 bag = []
 storedPiece = None
-clean = False
 expectedPos = None
 piece = None
 lines = 0
 env = None
+
 def flow_manager(frame):
     '''Asks neural net for output whenever it is deemed necessary'''
-    global moves, clean, expectedPos, piece, bag, storedPiece, env
+    global expectedPos, piece, bag, storedPiece, env
     if img_process.gameBoard and (not np.array_equal(img_process.gameBoard.bag[:3], bag) or 
-        type(storedPiece) != type(img_process.gameBoard.storedPiece)) and not moves:
-        # ask_net_img()
-        ask_net_predict()
-
+        type(storedPiece) != type(img_process.gameBoard.storedPiece)):
+        ask_net_img()
+        # ask_net_predict()
+        
     # If there is and expected piece to be placed, draw it
     if piece:
         draw_expected_pos(expectedPos, piece, frame)
 
-    next_move_timer = 0.027
-
-    # Checks to see if time has passeds
-    if check_wait_timer(next_move_timer):
-        if clean: # clean last input if enough time has passed
-            ctrler.send_cmd()
-            clean = False
-            start_time_counter()
-            if not moves: # last move just executed
-                piece = None
-        elif moves: # send new move
-            move = moves.pop()
-            # if move == up_pad# Stop dropping the piece at high levels
-            controller(move)
-            controller(move)
-            start_time_counter()
-            clean = True
-
 
 def ask_net_img():
     '''Asks the neural net for moves and stores them'''
-    global moves, bag, storedPiece, piece, expectedPos, lines, env
+    global bag, storedPiece, piece, expectedPos, lines, env
     bag = img_process.gameBoard.bag[:3] # we will use it to avoid executing same sequence more than once
     storedPiece = img_process.gameBoard.storedPiece    
 
     # If can draw and last moves where cleared
     displacement, rotation, expectedPos, piece, points, env = net.get_net_output(img_process.gameBoard)
-    moves = queue_moves(displacement, rotation)
+    queue_moves(displacement, rotation)
 
 def ask_net_predict():
     '''Asks the neural net for moves and stores them'''
-    global moves, bag, storedPiece, piece, expectedPos, lines, env
-    if not env or img_process.allMatch == True:
+    global bag, storedPiece, piece, expectedPos, lines, env
+    # if not env or img_process.allMatch == True:
         # print("allMatch")
-    # if not env:
+    if not env:
         env = copy.deepcopy(img_process.gameBoard)
     # else:
         # print("no     Match")
     env.bag = copy.deepcopy(img_process.gameBoard.bag)
     env.storedPiece = copy.deepcopy(img_process.gameBoard.storedPiece)
+
     bag = img_process.gameBoard.bag[:3] # we will use it to avoid executing same sequence more than once
     storedPiece = img_process.gameBoard.storedPiece
     
     # If can draw and last moves where cleared
     displacement, rotation, expectedPos, piece, points, env = net.get_net_output(env)
-    moves = queue_moves(displacement, rotation)
+    queue_moves(displacement, rotation)
+
 
 def draw_expected_pos(expectedPos, piece, frame):
     '''Draws a piece that we want directly on the game grid'''
@@ -166,37 +141,41 @@ def draw_expected_pos(expectedPos, piece, frame):
         x, y = expectedPos + tile.position
         cv2.putText(frame, "POS", (pixel_x+(x*box_spacing), pixel_y+((19-y)*box_spacing)), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (piece.color[2], piece.color[1], piece.color[0]))
 
+
 def queue_moves(displacement, rotation):
     "Return a queue with the movements to perform"
-    moves = []
+    moves = ""
 
     # Piece swap
     if displacement == 6:
-        moves.append(l_button)
-        # print("swap")
-        return moves
+        moves += "1#"
+        ctrler.write_str(moves)
+        return
 
-    # Drop piece
-    moves.append(up_pad)
-    
+    # Rotate piece
+    for i in range(rotation):
+        moves+= "3"
+
     # Place in correct column
     if displacement > 0:
         for i in range(displacement):
-            moves.append(right_pad)
+            moves+= "d"
     elif displacement < 0:
         for i in range(abs(displacement)):
-            moves.append(left_pad)
-    
-    # Rotate piece
-    for i in range(rotation):
-        moves.append(b_button)
+            moves+= "a"
 
-    return moves
+    # Drop piece
+    moves+= "w"
+    
+    moves+= "#"
+
+    ctrler.write_str(moves)
+
 
 # Main
 # -----------------------------------------------
 def main():
-    global moves, bag, clean, expectedPos, piece, lines, env
+    global bag, expectedPos, piece, lines, env
 
     # We get the 2 arguments and process them for its use
     parser = argparse.ArgumentParser('Tetris gaming')
@@ -208,22 +187,7 @@ def main():
     print('Opening serial port')
     # Only first baudrate seems to be able to sync
     if not ctrler.serialPort:
-        ctrler.serialPort = serial.Serial(port=args.port, baudrate=19200, timeout=1) # switch
-    # ser = serial.Serial(port=args.port, baudrate=31250,timeout=1)
-    # ser = serial.Serial(port=args.port, baudrate=40000,timeout=1)
-    # ser = serial.Serial(port=args.port, baudrate=62500,timeout=1)
-
-    # Attempt to sync with the MCU
-    print('Synchronizing pc with Nintendo Switch')
-    if not ctrler.sync():
-        print('Could not sync!')
-
-    print('Sending test packet')
-    if not ctrler.send_cmd():
-        print('Packet Error!')
-        # return
-    print('Packet succesful')
-    print('Synchronized')
+        ctrler.serialPort = serial.Serial(port=args.port, baudrate=115200) # robot
 
     # Frame buffer
     width = 1266
@@ -274,20 +238,11 @@ def main():
                 img_process.frame = frame # Send frame info to game processing
                 img_process.game_processing() # Image detection on frame
         
-        
+        if k != -1:
+                controller2(k) # Player controller mode
         if auto_pilot: # Automatic mode
             flow_manager(frame)
-        else: # Player controller mode
-            # read keyboard input
-            if k != -1: # If command received
-                # command = chr(k)
-                controller(k) # send command to switch
-                start_time_counter()
-                lastCommand = k
-            else:
-                if check_wait_timer(0.06) and lastCommand != -1: # Send command cleanup to switch after a some time
-                    ctrler.send_cmd()
-                    lastCommand = -1
+                      
         # show the frame 
         cv2.imshow(winname, frame)
         

@@ -1,3 +1,6 @@
+
+
+
 #!/usr/bin/env python3
 import serial
 import select
@@ -167,6 +170,12 @@ def write_bytes(bytes_out):
 def write_byte(byte_out):
     write_bytes([byte_out])
     return
+
+def write_str(sequence):
+    sequence.encode('ascii')
+    byte_sequence = bytes(sequence, 'ascii')
+    # print(byte_sequence)
+    serialPort.write(byte_sequence)
 
 # Compute CRC8
 # https://www.microchip.com/webdoc/AVRLibcReferenceManual/group__util__crc_1gab27eaaef6d7fd096bd7d57bf3f9ba083.html

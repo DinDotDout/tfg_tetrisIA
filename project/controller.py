@@ -2,7 +2,7 @@ import pygame
 from menu import *
 import tetris_game.tetris as tetris
 import neural_net.ai_manager as nn
-from img_proc import flow_manager
+from img_proc import flow_manager, flow_manager_robot
 import os
 import traceback
 
@@ -19,7 +19,8 @@ class Controller():
             tetris.game_menu,
             nn.train,
             nn.test,
-            flow_manager.main
+            flow_manager.main,
+            flow_manager_robot.main
         ]
         self.reset()
 

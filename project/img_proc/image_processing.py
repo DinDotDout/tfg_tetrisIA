@@ -24,7 +24,7 @@ EMPTY = 0
 
 frame = None
 gameBoard = None
-canMove = True
+allMatch = False
 newBoard = False
 
 # GAME DETECTION
@@ -324,17 +324,25 @@ def _img_to_grid():
     }
     topRows = [[None for col in range(grid_x_size)] for row in range(4)]
     gameGrid = [[None for col in range(grid_x_size)] for row in range(grid_y_size)]
+    allMatch = True
     for i in range(len(info_matrix)):
-        greys = 0
         for j in range(len(info_matrix[0])):
-            if game_matrix[i][j] != 2 and info_matrix[i][j] != 0:
+            if game_matrix[i][j] != 2 and info_matrix[i][j] != 0 and info_matrix[i][j] != 9:
                 gameGrid[i][j] = pieceColor[shapes_str[info_matrix[i][j]]]
+            if shapes_str[info_matrix[i][j]] == "No": #No info
+                allMatch = False
+
+
+    # if NoMatch:
+    #     print('\n'.join([''.join(['{:4}'.format(item) for item in row]) 
+    #         for row in info_matrix]))
+    #     print("____________________")
     gameGrid = np.concatenate((topRows, gameGrid))
     
     # print('\n'.join([''.join(['{:4}'.format(item) for item in row]) 
     #     for row in gameGrid.tolist()]))
 
-    return gameGrid[::-1].tolist()
+    return gameGrid[::-1].tolist(), allMatch
 
 def _img_to_stored():
     '''Given a stored piece detection, it transforms it into our tetris simulation object'''
@@ -391,7 +399,7 @@ def check_piece_by_shape():
 def _img_to_upcoming_pieces():
     '''Given the upcoming pieces detected, it transforms them into our tetris simulation bag'''
 
-    bag = [7] * 6
+    bag = [7] * 6 # default piece value is 7 as none
     for k in range(n_pieces):
         found = False
         for i in range(n_box_y):
@@ -407,7 +415,7 @@ def _img_to_upcoming_pieces():
 
 def _update_board_info():
     "Checks the info detected and creates a board object with it"
-    global canMove, gameBoard, newBoard
+    global gameBoard, newBoard, allMatch
     
     pieceDetected = False
     startX = 0
@@ -432,7 +440,7 @@ def _update_board_info():
     if pieceDetected:
         # if canMove:
             piece, piecePos = _img_to_tetris_piece(startX, startY)
-            gameGrid = _img_to_grid()
+            gameGrid, allMatch = _img_to_grid()
             storedPiece, canStore = _img_to_stored()
             bag = _img_to_upcoming_pieces()
             gameBoard = board.Board(grid = gameGrid, bag = bag, piecePos = piecePos,

@@ -15,9 +15,10 @@ class Menu():
         self.trainX, self.trainY = self.mid_w, self.playY + self.textSize
         self.testX, self.testY = self.mid_w, self.trainY + self.textSize
         self.switchX, self.switchY = self.mid_w, self.testY + self.textSize
+        self.robotX, self.robotY = self.mid_w, self.switchY + self.textSize
 
         self.state = 0  # Menu cursor selector
-        self.states = 4
+        self.states = len(controller.stateList)
 
         self.cursor_rect = pygame.Rect(0, 0, 20, 20)
         self.cursor_rect.midtop = (self.mid_w, self.mid_h+self.state*self.textSize)
@@ -32,7 +33,8 @@ class Menu():
             self.controller.draw_text("Play Tetris", self.textSize, self.playX, self.playY)
             self.controller.draw_text("Train Net", self.textSize, self.trainX, self.trainY)
             self.controller.draw_text("Test Net", self.textSize, self.testX, self.testY)
-            self.controller.draw_text("Access Switch", self.textSize, self.switchX, self.switchY)
+            self.controller.draw_text("Switch Arduino", self.textSize, self.switchX, self.switchY)
+            self.controller.draw_text("Switch Robot", self.textSize, self.robotX, self.robotY)
             self.draw_cursor()
             self.blit_screen()
 
