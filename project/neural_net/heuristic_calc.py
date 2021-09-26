@@ -40,7 +40,7 @@ def get_next_states(board):
         is_new_hold = not board.storedPiece
         move = [6,0] # This impossible move is percieved as a hold move later on
 
-        board.swap_piece() # Perform the hold moce
+        board.swap_piece() # Perform the hold move
 
         # Store all info
         gridState, nextPiecesState, score = get_board_props(board)
@@ -196,6 +196,10 @@ def get_props_and_pieces(board):
     for i in range(next_num):
         mainPieceType = board.bag[i]
         if mainPieceType != 7: # if piece is None don't add info
+            if mainPieceType != 6 and mainPieceType != 5 and mainPieceType != 4 and mainPieceType != 3 and mainPieceType != 2 and mainPieceType != 1 and mainPieceType != 0:
+                print("upcoming")
+                
+                print(mainPieceType)
             buffer2[hold_num + (i + hold_num + current_num) * pool_size + mainPieceType] = 1
     return np.reshape(np.array(buffer1 + buffer2, dtype='int8'), [1, -1])
 

@@ -239,7 +239,7 @@ def main():
                 img_process.game_processing() # Image detection on frame
         
         if k != -1:
-                controller2(k) # Player controller mode
+            controller2(k) # Player controller mode
         if auto_pilot: # Automatic mode
             flow_manager(frame)
                       

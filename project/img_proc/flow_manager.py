@@ -122,8 +122,6 @@ def flow_manager(frame):
                 piece = None
         elif moves: # send new move
             move = moves.pop()
-            # if move == up_pad# Stop dropping the piece at high levels
-            controller(move)
             controller(move)
             start_time_counter()
             clean = True
@@ -173,7 +171,6 @@ def queue_moves(displacement, rotation):
     # Piece swap
     if displacement == 6:
         moves.append(l_button)
-        # print("swap")
         return moves
 
     # Drop piece
@@ -221,7 +218,7 @@ def main():
     print('Sending test packet')
     if not ctrler.send_cmd():
         print('Packet Error!')
-        # return
+        return
     print('Packet succesful')
     print('Synchronized')
 

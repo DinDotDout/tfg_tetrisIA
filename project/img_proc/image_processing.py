@@ -175,7 +175,7 @@ def _check_block(pixel_x, pixel_y, real_block, info_block):
                 real_block = 2
             else:
                 real_block = 1
-            info_block = shape
+        info_block = shape
     else: # Empty block
         real_block = 0
         info_block = 0
@@ -362,12 +362,14 @@ def _img_to_stored():
 
     pieceType = None
     if found: # Found a piece
-        if stored_piece_info[startY][startX] != len(shapes)-2: # there is a stored piece, not grey ergo can store
+        if stored_piece_info[startY][startX] < len(shapes)-2: # there is a stored piece, not grey ergo can store
             # Can check by colour, which is more reliable
             pieceType = tetrisPiece.get_piece_type(stored_piece_info[startY][startX]-1)
         else:
             pieceType = check_piece_by_shape()
             canStore = False
+    else:
+        canStore = False
     return pieceType, canStore
 
 def check_piece_by_shape():
@@ -381,18 +383,18 @@ def check_piece_by_shape():
             else: # 1100
                 pieceType = tetrisPiece.ZPiece() # "Z"
         else: # 10
-            pieceType = tetrisPiece.JPiece # "J"
+            pieceType = tetrisPiece.JPiece() # "J"
     else: # 0
         if stored_piece[0][1] == 1 or stored_piece[0][1]  == 2: # 01
             if stored_piece[0][2] == 1 or stored_piece[0][2]  == 2: # 011
                 if stored_piece[1][0] == 1 or stored_piece[1][0]  == 2: # 011/1
-                    pieceType = tetrisPiece.SPiece # "S"
+                    pieceType = tetrisPiece.SPiece() # "S"
                 else:# 011/0
-                    pieceType = tetrisPiece.OPiece # "O"
+                    pieceType = tetrisPiece.OPiece() # "O"
             else: # 010
-                pieceType = tetrisPiece.TPiece # "T"
+                pieceType = tetrisPiece.TPiece() # "T"
         else: # 00
-            pieceType = tetrisPiece.LPiece # "L"
+            pieceType = tetrisPiece.LPiece() # "L"
     return pieceType
     
 
@@ -404,8 +406,9 @@ def _img_to_upcoming_pieces():
         found = False
         for i in range(n_box_y):
             for j in range(n_box_x):
-                if next_pieces[k][i][j] == 1 or next_pieces[k][i][j] == 2:
-                    bag[k] = next_pieces_info[k][i][j]-1
+                pieceType = next_pieces_info[k][i][j]
+                if (next_pieces[k][i][j] == 1 or next_pieces[k][i][j] == 2) and pieceType < len(shapes)-2:
+                    bag[k] = pieceType-1
                     found = True
                     break
             if found:
@@ -422,14 +425,14 @@ def _update_board_info():
     startY = -1
     
     for i in range(grid_x_size):
-        if game_out_matrix[i] == 2:
+        if game_out_matrix[i] == 2 and info_out_matrix[i] < len(shapes) - 2:
             pieceDetected = True
             startX = i
             break
     if not pieceDetected:
         for i in range(4):
             for j in range(grid_x_size):
-                if game_matrix[i][j] == 2:
+                if game_matrix[i][j] == 2 and info_matrix[i][j] < len(shapes) - 2:
                     pieceDetected = True
                     startY = i
                     startX = j
